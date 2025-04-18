@@ -14,3 +14,20 @@ The shelf of stories
 Cards:
 
 Indholdsværdi / collection value
+
+
+Bogskabet på Otto Busses - Otto Busses Vej 54, København
+Lille Bibliotek Kastrup - Rhodesiavej 31, Kastrup
+Hylden i Lyngby - Caroline Amalie Vej 22, Kongens Lyngby
+Ballerup Bøger - Egebjerghuse 5, Ballerup
+Virum Bogkasse - Brovænget 44, Virum
+Skolekrogens Læsehjørne - Skolekrogen 107, Værløse
+Ledøjes Frie Bogskab - Præstetoften 5, Ledøje
+Sandbjergs Litteraturskur - Sanbjergvej 36, Vedbæk
+Fredensborg Boghus - Humlebækvej 39, Fredensborg
+Ågades Byttehylde - Ågade 56, Frederikssund
+Bogbyttehuset i Aarhus - Nørre Allé 23, 8000 Aarhus C
+Lille Bibliotek i Odense - Skibhusvej 52, 5000 Odense C
+Byttebogskassen i Aalborg - Boulevarden 15, 9000 Aalborg
+Gratis Bogskab i Esbjerg - Kirkegade 10, 6700 Esbjerg
+Litteraturhylden i Kolding - Slotsgade 5, 6000 Kolding
