@@ -16,7 +16,7 @@ services:
     container_name: web_mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: company
+      MYSQL_DATABASE: web
     volumes:
       - mysql_data:/var/lib/mysql
     ports:

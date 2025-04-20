@@ -1,0 +1,17 @@
+{% include "_header.html" %}
+{% include "_nav.html" %}
+
+<main>
+
+    <form mix-post="/login">
+        <input name="email" type="text" placeholder="user email" 
+        mix-check="{{ x.REGEX_EMAIL }}">
+        <button>
+            Login
+        </button>
+    </form>
+
+</main>
+
+
+{% include "_footer.html" %}
