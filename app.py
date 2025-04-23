@@ -206,6 +206,9 @@ def logout():
 ##############################
 @app.get("/items/<item_pk>")
 def get_item_by_pk(item_pk):
+    lan = request.args.get('lan', 'dk')
+    if lan not in ("dk","en"):
+        lan = "dk"
     try:
         db, cursor = x.db()
         q = "SELECT * FROM items WHERE item_pk = %s"
@@ -217,7 +220,8 @@ def get_item_by_pk(item_pk):
             rates = file.read() # this is text that looks like json
             rates = json.loads(rates)
 
-        html_item = render_template("_item.html", item=item, rates=rates)
+        html_item = render_template("_item.html", item=item, rates=rates, lan=lan,                   
+            translate=languages.translate)
         return f"""
             <mixhtml mix-replace="#item">
                 {html_item}
@@ -246,6 +250,9 @@ def get_item_by_pk(item_pk):
 ##############################
 @app.get("/items/page/<page_number>")
 def get_items_by_page(page_number):
+    lan = request.args.get('lan', 'dk')
+    if lan not in ("dk","en"):
+        lan = "dk"
     try:
         page_number = x.validate_page_number(page_number)
         items_per_page = 2
@@ -263,9 +270,9 @@ def get_items_by_page(page_number):
             rates = json.loads(rates)
 
         for item in items[:items_per_page]:
-            i = render_template("_card.html", item=item, rates=rates)
+            i = render_template("_card.html", item=item, rates=rates, lan=lan, translate=languages.translate)
             html += i
-        button = render_template("_btn_more_items.html", page_number=page_number + 1)
+        button = render_template("_btn_more_items.html", page_number=page_number + 1, lan=lan, translate=languages.translate)
         if len(items) < extra_item: button = ""
         return f"""
             <mixhtml mix-bottom="#items">
