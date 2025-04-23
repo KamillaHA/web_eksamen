@@ -1,0 +1,15 @@
+<a href="/items/{{ item.item_pk }}" mix-get class="item">
+    <img src="{{ url_for('static', filename='images/'+ item.item_image) }}">
+    <p>
+        {{ item.item_name }}
+    </p>
+    {% if lan == 'en' %}
+    <div>
+    {{ "{:,}".format(item.item_price) }} USD
+    </div>
+{% else %}
+    <div>
+    {{ "{:,.0f}".format(item.item_price * rates.rates.DKK) }} DKK
+    </div>
+{% endif %}
+</a>

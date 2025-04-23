@@ -1,0 +1,23 @@
+{% include "_header.html" %}
+{% include "_nav.html" %}
+
+{{ user.user_name }}
+
+
+<form mix-post="/item">
+    <input name="files" type="file" multiple>
+    <button>
+        Create item
+    </button>
+</form>
+
+<div id="images"></div>
+
+
+
+<button mix-delete="/user">
+    Delete account
+</button>
+
+
+{% include "_footer.html" %}

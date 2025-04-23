@@ -3,6 +3,51 @@
 
 <main>
 
+    <!-- <form mix-post="/signup" method="POST">
+        <input name="user_email" type="text" placeholder="email">
+        <input name="user_password" type="password" placeholder="password">
+        <button>
+            Signup
+        </button>
+    </form> -->
+
+    <form mix-post="/signup">
+        <div>
+            <label for="">
+                <span>user name</span>
+                <span>{{ x.USER_NAME_MIN }} to {{ x.USER_NAME_MAX }} characters</span>
+            </label>
+            <input name="user_name" type="text" mix-check="{{ x.USER_NAME_REGEX }}">
+        </div> 
+        <div>
+            <label for="">
+                <span>user last name</span>
+                <span>{{ x.USER_LAST_NAME_MIN }} to {{ x.USER_LAST_NAME_MAX }} characters</span>
+            </label>
+            <input name="user_last_name" type="text" mix-check="{{ x.USER_LAST_NAME_REGEX }}">
+        </div>                 
+        <div>
+            <label for="">
+                <span>email</span>
+                <span></span>
+            </label>
+            <input name="user_email" type="text" mix-check="{{ x.USER_EMAIL_REGEX }}">
+        </div>
+        <div>
+            <label for="">
+                <span>password</span>
+                <span>{{ x.USER_PASSWORD_MIN }} to {{ x.USER_PASSWORD_MAX }} characters</span>
+            </label>
+            <input name="user_password" type="password" mix-check="{{ x.USER_PASSWORD_REGEX }}">
+        </div>        
+        <button
+        mix-await="Please wait..."
+        mix-default="Signup"
+        >
+            Signup
+        </button>
+    </form>
+
 </main>
 
 

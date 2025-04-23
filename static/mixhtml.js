@@ -55,19 +55,59 @@ setInterval(async function(){
     }catch(error){ console.error("setInterval for clearing pages", error) }        
 }, 1000)
 // ##############################
+function hide_elements(selectors){
+    try{
+        selectors = selectors.split(',')
+        // console.log('selectors', selectors)
+        selectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(i=>{                 
+                i.classList.add("mix-hidden")
+            })
+        })
+    }catch(err){
+        console.log(err)
+    }
+}
+
+// ##############################
+function show_elements(selectors){
+    try{
+        selectors = selectors.split(',')
+        // console.log('selectors', selectors)
+        selectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(i=>{                 
+                i.classList.remove("mix-hidden")
+            })
+        })
+    }catch(err){
+        console.log(err)
+    }
+}
+
+
+// ##############################
 function mix_switch_page(mix_page, push_to_history = true){
     try{
         el = document.querySelector(`[mix-url="${mix_page}"]`)
         if( ! el ){
             console.log("mix_switch_page() -> no page")
+            console.log("mix_page", mix_page)
+            let el_cover = false
+            const el = document.querySelector(`[href='${mix_page}']`)
+            if( el.hasAttribute("mix-cover")){ 
+                el_cover = document.querySelector(el.getAttribute("mix-cover"))
+                el_cover.classList.remove("mix-hidden")
+            }            
             mix_page += mix_page.includes("?") ? "&mix-page=yes" : "?mix-page=yes"
-            mix_fetch(mix_page, "GET", null, false, false, false)
+            mix_fetch(mix_page, "GET", null, false, el_cover, false)
             return
         }
         document.title = el.getAttribute("mix-title")
         if( ! el.getAttribute("mix-y") ){ el.setAttribute("mix-y", "0") }
-        document.querySelectorAll(el.getAttribute("mix-hide")).forEach(i=>{ i.classList.add("mix-hidden") }) 
-        document.querySelectorAll(el.getAttribute("mix-show")).forEach(i=>{ i.classList.remove("mix-hidden") })
+        
+        hide_elements(el.getAttribute("mix-hide"))
+        show_elements(el.getAttribute("mix-show"))
+        
         document.querySelectorAll("[mix-on]").forEach(i=>{ i.setAttribute("mix-on", "no") })
         el.setAttribute("mix-on", "yes")  
         window.scrollTo(0, el.getAttribute("mix-y"))                
@@ -77,6 +117,7 @@ function mix_switch_page(mix_page, push_to_history = true){
     }catch(error){ console.error("mix_switch_page()", error) }
 }
 // ##############################
+let timeout = null
 function mixhtml(){
     try{
         const el = event.target
@@ -151,13 +192,23 @@ function mixhtml(){
                 el_await.setAttribute("disabled", true)
             }
         }
-        mix_fetch(url, method, form, true, el_cover, el)
+
+        if( el.hasAttribute("mix-delay") ){
+            clearTimeout(timeout)
+            timeout = setTimeout(function(){
+                mix_fetch(url, method, form, true, el_cover, el)
+            }, el.getAttribute("mix-delay"))
+        }else{
+            mix_fetch(url, method, form, true, el_cover, el)
+        }
+
     }catch(error){ console.error(error) }
 }
 
 // ##############################
 async function mix_fetch(url, method, form, push_to_history=true, el_cover=false, el=false){
     try{
+        console.log("el_cover", el_cover)
         let conn = null
         if( method == "GET" || method == "DELETE" ){
             conn = await fetch(url, {method:method})
@@ -193,9 +244,10 @@ async function mix_fetch(url, method, form, push_to_history=true, el_cover=false
                 if(push_to_history){
                     history.pushState({"mix_page":element.getAttribute("mix-url")}, "title", element.getAttribute("mix-url"))
                 }
-                document.querySelectorAll(element.getAttribute("mix-hide")).forEach(i=>{                 
-                    i.classList.add("mix-hidden")
-                })
+
+                hide_elements(element.getAttribute("mix-hide"))
+                show_elements(element.getAttribute("mix-show"))
+
                 document.querySelectorAll("[mix-on]").forEach(i=>{                 
                     i.setAttribute("mix-on", "no")
                 })    
@@ -296,6 +348,7 @@ function mix_convert(){
             if( el.hasAttribute("mix-focus") ){ el_event = "onfocus" }
             if( el.hasAttribute("mix-blur") ){ el_event = "onblur" }
             if( el.hasAttribute("mix-change") ){ el_event = "onchange" }
+            if( el.hasAttribute("mix-input") ){ el_event = "oninput" }
             if( el.hasAttribute("mix-url") && ! el.getAttribute("mix-on") ){ el.setAttribute("mix-on","yes") }
             if( el.hasAttribute("mix-url") && ! el.hasAttribute("mix-ttl") ){ el.setAttribute("mix-ttl", "0") }
             if(el.hasAttribute("mix-ttl")){
@@ -324,3 +377,5 @@ function mix_convert(){
     // hljs.highlightAll()
 }
 mix_convert()
+
+

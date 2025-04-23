@@ -20,11 +20,12 @@ def db():
     cursor = db.cursor(dictionary=True)
     return db, cursor
 
-# Brugbart?
+
 ##############################
 def validate_user_logged():
     if not session.get("user"): raise Exception("web_ex user not logged")
     return session.get("user")
+
 
 
 ##############################
@@ -55,7 +56,6 @@ def validate_email():
     if not re.match(REGEX_EMAIL, email): raise Exception(error)
     return email
 
-
 ##############################
 ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
 MAX_FILE_SIZE = 1 * 1024 * 1024  # 1MB - size in bytes
@@ -64,15 +64,14 @@ MAX_FILES = 5
 def validate_item_images():
     images_names = []
     if "files" not in request.files:
-        raise Exception("web_ex at least one file")
+         raise Exception("web_ex at least one file")
     
     files = request.files.getlist('files')
     
-    #  Fix the validation for 0 files
+    # TODO: Fix the validation for 0 files
     # if not files == [None]:
     #     raise Exception("web_ex at least one file")  
-    # Virker den ovenstående??
-
+       
     if len(files) > MAX_FILES:
         raise Exception("web_ex max 5 files")
 
@@ -91,3 +90,7 @@ def validate_item_images():
         the_file.save(file_path) 
         
     return images_names
+
+# OBS: HVAD BETYDER OVENSTÅENDE IFT STATIC/UPLOADS? DUMMY BILLEDER???
+
+

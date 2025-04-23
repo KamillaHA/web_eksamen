@@ -1,12 +1,18 @@
 <nav>
 
-    <div id="search_container">
-        <input id="input_search" oninput="search()" class="" type="text" placeholder="Search">
-        <div id="search_results" class="hidden">
-        </div>
+    <div id="logo_container">
+        <a href="/">
+            <img class="logo" src="../static/images/logotest.png" alt="Logotest"></a>
     </div>
 
 
-    <a href="./login.html">Log ind</a>
-    <a href="./signup.html">Opret bruger</a>
+
+    <div id="nav_right">
+        <a href="/login">{{ translate('login', lan) }}</a>
+        <div>
+            <a href="{{ url_for('index', lan='dk') }}" title="Dansk">🇩🇰</a>
+            <a href="{{ url_for('index', lan='en') }}" title="English">🇬🇧</a>
+        </div>
+    </div>
+
 </nav>

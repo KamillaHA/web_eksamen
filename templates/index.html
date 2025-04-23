@@ -1,8 +1,38 @@
 {% include "_header.html" %}
 {% include "_nav.html" %}
 
-<main>
+<!-- <header>
+    <div id="search_container">
+        <input id="input_search" oninput="search()" class="" type="text" placeholder="Search">
+        <div id="search_results" class="hidden">
+        </div>
+    </div>
+</header> -->
+<main id="index_main">
 
+    <section id="map">
+
+    </section>
+
+    <section id="items_more">
+        <div id="search_container">
+            <input id="input_search" oninput="search()" class="" type="text" placeholder="{{ translate('search', lan) }}">
+            <div id="search_results" class="hidden">
+            </div>
+        </div>
+        <div id="items">
+            {% for item in items: %}
+                {% include "_card.html" %}
+            {% endfor %}
+        </div>
+        {% include "_btn_more_items.html" %}
+    </section>
+
+    <section id="right">
+        {% set item = items[0] %}
+        {% include "_item.html" %}
+    </section>
+</div>
 
 </main>
 

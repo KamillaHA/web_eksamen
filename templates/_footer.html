@@ -1,6 +1,76 @@
 <!-- Footer -->
 
-<!-- Indsæt script til at mappet skal være i dk her med eventuelle custom markers -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+    <script>
+        // Create the map centered on Copenhagen (latitude, longitude)
+        var map = L.map('map').setView([55.6761, 12.5683], 13); // Copenhagen's coordinates
+
+        // Add the OpenStreetMap tile layer to the map
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+
+        {% for item in items %} 
+        
+            var customIcon = L.divIcon({
+                className: 'custom-marker', // Class for custom styling
+                html: `<div mix-get="/items/{{ item.item_pk }}" class="custom-marker">{{ item.item_name[:1] }}</div>`, // Custom content inside the div
+                iconSize: [50, 50], // Size of the div
+                iconAnchor: [25, 25], // Anchor point (center of the div)
+            });
+
+            var marker = L.marker([{{ item.item_lat }}, {{ item.item_lon }}], { icon: customIcon }).addTo(map)           
+            .openPopup();
+            // marker.on('click', onMarkerClick)
+        {% endfor %}
+
+
+            // make sure this lives *after* you do L.map(...)
+    window.add_markers_to_map = function(jsonItems){
+        // parse the JSON string into an array of item-objects
+        let items = typeof jsonItems === 'string'
+        ? JSON.parse(jsonItems)
+        : jsonItems;
+
+        items.forEach(item => {
+        // exactly your existing divIcon + marker logic:
+        var customIcon = L.divIcon({
+            className: 'custom-marker',
+            html: `<div mix-get="/items/${ item.item_pk }" class="custom-marker">
+                    ${ item.item_name.charAt(0) }
+                </div>`,
+            iconSize: [50, 50],
+            iconAnchor: [25, 25],
+        });
+
+        L.marker(
+            [ parseFloat(item.item_lat), parseFloat(item.item_lon) ],
+            { icon: customIcon }
+        ).addTo(map)
+        .openPopup();
+        });
+    };
+
+
+        // {% for item in items %} 
+        
+        //     var customIcon = L.divIcon({
+        //         className: 'custom-marker', // Class for custom styling
+        //         html: `<div mix-get="/items/{{ item.item_pk }}" class="custom-marker">{{ item.item_name[:1] }}</div>`, // Custom content inside the div
+        //         iconSize: [50, 50], // Size of the div
+        //         iconAnchor: [25, 25], // Anchor point (center of the div)
+        //     });
+
+        //     var marker = L.marker([{{ item.item_lat }}, {{ item.item_lon }}], { icon: customIcon }).addTo(map)           
+        //     .openPopup();
+        //     // marker.on('click', onMarkerClick)
+        // {% endfor %}
+
+        mix_convert()
+        
+    </script>
 
 </body>
 </html>
