@@ -8,7 +8,7 @@
 
 
     <div id="nav_right">
-        <a href="/login">{{ translate('login', lan) }}</a>
+        <a href="{{ url_for('login', lan=lan) }}">{{ translate('login', lan) }}</a>
         <div>
             <a href="{{ url_for('index', lan='dk') }}" title="Dansk">🇩🇰</a>
             <a href="{{ url_for('index', lan='en') }}" title="English">🇬🇧</a>

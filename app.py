@@ -1,5 +1,6 @@
-from flask import Flask, render_template, session, request, redirect, url_for
+from flask import Flask, render_template, session, request, redirect, url_for, abort
 from werkzeug.security import generate_password_hash, check_password_hash
+# admin_hash = generate_password_hash("admin")
 from flask_session import Session
 import x
 import time
@@ -8,6 +9,7 @@ import os
 import json
 import languages
 import requests
+import traceback
 
 app = Flask(__name__)
 
@@ -47,7 +49,7 @@ def get_rates():
 
 ##############################
 @app.get("/")
-@app.get("/<lan>")
+@app.get("/<lan>/")
 def index(lan="dk"):
     if lan not in languages.translations:
         lan = "dk"
@@ -74,9 +76,10 @@ def index(lan="dk"):
 
 ##############################
 @app.get("/signup")
-def signup():
+@app.get("/<lan>/signup")
+def signup(lan="dk"):
     try:
-        return render_template("signup.html", title="Signup", x=x)
+        return render_template("signup.html", title="Signup", x=x, translate=languages.translate, lan=lan)
     except Exception as ex:
         ic(ex)
         return "error loading signup page"
@@ -86,7 +89,8 @@ def signup():
 
 ##############################
 @app.post("/signup")
-def post_signup():
+@app.post("/<lan>/signup")
+def post_signup(lan="dk"):
     try:
         user_username = x.validate_user_username()
         user_name = x.validate_user_name()
@@ -109,9 +113,10 @@ def post_signup():
 
         db.commit()
         x.send_email(user_name, user_last_name)
-        return redirect(url_for("login", message="Signup ok"))
+        return redirect(url_for("login", message="Signup ok", lan=lan))
     except Exception as ex:
         ic(ex)
+        traceback.print_exc()
         if "db" in locals(): db.rollback()
         # request.form is a tuple
         # test = request.form
@@ -119,30 +124,30 @@ def post_signup():
         if "username" in str(ex):
             old_values.pop("user_username", None)
             return render_template("signup.html",                                   
-                error_message="Invalid username", old_values=old_values, user_username_error="input_error")
+                error_message="Invalid username", old_values=old_values, user_username_error="input_error", x=x, translate=languages.translate, lan=lan)
         if "first name" in str(ex):
             old_values.pop("user_name", None)
             return render_template("signup.html",
-                error_message="Invalid name", old_values=old_values, user_name_error="input_error")
+                error_message="Invalid name", old_values=old_values, user_name_error="input_error", x=x, translate=languages.translate, lan=lan)
         if "last name" in str(ex):
             old_values.pop("user_last_name", None)
             return render_template("signup.html",
-                error_message="Invalid last name", old_values=old_values, user_last_name_error="input_error")
+                error_message="Invalid last name", old_values=old_values, user_last_name_error="input_error", x=x, translate=languages.translate, lan=lan)
         if "Invalid email" in str(ex):
             old_values.pop("user_email", None)
             return render_template("signup.html",
-                error_message="Invalid email", old_values=old_values, user_email_error="input_error")
+                error_message="Invalid email", old_values=old_values, user_email_error="input_error", x=x, translate=languages.translate, lan=lan)
         if "password" in str(ex):
             old_values.pop("user_password", None)
             return render_template("signup.html",
-                error_message="Invalid password", old_values=old_values, user_password_error="input_error")
+                error_message="Invalid password", old_values=old_values, user_password_error="input_error", x=x, translate=languages.translate, lan=lan)
 
         if "user_email" in str(ex):
             return redirect(url_for("signup",
-                error_message="Email already exists", old_values=old_values, email_error=True))
+                error_message="Email already exists", old_values=old_values, email_error=True, lan=lan))
         if "user_username" in str(ex): 
             return redirect(url_for("signup", 
-                error_message="Username already exists", old_values=request.form, user_username_error=True))
+                error_message="Username already exists", old_values=request.form, user_username_error=True, lan=lan))
         return redirect(url_for("signup", error_message=ex.args[0]))
     finally:
         if "cursor" in locals(): cursor.close()
@@ -152,9 +157,10 @@ def post_signup():
 
 ##############################
 @app.get("/login")
-def login():
+@app.get("/<lan>/login")
+def login(lan="dk"):
     try:
-        return render_template("login.html", title="Login", x=x)
+        return render_template("login.html", title="Login", x=x, translate=languages.translate, lan=lan)
     except Exception as ex:
         ic(ex)
         return "error loading login page"
@@ -165,34 +171,85 @@ def login():
 # fra full 15
 ##############################
 @app.post("/login")
-def post_login():
+@app.post("/<lan>/login")
+def post_login(lan="dk"):
     try:
         # MUST VALIDATE
         user_email = x.validate_user_email()
         user_password = x.validate_user_password()
+
         db, cursor = x.db()
-        q = "SELECT * FROM users WHERE user_email = %s"
+        q = """
+        SELECT user_pk, user_password, is_admin FROM users WHERE user_email = %s AND user_deleted_at = 0
+        """
         cursor.execute(q, (user_email,))
         user = cursor.fetchone()
-        if not user: raise Exception("User not found")
+        if not user:
+            raise Exception("User not found")
+
+
+
+
+
+        # db, cursor = x.db()
+        # q = "SELECT * FROM users WHERE user_email = %s"
+        # cursor.execute(q, (user_email,))
+        # user = cursor.fetchone()
+        # if not user: raise Exception("User not found")
+
+
+
         if not check_password_hash(user["user_password"], user_password):
             raise Exception("Invalid credentials")
         # todo: remove the user's password
         user.pop("user_password")
         ic(user)
         session["user"] = user
-        return redirect(url_for("profile"))
+
+
+        if user.get("is_admin"):
+            return redirect(url_for("admin", translate=languages.translate, lan=lan))
+        else:
+            return redirect(url_for("profile", translate=languages.translate, lan=lan))
+
     except Exception as ex:
         ic(ex)
-        return str(ex), 400 
+        return str(ex), 400
+
     finally:
         if "cursor" in locals(): cursor.close()
-        if "db" in locals(): db.close()  
+        if "db"     in locals(): db.close()
+
+
+
+
+
+    #     return redirect(url_for("profile"))
+    # except Exception as ex:
+    #     ic(ex)
+    #     return str(ex), 400 
+    # finally:
+    #     if "cursor" in locals(): cursor.close()
+    #     if "db" in locals(): db.close()  
+
+
+##############################
+@app.get("/admin")
+@app.get("/<lan>/admin")
+def admin(lan="dk"):
+    user = session.get("user")
+    # only allow real admins
+    if not user or not user.get("is_admin"):
+        return abort(403)
+    # render your admin.html template
+    return render_template("admin.html", title="Admin", user=user, x=x, translate=languages.translate, lan=lan)
 
 
 ##############################
 @app.get("/profile")
-def profile():
+@app.get("/<lan>/profile")
+def profile(lan="dk"):
+    user = session.get("user")
     return render_template("profile.html", title="Profile", x=x)
 
 

@@ -5,12 +5,12 @@
 
     <h1>Log ind</h1>
 
-    <form mix-post="/login">
-        <input name="email" type="text" placeholder="user email" 
-        mix-check="{{ x.REGEX_EMAIL }}">
-        <button>
-            Login
-        </button>
+    <form action="{{ url_for('post_login', lan=lan) }}" method="post">
+        <input name="user_email" type="email" placeholder="Email" mix-check="{{ x.REGEX_EMAIL }}" required
+        >
+        <input name="user_password" type="password" placeholder="Password" mix-check="{{ x.REGEX_PASSWORD }}" required
+        >
+        <button type="submit">Log ind</button>
     </form>
 
 <p>Har du ikke en profil?</p>
