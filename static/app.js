@@ -60,3 +60,17 @@ function add_markers_to_map(data){
 function onMarkerClick(event) {
     alert("Marker clicked at " + event.latlng);
 }
+
+
+document.getElementById('btn_items').onclick = () => {
+    document.getElementById('items').classList.remove('hidden');
+    document.getElementById('single_item').classList.remove('hidden');
+    document.getElementById('users').classList.add('hidden');
+    document.getElementById('single_user').classList.add('hidden');
+};
+document.getElementById('btn_users').onclick = () => {
+    document.getElementById('items').classList.add('hidden');
+    document.getElementById('single_item').classList.add('hidden');
+    document.getElementById('users').classList.remove('hidden');
+    document.getElementById('single_user').classList.remove('hidden');
+};

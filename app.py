@@ -21,6 +21,14 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 
+# Til login/log ud men virker umiddelbart uden?
+##############################
+# @app.context_processor
+# def inject_user():
+#     # makes `user` available in every template
+#     return {"user": session.get("user")}
+
+
 ##############################
 @app.after_request
 def disable_cache(response):
@@ -241,8 +249,37 @@ def admin(lan="dk"):
     # only allow real admins
     if not user or not user.get("is_admin"):
         return abort(403)
+    try:
+        db, cursor = x.db()
+        # languages_allowed = ["dk", "en"]
+        # if lan not in languages_allowed: lan = "dk"
+        q = "SELECT * FROM items ORDER BY item_created_at"
+        cursor.execute(q)
+        items = cursor.fetchall()
+        rates = ""
+        with open("rates.txt", "r") as file:
+            rates = file.read() # this is text that looks like json
+        ic(rates)
+        # Convert the text rates to json
+        rates = json.loads(rates)
     # render your admin.html template
-    return render_template("admin.html", title="Admin", user=user, x=x, translate=languages.translate, lan=lan)
+        return render_template("admin.html", title="Admin", items=items, rates=rates, user=user, x=x, translate=languages.translate, lan=lan)
+    except Exception as ex:
+        ic(ex)
+        return "ups"
+    finally:
+        pass
+
+##############################
+# @app.get("/admin")
+# @app.get("/<lan>/admin")
+# def admin(lan="dk"):
+#     user = session.get("user")
+#     # only allow real admins
+#     if not user or not user.get("is_admin"):
+#         return abort(403)
+#     # render your admin.html template
+#     return render_template("admin.html", title="Admin", user=user, x=x, translate=languages.translate, lan=lan)
 
 
 ##############################
@@ -250,9 +287,9 @@ def admin(lan="dk"):
 @app.get("/<lan>/profile")
 def profile(lan="dk"):
     user = session.get("user")
-    return render_template("profile.html", title="Profile", x=x)
+    return render_template("profile.html", title="Profile", x=x, translate=languages.translate, lan=lan)
 
-
+# MANGLER LANGUAGE
 ##############################
 @app.get("/logout")
 def logout():
@@ -366,7 +403,7 @@ def get_items_by_page(page_number):
 @app.get("/search")
 def search():
     try:
-        search_for = request.args.get("q", "") # car
+        search_for = request.args.get("q", "").strip() # car
         # TODO: validate search_for
         db, cursor = x.db()
         q = "SELECT * FROM items WHERE item_name LIKE %s"

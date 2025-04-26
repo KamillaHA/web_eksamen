@@ -3,27 +3,19 @@ Vejhylden
 Hylden med historier
 The shelf of stories
 
-
-#2b2b2b - sort
-#a3b7bf - blå
-#3c5a3b - grøn
-#f5f1eb - hvid
-#8b5e3c - brun
-
-
 Cards:
 
 Indholdsværdi / collection value
 
 
-Bogskabet på Otto Busses - Otto Busses Vej 54, København
-Lille Bibliotek Kastrup - Rhodesiavej 31, Kastrup
-Hylden i Lyngby - Caroline Amalie Vej 22, Kongens Lyngby
-Ballerup Bøger - Egebjerghuse 5, Ballerup
-Virum Bogkasse - Brovænget 44, Virum
-Skolekrogens Læsehjørne - Skolekrogen 107, Værløse
+Bogskabet på Otto Busses - Otto Busses Vej 54, 2450 København
+Lille Bibliotek Kastrup - Rhodesiavej 31, 2770 Kastrup
+Hylden i Lyngby - Caroline Amalie Vej 22, 2800 Kongens Lyngby
+Ballerup Bøger - Egebjerghuse 5, 2750 Ballerup
+Virum Bogkasse - Brovænget 44, 2830 Virum
+Skolekrogens Læsehjørne - Skolekrogen 107, 3550 Værløse
 Ledøjes Frie Bogskab - Præstetoften 5, Ledøje
-Sandbjergs Litteraturskur - Sanbjergvej 36, Vedbæk
+Sandbjergs Litteraturskur - Sandbjergvej 36, Vedbæk
 Fredensborg Boghus - Humlebækvej 39, Fredensborg
 Ågades Byttehylde - Ågade 56, Frederikssund
 Bogbyttehuset i Aarhus - Nørre Allé 23, 8000 Aarhus C

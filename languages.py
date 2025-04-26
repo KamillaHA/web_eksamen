@@ -17,14 +17,24 @@ translations = {
     'dk': {
         'more_items': 'Vis mere',
         'login' : 'Log ind',
+        'logout' : 'Log ud',
         'search' : 'Søg',
+        'admin' : 'Dit admin dashboard',
+        'library' : "Biblioteker",
+        'user' : 'Profiler',
     },
     'en': {
         'more_items': 'Show more',
         'login' : 'Login',
+        'logout' : 'Logout',
         'search' : 'Search',
+        'admin' : 'Your admin dashboard',
+        'library' : "Libraries",
+        'user' : 'Users',
+
     },
 }
+
 
 # defining a function to translate the keys
 def translate(key: str, lan: str = 'dk') -> str:

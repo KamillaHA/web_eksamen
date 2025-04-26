@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oooh+Baby&display=swap');
+
+
+:root {
+    /* --colorBg: #F5F7F2;
+    --colorTxt: #17261C;
+    --colorGreen: #B7C396;
+    --colorDarkGreen: #365940;
+    --colorDarkBrown: #664930;
+    --colorBrown: #997E67; */
+
+
+    --colorBg: #F5F7F2;
+    --colorTxt: #1C140D;
+    --colorLightBrown: #CEC1B6;
+    --colorBrown: #997E67;
+    --colorDarkBrown: #664930;
+
+
+
+    --fontMain: 'Poppins', sans-serif;
+    --fontWritten: 'Oooh Baby', cursive;
+}

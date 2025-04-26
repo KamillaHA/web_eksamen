@@ -2,13 +2,21 @@
 
     <div id="logo_container">
         <a href="/">
-            <img class="logo" src="../static/images/logotest.png" alt="Logotest"></a>
+            <!-- <img class="logo" src="../static/images/logotest.png" alt="Logotest"> -->
+            Vejhylden
+        </a>
     </div>
 
 
 
     <div id="nav_right">
+        {% if user %}
+        <!-- If there's a logged-in user, show “Logout” -->
+        <a href="{{ url_for('logout') }}">{{ translate('logout', lan) }}</a>
+        {% else %}
+        <!-- Otherwise show “Login” -->
         <a href="{{ url_for('login', lan=lan) }}">{{ translate('login', lan) }}</a>
+        {% endif %}
         <div>
             <a href="{{ url_for('index', lan='dk') }}" title="Dansk">🇩🇰</a>
             <a href="{{ url_for('index', lan='en') }}" title="English">🇬🇧</a>

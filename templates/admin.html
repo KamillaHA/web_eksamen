@@ -1,6 +1,38 @@
 {% include "_header.html" %}
 {% include "_nav.html" %}
 
-<p>admin yay</p>
+
+<main id="admin_main">
+
+    <!-- TJEK OM ASIDE ER OK -->
+    <div id="aside_dash">
+
+        <aside id="dashboard">
+            <h1>{{ translate('admin', lan) }}</h1>
+            {% include "_btn_admin.html" %}
+        </aside>
+    </div>
+
+
+        <section id="items">
+            {% for item in items: %}
+                {% include "_admin_card_item.html" %}
+            {% endfor %}
+        </section>
+
+        <section id="single_item">
+            {% set item = items[0] %}
+            {% include "_admin_item.html" %}
+        <!-- Block / unblock -->
+        </section>
+
+        <section id="users" class="hidden">
+
+            <p>users</p></section>
+
+</main>
 
 {% include "_footer.html" %}
+
+
+
