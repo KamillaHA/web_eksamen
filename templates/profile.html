@@ -1,22 +1,62 @@
 {% include "_header.html" %}
 {% include "_nav.html" %}
 
-{{ user.user_name }}
+    <p>
+        {{ translate('welcome', lan) }}
+    </p>
+    <p>
+        {{ user.user_name }} {{ user.user_last_name }}
+    </p>
 
 
-<form mix-post="/item">
+    <form 
+    action="{{ url_for('create_item', lan=lan) }}" 
+    method="post" 
+    enctype="multipart/form-data"
+>
+    <div>
+        <label for="item_name">{{ translate('name', lan) }}</label>
+        <input id="item_name" name="item_name" type="text" placeholder="Roskildes Boghylde" required>
+    </div>
+    <div>
+        <label for="item_address">{{ translate('address', lan) }}</label>
+        <input id="item_address" name="item_address" type="text" placeholder="Jernbanegade 2, 4000 Roskilde" required>
+    </div>
+    <div>
+        <label for="item_price">{{ translate('price', lan) }}</label>
+        <input id="item_price" name="item_price" type="number" step="1.00" placeholder="25.00" required>
+        <p><em>{{ translate('based_on', lan) }}</em></p>
+    </div>
+    <div>
+        <label for="files">{{ translate('image', lan) }}</label>
+        <input 
+        id="files" 
+        name="files" 
+        type="file" 
+        accept="image/*"  
+        required
+    >
+    </div>
+    <button type="submit">{{ translate('create', lan) }}</button>
+    </form>
+
+<!-- <div id="images"></div> -->
+
+
+
+<!-- <form mix-post="/item">
     <input name="files" type="file" multiple>
     <button>
         Create item
     </button>
 </form>
 
-<div id="images"></div>
+<div id="images"></div> -->
 
 
 
 <button mix-delete="/user">
-    Delete account
+    {{ translate('delete_profile', lan) }}
 </button>
 
 

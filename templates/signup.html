@@ -10,19 +10,22 @@
             Signup
         </button>
     </form> -->
-    <h1>Opret bruger</h1>
+    
+    <h1>{{ translate('sign_up', lan) }}</h1>
 
-    <form action="{{ url_for('post_signup', lan=lan) }}" method="post">
+    <!-- <div id="toast_container"></div> -->
+
+    <form action="{{ url_for('post_signup', lan=lan) }}" method="POST">
         <div>
             <label for="">
-                <span>Navn</span>
+                <span>{{ translate('user_name', lan) }}</span>
             </label>
             <input name="user_name" type="text" mix-check="{{ x.USER_NAME_REGEX }}">
         </div> 
 
         <div>
             <label for="">
-                <span>Efternavn</span>
+                <span>{{ translate('user_lastname', lan) }}</span>
             </label>
             <input name="user_last_name" type="text" mix-check="{{ x.USER_LAST_NAME_REGEX }}">
         </div>
@@ -37,20 +40,18 @@
 
         <div>
             <label for="">
-                <span>Brugernavn</span>
-                <span>{{ x.USER_USERNAME_MIN }} til {{ x.USER_USERNAME_MAX }} karakterer</span>
+                <span>{{ translate('user_username', lan) }}</span>
             </label>
-            <input name="user_username" type="text" mix-check="{{ x.USER_USERNAME_REGEX }}">
+            <input name="user_username" type="text" mix-check="{{ x.USER_USERNAME_REGEX }}" placeholder="{{ x.USER_USERNAME_MIN }} {{ translate('to', lan) }} {{ x.USER_USERNAME_MAX }} {{ translate('characters', lan) }}">
         </div>        
 
         <div>
             <label for="">
                 <span>Password</span>
-                <span>{{ x.USER_PASSWORD_MIN }} til {{ x.USER_PASSWORD_MAX }} karakterer</span>
             </label>
-            <input name="user_password" type="password" mix-check="{{ x.USER_PASSWORD_REGEX }}">
+            <input name="user_password" type="password" mix-check="{{ x.USER_PASSWORD_REGEX }}" placeholder="{{ x.USER_PASSWORD_MIN }} {{ translate('to', lan) }} {{ x.USER_PASSWORD_MAX }} {{ translate('characters', lan) }}">
         </div>        
-        <button type="submit">Opret bruger</button>
+        <button type="submit">{{ translate('sign_up', lan) }}</button>
     </form>
 
 </main>

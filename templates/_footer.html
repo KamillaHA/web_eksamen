@@ -9,8 +9,29 @@
     <script src="{{ url_for('static', filename='app.js') }}"></script>
 
     <script>
+        function switchLang(lang) {
+            let path = window.location.pathname;
+          // hvis path starter med "/xy/" (2-bogstavs lan-kode), skift det:
+            if (/^\/[a-z]{2}\//.test(path)) {
+            path = path.replace(/^\/[a-z]{2}\//, '/' + lang + '/');
+            } else {
+            // ellers indsæt koden som første segment
+            path = '/' + lang + path;
+            }
+          // bevar query params & hash
+            const qs   = window.location.search;
+            const hash = window.location.hash;
+            window.location.href = path + qs + hash;
+        }
+    </script>
+
+
+
+
+
+    <script>
         // Create the map centered on Copenhagen (latitude, longitude)
-        var map = L.map('map').setView([55.6761, 10.3605], 7); // Copenhagen's coordinates
+        var map = L.map('map').setView([55.6761, 10.3605], 7); // Denmark's coordinates
 
         // Add the OpenStreetMap tile layer to the map
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -27,7 +48,7 @@
                 iconAnchor: [25, 25], // Anchor point (center of the div)
             });
 
-            var marker = L.marker([{{ item.item_lat }}, {{ item.item_lon }}], { icon: customIcon }).addTo(map)           
+            var marker = L.marker([{{ item.item_latitude }}, {{ item.item_longitude }}], { icon: customIcon }).addTo(map)           
             .openPopup();
             // marker.on('click', onMarkerClick)
         {% endfor %}
@@ -52,27 +73,13 @@
         });
 
         L.marker(
-            [ parseFloat(item.item_lat), parseFloat(item.item_lon) ],
+            [ parseFloat(item.item_latitude), parseFloat(item.item_longitude) ],
             { icon: customIcon }
         ).addTo(map)
         .openPopup();
         });
     };
 
-
-        // {% for item in items %} 
-        
-        //     var customIcon = L.divIcon({
-        //         className: 'custom-marker', // Class for custom styling
-        //         html: `<div mix-get="/items/{{ item.item_pk }}" class="custom-marker">{{ item.item_name[:1] }}</div>`, // Custom content inside the div
-        //         iconSize: [50, 50], // Size of the div
-        //         iconAnchor: [25, 25], // Anchor point (center of the div)
-        //     });
-
-        //     var marker = L.marker([{{ item.item_lat }}, {{ item.item_lon }}], { icon: customIcon }).addTo(map)           
-        //     .openPopup();
-        //     // marker.on('click', onMarkerClick)
-        // {% endfor %}
 
         mix_convert()
         

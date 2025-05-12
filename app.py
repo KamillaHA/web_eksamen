@@ -2,6 +2,8 @@ from flask import Flask, render_template, session, request, redirect, url_for, a
 from werkzeug.security import generate_password_hash, check_password_hash
 # admin_hash = generate_password_hash("admin")
 from flask_session import Session
+from decimal import Decimal
+from datetime import datetime, date
 import x
 import time
 import uuid
@@ -23,10 +25,41 @@ Session(app)
 
 # Til login/log ud men virker umiddelbart uden?
 ##############################
-# @app.context_processor
-# def inject_user():
-#     # makes `user` available in every template
-#     return {"user": session.get("user")}
+@app.context_processor
+def inject_user():
+    # makes `user` available in every template
+    return {"user": session.get("user")}
+
+
+##############################
+@app.context_processor
+def utility_processor():
+    def image_path(filename):
+        """Returner den korrekte static-sti til billedet."""
+        # Absolutte stier til de to mulige mapper
+        upload_fp = os.path.join(app.static_folder, "uploads", filename)
+        image_fp  = os.path.join(app.static_folder, "images", filename)
+
+        # Tjek hvad der findes
+        if os.path.isfile(upload_fp):
+            folder = "uploads"
+        elif os.path.isfile(image_fp):
+            folder = "images"
+        else:
+            folder = "uploads"   # eller 'images', fallback hvis ingen findes
+
+        return url_for("static", filename=f"{folder}/{filename}")
+
+    return dict(image_path=image_path)
+
+
+
+
+
+
+
+
+
 
 
 ##############################
@@ -46,7 +79,7 @@ def disable_cache(response):
 @app.get("/rates")
 def get_rates():
     try:
-        data = requests.get("https://api.exchangerate-api.com/v4/latest/usd")
+        data = requests.get("https://open.er-api.com/v6/latest/USD")
         ic(data.json())
         with open("rates.txt", "w") as file:
             file.write(data.text)
@@ -59,22 +92,40 @@ def get_rates():
 @app.get("/")
 @app.get("/<lan>/")
 def index(lan="dk"):
+    user = session.get("user")
     if lan not in languages.translations:
         lan = "dk"
     try:
         db, cursor = x.db()
         # languages_allowed = ["dk", "en"]
         # if lan not in languages_allowed: lan = "dk"
-        q = "SELECT * FROM items ORDER BY item_created_at LIMIT 2"
+        q = """
+        SELECT *
+        FROM items
+        LEFT JOIN images
+        ON items.item_pk = images.item_id
+        AND images.image_slot = 1
+        AND images.image_deleted_at IS NULL
+        ORDER BY items.item_created_at DESC
+        LIMIT 2
+        """
         cursor.execute(q)
         items = cursor.fetchall()
+
+##
+        for it in items:
+            if isinstance(it.get("item_price"), Decimal):
+                it["item_price"] = float(it["item_price"])
+
+
+
         rates = ""
         with open("rates.txt", "r") as file:
             rates = file.read() # this is text that looks like json
         ic(rates)
         # Convert the text rates to json
         rates = json.loads(rates)
-        return render_template("index.html", title="Vejhylden", items=items, rates=rates, translate=languages.translate, lan=lan)
+        return render_template("index.html", title="Vejhylden", items=items, rates=rates, translate=languages.translate, lan=lan, user=user)
     except Exception as ex:
         ic(ex)
         return "ups"
@@ -107,20 +158,27 @@ def post_signup(lan="dk"):
         user_password = x.validate_user_password()
         hashed_password = generate_password_hash(user_password)
         # ic(hashed_password)
-        user_created_at = int(time.time())
 
         q = """INSERT INTO users 
-        (user_pk, user_username, user_name, user_last_name, user_email, 
-        user_password, user_created_at, user_updated_at, user_deleted_at) 
-        VALUES (NULL, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        (user_username, user_name, user_last_name, user_email, 
+        user_password) 
+        VALUES (%s, %s, %s, %s, %s)"""
 
         db, cursor = x.db()
-        cursor.execute(q, (user_username, user_name,user_last_name,user_email,hashed_password,user_created_at,0,0))
+        cursor.execute(q, (user_username, user_name, user_last_name, user_email, hashed_password,))
 
         if cursor.rowcount != 1: raise Exception("System under maintenance")
 
         db.commit()
-        x.send_email(user_name, user_last_name)
+
+
+
+        try:
+            x.send_email(user_name, user_last_name, user_email)
+        except Exception as mail_ex:
+            ic(f"Email-fejl: {mail_ex} (brugeren er oprettet)")
+
+
         return redirect(url_for("login", message="Signup ok", lan=lan))
     except Exception as ex:
         ic(ex)
@@ -188,7 +246,7 @@ def post_login(lan="dk"):
 
         db, cursor = x.db()
         q = """
-        SELECT user_pk, user_password, is_admin FROM users WHERE user_email = %s AND user_deleted_at = 0
+        SELECT user_pk, user_name, user_last_name, user_password, user_is_admin FROM users WHERE user_email = %s AND user_deleted_at IS NULL
         """
         cursor.execute(q, (user_email,))
         user = cursor.fetchone()
@@ -215,10 +273,10 @@ def post_login(lan="dk"):
         session["user"] = user
 
 
-        if user.get("is_admin"):
-            return redirect(url_for("admin", translate=languages.translate, lan=lan))
+        if user.get("user_is_admin"):
+            return redirect(url_for("admin", lan=lan))
         else:
-            return redirect(url_for("profile", translate=languages.translate, lan=lan))
+            return redirect(url_for("profile", lan=lan))
 
     except Exception as ex:
         ic(ex)
@@ -247,28 +305,189 @@ def post_login(lan="dk"):
 def admin(lan="dk"):
     user = session.get("user")
     # only allow real admins
-    if not user or not user.get("is_admin"):
+    if not user or not user.get("user_is_admin"):
         return abort(403)
+
     try:
         db, cursor = x.db()
-        # languages_allowed = ["dk", "en"]
-        # if lan not in languages_allowed: lan = "dk"
-        q = "SELECT * FROM items ORDER BY item_created_at"
-        cursor.execute(q)
+
+        # ── 1) Handle toggles ──
+        toggle_item = request.args.get("toggle_item")
+        if toggle_item:
+            cursor.execute(
+                "UPDATE items SET item_is_blocked = NOT item_is_blocked WHERE item_pk = %s",
+                (toggle_item,)
+            )
+            db.commit()
+
+        toggle_user = request.args.get("toggle_user")
+        if toggle_user:
+            cursor.execute(
+                "UPDATE users SET user_is_blocked = NOT user_is_blocked WHERE user_pk = %s",
+                (toggle_user,)
+            )
+            db.commit()
+
+        # ── 2) Fetch single item (if needed) ──
+        cursor.execute("""
+            SELECT *
+            FROM items
+            LEFT JOIN images
+              ON items.item_pk = images.item_id
+              AND images.image_slot = 1
+              AND images.image_deleted_at IS NULL
+            WHERE items.item_pk = %s
+        """, (toggle_item,))
+        items = cursor.fetchone()
+
+        # ── 3) Fetch all items ──
+        q_items = """
+        SELECT *
+        FROM items
+        LEFT JOIN images
+          ON items.item_pk = images.item_id
+          AND images.image_slot = 1
+          AND images.image_deleted_at IS NULL
+        ORDER BY items.item_created_at DESC
+        """
+        cursor.execute(q_items)
         items = cursor.fetchall()
-        rates = ""
+
+        # ── 4) Fetch all users ──
+        q_users = "SELECT * FROM users ORDER BY user_created_at DESC"
+        cursor.execute(q_users)
+        users = cursor.fetchall()
+
+        # ── 5) Convert Decimal prices to float ──
+        for it in items:
+            if isinstance(it.get("item_price"), Decimal):
+                it["item_price"] = float(it["item_price"])
+
+        # ── 6) Load rates ──
         with open("rates.txt", "r") as file:
-            rates = file.read() # this is text that looks like json
-        ic(rates)
-        # Convert the text rates to json
-        rates = json.loads(rates)
-    # render your admin.html template
-        return render_template("admin.html", title="Admin", items=items, rates=rates, user=user, x=x, translate=languages.translate, lan=lan)
+            rates = json.loads(file.read())
+
+        # ── 7) Render template ──
+        return render_template(
+            "admin.html",
+            title="Admin",
+            items=items,
+            rates=rates,
+            user=user,
+            users=users,
+            x=x,
+            translate=languages.translate,
+            lan=lan
+        )
+
     except Exception as ex:
         ic(ex)
         return "ups"
     finally:
         pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##############################
+# @app.get("/admin")
+# @app.get("/<lan>/admin")
+# def admin(lan="dk"):
+#     user = session.get("user")
+#     # only allow real admins
+#     if not user or not user.get("user_is_admin"):
+#         return abort(403)
+#     try:
+#         db, cursor = x.db()
+
+
+#         toggle_item = request.args.get("toggle_item")
+#         if toggle_item:
+#             cursor.execute(
+#                 "UPDATE items SET item_is_blocked = NOT item_is_blocked WHERE item_pk = %s",
+#                 (toggle_item,)
+#             )
+#             db.commit()
+        
+
+#         cursor.execute("""
+#                 SELECT *
+#                 FROM items
+#                 LEFT JOIN images
+#                 ON items.item_pk = images.item_id
+#                 AND images.image_slot = 1
+#                 AND images.image_deleted_at IS NULL
+#                 WHERE items.item_pk = %s
+#             """, (toggle_item,))
+#         items = cursor.fetchone()
+
+
+        
+#         # languages_allowed = ["dk", "en"]
+#         # if lan not in languages_allowed: lan = "dk"
+#         # q = "SELECT * FROM items ORDER BY item_created_at"
+#         q_items = """
+#         SELECT *
+#         FROM items
+#         LEFT JOIN images
+#         ON items.item_pk = images.item_id
+#         AND images.image_slot = 1
+#         AND images.image_deleted_at IS NULL
+#         ORDER BY items.item_created_at DESC
+#         """
+#         cursor.execute(q_items)
+#         items = cursor.fetchall()
+
+
+
+#         toggle_user = request.args.get("toggle_user")
+#         if toggle_user:
+#             cursor.execute(
+#                 "UPDATE users SET user_is_blocked = NOT user_is_blocked WHERE user_pk = %s",
+#                 (toggle_user,)
+#             )
+#             db.commit()
+        
+
+
+#         q_users = "SELECT * FROM users ORDER BY user_created_at DESC"
+    
+#         cursor.execute(q_users)
+#         users = cursor.fetchall()
+
+# ##
+#         for it in items:
+#             if isinstance(it.get("item_price"), Decimal):
+#                 it["item_price"] = float(it["item_price"])
+
+#         rates = ""
+#         with open("rates.txt", "r") as file:
+#             rates = file.read() # this is text that looks like json
+#         ic(rates)
+#         # Convert the text rates to json
+#         rates = json.loads(rates)
+#     # render your admin.html template
+#         return render_template("admin.html", title="Admin", items=items, rates=rates, user=user, users=users, x=x, translate=languages.translate, lan=lan)
+#     except Exception as ex:
+#         ic(ex)
+#         return "ups"
+#     finally:
+#         pass
 
 ##############################
 # @app.get("/admin")
@@ -287,27 +506,46 @@ def admin(lan="dk"):
 @app.get("/<lan>/profile")
 def profile(lan="dk"):
     user = session.get("user")
-    return render_template("profile.html", title="Profile", x=x, translate=languages.translate, lan=lan)
+    return render_template("profile.html", title="Profile", x=x, user=user, translate=languages.translate, lan=lan)
 
 # MANGLER LANGUAGE
 ##############################
 @app.get("/logout")
-def logout():
+@app.get("/<lan>/logout")
+def logout(lan="dk"):
     session.pop("user")
-    return redirect(url_for("login"))
+    return redirect(url_for("login", lan=lan))
 
 
 ##############################
 @app.get("/items/<item_pk>")
+@app.get("/<lan>/items/<item_pk>")
 def get_item_by_pk(item_pk):
     lan = request.args.get('lan', 'dk')
     if lan not in ("dk","en"):
         lan = "dk"
     try:
         db, cursor = x.db()
-        q = "SELECT * FROM items WHERE item_pk = %s"
+        # q = "SELECT * FROM items WHERE item_pk = %s"
+        q = """
+        SELECT *
+        FROM items
+        LEFT JOIN images
+        ON items.item_pk = images.item_id
+        AND images.image_slot = 1
+        AND images.image_deleted_at IS NULL
+        WHERE items.item_pk = %s
+    """
+
         cursor.execute(q, (item_pk,))
         item = cursor.fetchone()
+
+###
+        if item and isinstance(item.get("item_price"), Decimal):
+            item["item_price"] = float(item["item_price"])
+
+
+
 
         rates= ""
         with open("rates.txt", "r") as file:
@@ -323,7 +561,7 @@ def get_item_by_pk(item_pk):
         """
     except Exception as ex:
         ic(ex)
-        if "web_ex page number" in str(ex):
+        if "new_ex page number" in str(ex):
             return """
                 <mixhtml mix-top="body">
                     page number invalid
@@ -343,6 +581,7 @@ def get_item_by_pk(item_pk):
 
 ##############################
 @app.get("/items/page/<page_number>")
+@app.get("/<lan>/items/page/<page_number>")
 def get_items_by_page(page_number):
     lan = request.args.get('lan', 'dk')
     if lan not in ("dk","en"):
@@ -353,9 +592,31 @@ def get_items_by_page(page_number):
         offset = (page_number-1) * items_per_page
         extra_item = items_per_page + 1
         db, cursor = x.db()
-        q = "SELECT * FROM items ORDER BY item_created_at LIMIT %s OFFSET %s"
+        # q = "SELECT * FROM items ORDER BY item_created_at LIMIT %s OFFSET %s"
+
+        q = """
+        SELECT *
+        FROM items
+        LEFT JOIN images
+        ON items.item_pk = images.item_id
+        AND images.image_slot = 1
+        AND images.image_deleted_at IS NULL
+        ORDER BY items.item_created_at DESC
+        LIMIT %s OFFSET %s
+        """
         cursor.execute(q, (extra_item, offset))
         items = cursor.fetchall()
+
+
+###
+        for it in items:
+            for k, v in list(it.items()):
+                if isinstance(v, Decimal):
+                    it[k] = float(v)
+                elif isinstance(v, (datetime, date)):
+                    it[k] = v.isoformat()
+
+
         html = ""
         
         rates= ""
@@ -381,7 +642,122 @@ def get_items_by_page(page_number):
         """
     except Exception as ex:
         ic(ex)
-        if "web_ex page number" in str(ex):
+        if "new_ex page number" in str(ex):
+            return """
+                <mixhtml mix-top="body">
+                    page number invalid
+                </mixhtml>
+            """
+        # worst case, we cannot control exceptions
+        return """
+            <mixhtml mix-top="body">
+                ups
+            </mixhtml>
+        """
+    finally:
+        if "cursor" in locals(): cursor.close()
+        if "db" in locals(): db.close()
+
+
+##############################
+@app.post("/item")
+@app.post("/<lan>/item")
+def create_item(lan="dk"):
+    # 1) Tjek at brugeren er logget ind
+    user = x.validate_user_logged()
+
+    # 2) Valider og hent de øvrige formular-felter
+    item_name    = request.form["item_name"].strip()
+    item_address = request.form["item_address"].strip()
+    item_price   = request.form["item_price"].strip()
+
+    # 3) Geokodér adressen (som før)
+    try:
+        resp = requests.get(
+            "https://nominatim.openstreetmap.org/search",
+            params={"q": item_address, "format": "json"},
+            headers={"User-Agent": "my-flask-app/1.0"}
+        )
+        data = resp.json()
+        latitude  = float(data[0]["lat"]) if data else 0.0
+        longitude = float(data[0]["lon"]) if data else 0.0
+    except:
+        latitude = longitude = 0.0
+
+    # 4) Opdel billed-validering & gemning til x.validate_item_images()
+    #    Den returnerer en liste af nye filnavne
+    image_filenames = x.validate_item_images()[:3]
+
+    # 5) Indsæt item i DB
+    db, cursor = x.db()
+    cursor.execute(
+        """
+        INSERT INTO items
+          (item_name,item_address,item_price,item_latitude,item_longitude,item_created_by)
+        VALUES (%s,%s,%s,%s,%s,%s)
+        """,
+        (item_name, item_address, item_price,
+         latitude, longitude, user["user_pk"])
+    )
+    item_pk = cursor.lastrowid
+    db.commit()
+
+    # 6) Gem de validerede billeder i images-tabellen
+    for slot, fname in enumerate(image_filenames, start=1):
+        cursor.execute(
+            "INSERT INTO images (item_id,item_image,image_slot) VALUES (%s,%s,%s)",
+            (item_pk, fname, slot)
+        )
+    db.commit()
+
+    cursor.close()
+    db.close()
+
+    return redirect(url_for("profile", lan=lan))
+
+
+
+
+
+
+
+
+
+
+
+
+
+##############################
+##############################
+##############################
+@app.get("/users/<user_pk>")
+@app.get("/<lan>/users/<user_pk>")
+def get_user_by_pk(user_pk, lan="dk"):
+    lan = request.args.get('lan', 'dk')
+    if lan not in ("dk","en"):
+        lan = "dk"
+    try:
+        db, cursor = x.db()
+        q = "SELECT * FROM users WHERE user_pk = %s"
+
+        cursor.execute(q, (user_pk,))
+        user = cursor.fetchone()
+
+        rates= ""
+        with open("rates.txt", "r") as file:
+            rates = file.read() # this is text that looks like json
+            rates = json.loads(rates)
+
+        html_user = render_template("_admin_user.html", user=user, lan=lan,                   
+            translate=languages.translate)
+        return f"""
+            <mixhtml mix-replace="#user">
+                {html_user}
+            </mixhtml>
+        """
+    except Exception as ex:
+        ic(ex)
+        if "new_ex page number" in str(ex):
             return """
                 <mixhtml mix-top="body">
                     page number invalid
@@ -406,7 +782,16 @@ def search():
         search_for = request.args.get("q", "").strip() # car
         # TODO: validate search_for
         db, cursor = x.db()
-        q = "SELECT * FROM items WHERE item_name LIKE %s"
+        # q = "SELECT * FROM items WHERE item_name LIKE %s"
+        q = """
+        SELECT *
+        FROM items
+        LEFT JOIN images
+        ON items.item_pk = images.item_id
+        AND images.image_slot = 1
+        AND images.image_deleted_at IS NULL
+        WHERE items.item_name LIKE %s
+        """
         cursor.execute(q, (f"{search_for}%",))
         rows = cursor.fetchall()
         ic(rows)

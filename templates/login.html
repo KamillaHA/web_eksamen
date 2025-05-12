@@ -3,18 +3,18 @@
 
 <main>
 
-    <h1>Log ind</h1>
+    <h1>{{ translate('login', lan) }}</h1>
 
     <form action="{{ url_for('post_login', lan=lan) }}" method="post">
         <input name="user_email" type="email" placeholder="Email" mix-check="{{ x.REGEX_EMAIL }}" required
         >
         <input name="user_password" type="password" placeholder="Password" mix-check="{{ x.REGEX_PASSWORD }}" required
         >
-        <button type="submit">Log ind</button>
+        <button type="submit">{{ translate('login', lan) }}</button>
     </form>
 
-<p>Har du ikke en profil?</p>
-<p>Opret en bruger <a href="/signup">her</a></p>
+<p>{{ translate('profile', lan) }}</p>
+<p>{{ translate('sign_up', lan) }} <a href="/signup">{{ translate('here', lan) }}</a></p>
 
 </main>
 

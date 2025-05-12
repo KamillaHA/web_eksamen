@@ -14,21 +14,27 @@
     </div>
 
 
-        <section id="items">
+        <section id="items_admin">
             {% for item in items: %}
                 {% include "_admin_card_item.html" %}
             {% endfor %}
         </section>
 
-        <section id="single_item">
+        <section id="single_item_admin">
             {% set item = items[0] %}
             {% include "_admin_item.html" %}
-        <!-- Block / unblock -->
         </section>
 
         <section id="users" class="hidden">
+            {% for user in users: %}
+                {% include "_admin_card_user.html" %}
+            {% endfor %}        
+        </section>
 
-            <p>users</p></section>
+        <section id="single_user">
+            {% set user = users[0] %}
+            {% include "_admin_user.html" %}
+        </section>
 
 </main>
 

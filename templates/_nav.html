@@ -1,7 +1,7 @@
 <nav>
 
     <div id="logo_container">
-        <a href="/">
+        <a href="{{ url_for('index', lan=lan) }}">
             <!-- <img class="logo" src="../static/images/logotest.png" alt="Logotest"> -->
             Vejhylden
         </a>
@@ -10,17 +10,33 @@
 
 
     <div id="nav_right">
-        {% if user %}
-        <!-- If there's a logged-in user, show “Logout” -->
-        <a href="{{ url_for('logout') }}">{{ translate('logout', lan) }}</a>
-        {% else %}
-        <!-- Otherwise show “Login” -->
+    {% if not user %}
         <a href="{{ url_for('login', lan=lan) }}">{{ translate('login', lan) }}</a>
+
+    {% else %}
+        {% if user.user_is_admin %}
+            <a href="{{ url_for('admin', lan=lan) }}">
+                {{ translate('panel_btn', lan) }}
+            </a>
+        {% else %}
+            <a href="{{ url_for('profile', lan=lan) }}">
+                {{ translate('profile_btn', lan) }}
+            </a>
         {% endif %}
-        <div>
-            <a href="{{ url_for('index', lan='dk') }}" title="Dansk">🇩🇰</a>
-            <a href="{{ url_for('index', lan='en') }}" title="English">🇬🇧</a>
-        </div>
+
+        <a href="{{ url_for('logout', lan=lan) }}">
+            {{ translate('logout', lan) }}
+        </a>
+    {% endif %}
+    <div>
+        <a href="javascript:void(0)"
+        onclick="switchLang('dk')"
+        title="Dansk">🇩🇰</a>
+        <a href="javascript:void(0)"
+        onclick="switchLang('en')"
+        title="English">🇬🇧</a>
     </div>
+</div>
+
 
 </nav>

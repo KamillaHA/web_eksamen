@@ -49,7 +49,7 @@ function add_markers_to_map(data){
     data = JSON.parse(data)
     console.log(data)
     data.forEach(item=>{
-        L.marker([item.item_lat, item.item_lon]).addTo(map)    
+        L.marker([item.item_latitude, item.item_longitude]).addTo(map)    
         .bindPopup(item.item_name)    
         .openPopup()        
     })
@@ -63,14 +63,14 @@ function onMarkerClick(event) {
 
 
 document.getElementById('btn_items').onclick = () => {
-    document.getElementById('items').classList.remove('hidden');
-    document.getElementById('single_item').classList.remove('hidden');
+    document.getElementById('items_admin').classList.remove('hidden');
+    document.getElementById('single_item_admin').classList.remove('hidden');
     document.getElementById('users').classList.add('hidden');
     document.getElementById('single_user').classList.add('hidden');
 };
 document.getElementById('btn_users').onclick = () => {
-    document.getElementById('items').classList.add('hidden');
-    document.getElementById('single_item').classList.add('hidden');
+    document.getElementById('items_admin').classList.add('hidden');
+    document.getElementById('single_item_admin').classList.add('hidden');
     document.getElementById('users').classList.remove('hidden');
     document.getElementById('single_user').classList.remove('hidden');
 };

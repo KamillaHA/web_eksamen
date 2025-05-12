@@ -1,16 +1,50 @@
+<h2>
+    {{ translate('info_item', lan) }}
+</h2>
 <div id="item">
-    <img src="{{ url_for('static', filename='images/'+item.item_image) }}">
+
+    <img src="{{ image_path(item.item_image) }}" alt="{{ item.item_name }}">
+
     <p>
         {{ item.item_name }}
     </p>    
-    <!-- <div>
-        {{ "{:,}".format(item.item_price)  }} USD
-    </div>
-    <div>
-        {{ "{:,.0f}".format(item.item_price * rates.rates.DKK) }} DKK
-    </div>     -->
 
-    <!-- <a href="/items/{{ item.item_pk }}" target="_blank">
-        Open in window
-    </a> -->
+    <p>
+        {{ item.item_address}}
+    </p>
+
+    {% if lan == 'en' %}
+    <div>
+    {{ "{:,}".format(item.item_price) }} USD
+    </div>
+{% else %}
+    <div>
+    {{ "{:,.0f}".format(item.item_price * rates.rates.DKK) }} DKK
+    </div>
+{% endif %}
+
 </div>
+<h2>
+    {{ translate('block_item', lan) }}
+</h2>
+
+<p>
+    Status:
+    {% if item.item_is_blocked %}
+    {{ translate('blocked', lan) }}
+    {% else %}
+    {{ translate('active', lan) }}
+    {% endif %}    
+</p>
+
+<button
+mix-get
+href="{{ url_for('admin', lan=lan, toggle_item=item.item_pk) }}"
+class="btn btn-block-toggle"
+>
+{% if item.item_is_blocked %}
+{{ translate('unblock', lan) }}
+{% else %}
+{{ translate('block', lan) }}
+{% endif %}  
+</button>

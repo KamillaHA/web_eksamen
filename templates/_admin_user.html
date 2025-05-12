@@ -1,0 +1,42 @@
+<div id="user">
+
+    <h2>
+        {{ translate('info_user', lan) }}
+    </h2>
+
+    <p>
+        {{ user.user_name }}
+    </p>    
+    <p>
+        {{ user.user_last_name }}
+    </p>
+    <p>
+        {{ user.user_email }}
+    </p>
+
+    <h2>
+        {{ translate('block_user', lan) }}
+    </h2>
+
+    <p>
+        Status:
+        {% if user.user_is_blocked %}
+        {{ translate('blocked', lan) }}
+        {% else %}
+        {{ translate('active', lan) }}
+        {% endif %}    
+    </p>
+
+<button
+mix-get
+href="{{ url_for('admin', lan=lan, toggle_user=user.user_pk) }}"
+class="btn btn-block-toggle"
+>
+{% if user.user_is_blocked %}
+{{ translate('unblock', lan) }}
+{% else %}
+{{ translate('block', lan) }}
+{% endif %}  
+</button>
+
+</div>

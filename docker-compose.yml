@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: web_flask
+    container_name: new_flask
     depends_on:
       - mysql
     ports:
@@ -13,10 +13,10 @@ services:
 
   mysql:
     image: mysql:latest
-    container_name: web_mysql
+    container_name: new_mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: web
+      MYSQL_DATABASE: new
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
@@ -24,7 +24,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: web_phpmyadmin
+    container_name: new_phpmyadmin
     depends_on:
       - mysql
     environment:
