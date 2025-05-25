@@ -1,20 +1,29 @@
-# import x 
 
-# dk_user_name = "navn" 
-# dk_user_name_rules = f"{x.USER_NAME_MIN} til {x.USER_NAME_MAX} tegn" 
-# dk_user_name_ex = f"navn {x.USER_NAME_MIN} til {x.USER_NAME_MAX} tegn" 
-# dk_user_name_already_exists = f"navnet findes allerede" 
-
-
-# en_user_name = "name" 
-# en_user_name_rules = f"{x.USER_NAME_MIN} to {x.USER_NAME_MAX} characters" 
-# en_user_name_ex = f"name {x.USER_NAME_MIN} to {x.USER_NAME_MAX} characters" 
-# en_user_name_already_exists = f"name already exists" 
-
-
-# mini‐dict of translations keyed by your URL param (‘dk’ or ‘en’)
 translations = {
     'dk': {
+        'nav' : 'hylden med historier',
+        'toast_signup_ok' : 'Tak for din tilmelding hos Vejhylden - tjek din e-mail for at bekræfte dit login.',
+        'toast_login_error' : 'Bekræft venligst din e-mail for at logge ind.',
+        'already_verified' : 'Brugeren er allerede blevet verificeret',
+        'verification_ok' : 'Din profil er blevet verificeret. Du kan nu logge ind.',
+        'verification_error' : 'Verifikation fejlet. Prøv venligst igen.',
+        'email_subject' : 'Verificér din bruger hos Vejhylden.',
+        'verify_link' : 'Klik venligst på nedenstående link for at verificere din bruger.',
+        'forgot_password' : 'Glemt adgangskode?',
+
+        'reset_password' : 'Nulstil din adgangskode',
+        'send_reset_link' : 'Send nulstillingslink',
+        'save_password' : 'Gem adgangskode',
+
+        'reset_email_greeting' : 'Har du glemt din adgangskode til Vejhylden?',
+        'reset_email_instruction' : 'Klik herunder for at vælge ny adgangskode.',
+
+
+
+
+        'click_here': 'Klik her',
+        'signing_up': 'for at oprette dig.',
+        'thanks': 'Tak',
         'to': 'til',
         'characters': 'karakterer',
         'more_items': 'Vis mere',
@@ -30,13 +39,24 @@ translations = {
         'profile_btn' : 'Profil',
         'panel_btn' : 'Panel',
         'welcome' : 'Velkommen',
+        'add_item' : 'Tilføj et nyt bibliotek',
+        'edit_profile' : 'Ret profiloplysninger',
+        'save_changes' : 'Gem oplysninger',
+        'change_password' : 'Skift adgangskode',
+        'current_password' : 'Nuværende adgangskode',
+        'new_password' : 'Ny adgangskode',
+        'confirm_password' : 'Bekræft ny adgangskode',
         'delete_profile' : 'Slet profil',
         'user_name' : 'Navn',
         'user_lastname' : 'Efternavn',
         'user_username' : 'Brugernavn',
-        'name' : 'Bibliotekets navn',
-        'address' : 'Adresse',
-        'image' : 'Billeder af biblioteket',
+        'your_items' : 'Dine biblioteker',
+        'profile_page' : 'Profil indstillinger',
+        'name' : 'Bibliotekets navn*',
+        'address' : 'Adresse*',
+        'image' : 'Billede af biblioteket',
+        'more_images' : 'Flere billeder af biblioteket',
+        'optional' : 'Valgfrit',
         'price' : 'Indholdsværdi*',
         'create' : 'Opret bibliotek',
         'blocked' : 'Blokeret',
@@ -50,6 +70,29 @@ translations = {
         'block_item' : 'Blokering af bibliotek',
     },
     'en': {
+        'nav' : 'the shelf of stories',
+        'toast_signup_ok' : 'Thank you for signing up to Vejhylden - check your email to confirm your login.',
+        'toast_login_error' : 'Please verify your email to log in.',
+        'already_verified' : 'The user has already been verified',
+        'verification_ok' : 'Your account has been successfully verified. You can now log in.',
+        'verification_error' : 'Verification failed. Please try again.',
+        'email_subject' : 'Verify your account at Vejhylden.',
+        'verify_link' : 'Please click the link below to verify your account.',
+        'forgot_password' : 'Forgot password?',
+
+        'reset_password' : 'Reset password',
+        'send_reset_link' : 'Send reset link',
+        'save_password' : 'Save password',
+
+        'reset_email_greeting' : 'Forgot your password to Vejhylden?',
+        'reset_email_instruction' : 'Click below to choose a new password.',
+
+
+
+
+        'click_here': 'Click here',
+        'signing_up': 'for signing up.',
+        'thanks': 'Thank you',
         'to': 'to',
         'characters': 'characters',
         'more_items': 'Show more',
@@ -65,13 +108,24 @@ translations = {
         'profile_btn' : 'Profile',
         'panel_btn' : 'Dashboard',
         'welcome' : 'Welcome',
+        'add_item' : 'Add a new library',
+        'edit_profile' : 'Edit profileinformation',
+        'save_changes' : 'Save changes',
+        'change_password' : 'Change password',
+        'current_password' : 'Current password',
+        'new_password' : 'New password',
+        'confirm_password' : 'Confirm new password',
         'delete_profile' : 'Delete profile',
         'user_name' : 'Name',
         'user_lastname' : 'Lastname',
         'user_username' : 'Username',
-        'name' : 'Name of the library',
-        'address' : 'Address',
-        'image' : 'Pictures of the library',
+        'your_items' : 'Your libraries',
+        'profile_page' : 'Profile information',
+        'name' : 'Name of the library*',
+        'address' : 'Address*',
+        'image' : 'Picture of the library',
+        'more_images' : 'More pictures of the library',
+        'optional' : 'Optional',
         'price' : 'Collection value*',
         'create' : 'Create library',
         'blocked' : 'Blocked',
@@ -83,7 +137,6 @@ translations = {
         'info_item' : 'Library information',
         'block_user' : 'Blocking of user',
         'block_item' : 'Blocking of library',
-
     },
 }
 

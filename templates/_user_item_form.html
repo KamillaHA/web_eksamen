@@ -1,0 +1,40 @@
+<h2>{{ translate('add_item', lan) }}</h2>
+
+
+<form 
+action="{{ url_for('create_item', lan=lan) }}" 
+method="post" 
+enctype="multipart/form-data"
+>
+<div>
+    <label for="item_name">{{ translate('name', lan) }}</label>
+    <input id="item_name" name="item_name" type="text" placeholder="Roskildes Boghylde" required>
+</div>
+<div>
+    <label for="item_address">{{ translate('address', lan) }}</label>
+    <input id="item_address" name="item_address" type="text" placeholder="Jernbanegade 2, 4000 Roskilde" required>
+</div>
+<div>
+    <label for="item_price">{{ translate('price', lan) }}</label>
+    <input id="item_price" name="item_price" type="number" step="1.00" placeholder="25.00" required>
+    <p><em>{{ translate('based_on', lan) }}</em></p>
+</div>
+
+<div>
+    <label for="file1">{{ translate('image', lan) }}* </label>
+    <input id="file1" name="files" type="file" accept="image/*">
+</div>
+<div>
+    <label for="file2">{{ translate('more_images', lan) }}</label>
+    <input id="file2" name="files" type="file" accept="image/*">
+    <p><em>{{ translate('optional', lan) }}</em></p>
+
+</div>
+<div>
+    <label for="file3">{{ translate('more_images', lan) }}</label>
+    <input id="file3" name="files" type="file" accept="image/*">
+    <p><em>{{ translate('optional', lan) }}</em></p>
+
+</div>
+<button type="submit">{{ translate('create', lan) }}</button>
+</form>

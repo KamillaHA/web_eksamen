@@ -1,3 +1,31 @@
-<!-- <div class="toast {{ status }}" mix-ttl="{{ ttl | default('3000') }}">
-    {{ message |default("ups") }}
+
+<!-- Til at rette i css -->
+<!-- <div id="toast_container">
+    <div class="toast" id="toast_message">
+        {{ translate('toast_ok', lan) }}
+    </div>
 </div> -->
+
+
+
+
+
+
+{% if session.toast_message %}
+<div id="toast_container">
+    <div class="toast {{ session.toast_status }}" id="toast_message">
+        {{ session.toast_message }}
+    </div>
+</div>
+
+<script>
+    setTimeout(() => {
+        const toast = document.getElementById("toast_message");
+        if (toast) toast.classList.add("hidden");
+    }, {{ session.toast_ttl or 3000 }});
+</script>
+
+{% set _ = session.pop('toast_message', None) %}
+{% set _ = session.pop('toast_status', None) %}
+{% set _ = session.pop('toast_ttl', None) %}
+{% endif %}

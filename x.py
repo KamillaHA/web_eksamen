@@ -3,6 +3,11 @@ import mysql.connector
 import re
 import os
 import uuid
+from languages import translate
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 from icecream import ic
@@ -27,6 +32,81 @@ def validate_user_logged():
     return session.get("user")
 
 
+##############################
+def send_email(user_name, user_last_name, user_email, user_verification_token, lan="dk"):
+    try:
+        # Create a gmail
+        # Enable (turn on) 2 step verification/factor in the google account manager
+        # Visit: https://myaccount.google.com/apppasswords
+
+        # Email and password of the sender's Gmail account
+        sender_email = "kamiweb1031@gmail.com"
+        password = "bdqb aclo sysn hgrf"  # If 2FA is on, use an App Password instead
+
+        # Receiver email address
+        receiver_email = "kamiweb1031@gmail.com"
+        
+        # Create the email message
+        message = MIMEMultipart()
+        message["From"] = "Vejhylden"
+        message["To"] = "kamiweb1031@gmail.com"
+        message["Subject"] = translate("email_subject", lan)
+
+        # Verification link
+        verification_link = f"http://127.0.0.1/{lan}/verify/{user_verification_token}"
+
+        # Body of the email
+        body = f"""
+        <h1>{ translate('thanks', lan) }, {user_name} {user_last_name} { translate('signing_up', lan) }</h1>
+        <p>{ translate('verify_link', lan) }</p>
+        <p><a href="{verification_link}">{ translate('click_here', lan) }</a></p>"""
+        
+        message.attach(MIMEText(body, "html"))
+
+        # Connect to Gmail's SMTP server and send the email
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()  # Upgrade the connection to secure
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+        ic("Email sent successfully!")
+
+        return "email sent"
+
+    except Exception as ex:
+        ic(ex)
+        raise Exception("cannot send email")
+    finally:
+        pass
+
+
+
+##############################
+def send_reset_email(user_email, reset_token, lan="dk"):
+    from languages import translate
+
+    sender_email = "kamiweb1031@gmail.com"
+    password = "bdqb aclo sysn hgrf"
+    receiver_email = "kamiweb1031@gmail.com"
+
+    link = f"http://127.0.0.1/{lan}/reset-password/{reset_token}"
+
+    subject = translate("reset_password", lan)
+    body = f"""
+        <h1>{translate("reset_email_greeting", lan)}</h1>
+        <p>{translate("reset_email_instruction", lan)}</p>
+        <p><a href="{link}">{translate("click_here", lan)}</a></p>
+    """
+
+    message = MIMEMultipart()
+    message["From"] = "Vejhylden"
+    message["To"] = "kamiweb1031@gmail.com"
+    message["Subject"] = subject
+    message.attach(MIMEText(body, "html"))
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message.as_string())
 
 ##############################
 # def validate_user_password():
@@ -113,37 +193,60 @@ def validate_user_email():
 ##############################
 ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
 MAX_FILE_SIZE = 1 * 1024 * 1024  # 1MB - size in bytes
-MAX_FILES = 5
+MAX_FILES = 3
 
 def validate_item_images():
     images_names = []
     if "files" not in request.files:
         raise Exception("new_ex at least one file")
     
-    files = request.files.getlist('files')
+    files = [f for f in request.files.getlist('files') if f.filename]
     
     # TODO: Fix the validation for 0 files
     # if not files == [None]:
     #     raise Exception("web_ex at least one file")  
 
+    if len(files) == 0:
+        raise Exception("new_ex at least one file")
     if len(files) > MAX_FILES:
-        raise Exception("new_ex max 5 files")
+        raise Exception(f"new_ex max {MAX_FILES} files")
 
-    for the_file in files:
-        file_size = len(the_file.read()) # size is in bytes                 
-        file_name, file_extension = os.path.splitext(the_file.filename)
-        the_file.seek(0)
-        file_extension = file_extension.lstrip(".")
-        if file_extension not in ALLOWED_EXTENSIONS:
-            raise Exception("new_ex file extension not allowed")  
-        if file_size > MAX_FILE_SIZE:
-            raise Exception("new_ex file too large")  
-        new_file_name = f"{uuid.uuid4().hex}.{file_extension}"
-        images_names.append(new_file_name)
-        file_path = os.path.join("static/uploads", new_file_name)
-        the_file.save(file_path) 
-        
+    for f in files:
+        data = f.read()
+        size = len(data)
+        f.seek(0)
+
+        name, ext = os.path.splitext(f.filename)
+        ext = ext.lstrip(".").lower()
+        if ext not in ALLOWED_EXTENSIONS:
+            raise Exception("new_ex file extension not allowed")
+        if size > MAX_FILE_SIZE:
+            raise Exception("new_ex file too large")
+
+        new_name = f"{uuid.uuid4().hex}.{ext}"
+        f.save(os.path.join("static/uploads", new_name))
+        images_names.append(new_name)
+
     return images_names
+
+
+
+    # for the_file in files:
+    #     file_size = len(the_file.read())
+    #     file_name, file_extension = os.path.splitext(the_file.filename)
+    #     the_file.seek(0)
+    #     file_extension = file_extension.lstrip(".")
+    #     if file_extension not in ALLOWED_EXTENSIONS:
+    #         raise Exception("new_ex file extension not allowed")  
+    #     if file_size > MAX_FILE_SIZE:
+    #         raise Exception("new_ex file too large")  
+    #     new_file_name = f"{uuid.uuid4().hex}.{file_extension}"
+    #     images_names.append(new_file_name)
+    #     file_path = os.path.join("static/uploads", new_file_name)
+    #     the_file.save(file_path)
+        
+    # return images_names
+
 
 # OBS: HVAD BETYDER OVENSTÅENDE IFT STATIC/UPLOADS? DUMMY BILLEDER???
 

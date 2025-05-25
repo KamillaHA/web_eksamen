@@ -2,8 +2,7 @@ const search_results = document.querySelector("#search_results")
 const input_search = document.querySelector("#input_search")
 let my_timer = null
 
-// setTimeout - runs only 1 time
-// setInterval - runs forever in intervals
+
 function search(){
     clearInterval(my_timer)
     if (input_search.value != ""){
@@ -16,7 +15,7 @@ function search(){
                 console.log(data)
                 data.forEach(item => {
                     const a = `<div class="instant-item" mix-get="/items/${item.item_pk}">
-                                <img src="/static/images/${item.item_image}">
+                                <img src="/static/uploads/${item.item_image}">
                                 <a href="/${item.item_name}">${item.item_name}</a>
                                 </div>`
                     search_results.insertAdjacentHTML("beforeend", a)
@@ -34,7 +33,6 @@ function search(){
 }
 
 
-
 addEventListener("click", function(event){
     if( ! search_results.contains(event.target) ){
         search_results.classList.add("hidden")
@@ -44,6 +42,8 @@ addEventListener("click", function(event){
     }
 })
 
+
+// Map
 function add_markers_to_map(data){
     console.log(data)
     data = JSON.parse(data)
@@ -56,21 +56,8 @@ function add_markers_to_map(data){
 
 }
 
-
 function onMarkerClick(event) {
     alert("Marker clicked at " + event.latlng);
 }
 
 
-document.getElementById('btn_items').onclick = () => {
-    document.getElementById('items_admin').classList.remove('hidden');
-    document.getElementById('single_item_admin').classList.remove('hidden');
-    document.getElementById('users').classList.add('hidden');
-    document.getElementById('single_user').classList.add('hidden');
-};
-document.getElementById('btn_users').onclick = () => {
-    document.getElementById('items_admin').classList.add('hidden');
-    document.getElementById('single_item_admin').classList.add('hidden');
-    document.getElementById('users').classList.remove('hidden');
-    document.getElementById('single_user').classList.remove('hidden');
-};

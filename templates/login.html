@@ -1,5 +1,6 @@
 {% include "_header.html" %}
 {% include "_nav.html" %}
+{% include "_toast.html" %}
 
 <main>
 
@@ -10,11 +11,14 @@
         >
         <input name="user_password" type="password" placeholder="Password" mix-check="{{ x.REGEX_PASSWORD }}" required
         >
+        <p>{{ translate('forgot_password', lan) }} <a href="{{ url_for('forgot_password', lan=lan) }}">{{ translate('click_here', lan) }}</a></p>
         <button type="submit">{{ translate('login', lan) }}</button>
     </form>
 
 <p>{{ translate('profile', lan) }}</p>
-<p>{{ translate('sign_up', lan) }} <a href="/signup">{{ translate('here', lan) }}</a></p>
+<p>{{ translate('sign_up', lan) }} <a href="{{ url_for('signup', lan=lan) }}">{{ translate('here', lan) }}</a></p>
+
+
 
 </main>
 

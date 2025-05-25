@@ -1,0 +1,95 @@
+
+    <h2>lav om på item</h2>
+  
+    <form
+    mix-post="{{ url_for('update_item', item_pk=item.item_pk, lan=lan) }}"
+    mix-update="#single_item_user"
+    enctype="multipart/form-data"
+  >
+  
+      <div class="form-group">
+        <label for="item_name">{{ translate('name', lan) }}</label>
+        <input
+          type="text"
+          id="item_name"
+          name="item_name"
+          value="{{ item.item_name }}"
+          required
+        >
+      </div>
+  
+      <div class="form-group">
+        <label for="item_address">{{ translate('address', lan) }}</label>
+        <input
+          type="text"
+          id="item_address"
+          name="item_address"
+          value="{{ item.item_address }}"
+          required
+        >
+      </div>
+  
+      <div class="form-group">
+        <label for="item_price">{{ translate('price', lan) }}</label>
+        <input
+          type="number"
+          id="item_price"
+          name="item_price"
+          step="1.00"
+          value="{{ item.item_price }}"
+          required
+        >
+        <p><em>{{ translate('based_on', lan) }}</em></p>
+      </div>
+  
+      <hr>
+  
+      <div class="form-group">
+        <label for="file1">{{ translate('image', lan) }}</label>
+        <input
+          type="file"
+          id="file1"
+          name="files"
+          accept="image/*"
+        >
+        {% if item.item_image %}
+          <small>{{ translate('current_image', lan) }}:</small>
+          <img src="{{ image_path(item.item_image) }}" alt="" style="height:3rem;">
+        {% endif %}
+      </div>
+  
+      <div class="form-group">
+        <label for="file2">{{ translate('more_images', lan) }}</label>
+        <input
+          type="file"
+          id="file2"
+          name="files"
+          accept="image/*"
+        >
+        <p><em>{{ translate('optional', lan) }}</em></p>
+        {% if item.item_image_2 %}
+          <small>{{ translate('current_image', lan) }}:</small>
+          <img src="{{ image_path(item.item_image_2) }}" alt="" style="height:3rem;">
+        {% endif %}
+      </div>
+  
+      <div class="form-group">
+        <label for="file3">{{ translate('more_images', lan) }}</label>
+        <input
+          type="file"
+          id="file3"
+          name="files"
+          accept="image/*"
+        >
+        <p><em>{{ translate('optional', lan) }}</em></p>
+        {% if item.item_image_3 %}
+          <small>{{ translate('current_image', lan) }}:</small>
+          <img src="{{ image_path(item.item_image_3) }}" alt="" style="height:3rem;">
+        {% endif %}
+      </div>
+  
+      <button type="submit" class="btn">
+        gem
+      </button>
+    </form>
+

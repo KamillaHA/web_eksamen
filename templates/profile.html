@@ -1,63 +1,40 @@
 {% include "_header.html" %}
 {% include "_nav.html" %}
 
-    <p>
-        {{ translate('welcome', lan) }}
-    </p>
-    <p>
-        {{ user.user_name }} {{ user.user_last_name }}
-    </p>
 
+<main id="user_main">
 
-    <form 
-    action="{{ url_for('create_item', lan=lan) }}" 
-    method="post" 
-    enctype="multipart/form-data"
->
-    <div>
-        <label for="item_name">{{ translate('name', lan) }}</label>
-        <input id="item_name" name="item_name" type="text" placeholder="Roskildes Boghylde" required>
+    <div id="aside_dash">
+
+        <aside id="dashboard">
+            <h1>{{ translate('welcome', lan) }} {{ user.user_username }}</h1>
+            {% include "_btn_user.html" %}
+        </aside>
     </div>
-    <div>
-        <label for="item_address">{{ translate('address', lan) }}</label>
-        <input id="item_address" name="item_address" type="text" placeholder="Jernbanegade 2, 4000 Roskilde" required>
-    </div>
-    <div>
-        <label for="item_price">{{ translate('price', lan) }}</label>
-        <input id="item_price" name="item_price" type="number" step="1.00" placeholder="25.00" required>
-        <p><em>{{ translate('based_on', lan) }}</em></p>
-    </div>
-    <div>
-        <label for="files">{{ translate('image', lan) }}</label>
-        <input 
-        id="files" 
-        name="files" 
-        type="file" 
-        accept="image/*"  
-        required
-    >
-    </div>
-    <button type="submit">{{ translate('create', lan) }}</button>
-    </form>
 
-<!-- <div id="images"></div> -->
+<section id="items_form_user">
+    {% include "_user_item_form.html" %}
+</section>
 
 
-
-<!-- <form mix-post="/item">
-    <input name="files" type="file" multiple>
-    <button>
-        Create item
-    </button>
-</form>
-
-<div id="images"></div> -->
+<section id="items_user" class="hidden">
+    {% for item in items: %}
+        {% include "_user_your_items.html" %}
+    {% endfor %}
+</section>
 
 
+<section id="single_item_user" class="hidden">
+    {% set item = items[0] if items else None %}    
+    {% include "_user_single_item.html" %}
+</section>
 
-<button mix-delete="/user">
-    {{ translate('delete_profile', lan) }}
-</button>
+<section id="profile_user" class="hidden">
+    {% include "_user_edit_profile.html" %}
+</section>
+
+
+</main>    
 
 
 {% include "_footer.html" %}

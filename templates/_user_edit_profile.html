@@ -1,0 +1,103 @@
+<button mix-delete="/user">
+{{ translate('delete_profile', lan) }}
+
+</button>
+
+
+
+<!-- <section id="profile_user" class="hidden"> -->
+    <h2>{{ translate('edit_profile', lan) }}</h2>
+
+    <!-- 1) FORM TIL PROFIL-OPDATERING -->
+    <form mix-post="/user" class="profile-form">
+<!-- Hvis du bruger method-override på serveren: -->
+<!-- <input type="hidden" name="_method" value="PATCH"> -->
+
+    <div class="form-group">
+        <label for="user_name">{{ translate('user_name', lan) }}</label>
+        <input
+            type="text"
+            id="user_name"
+            name="user_name"
+            value="{{ user.user_name }}"
+        >
+    </div>
+
+    <div class="form-group">
+        <label for="user_last_name">{{ translate('user_lastname', lan) }}</label>
+        <input
+            type="text"
+            id="user_last_name"
+            name="user_last_name"
+            value="{{ user.user_last_name }}"
+        >
+    </div>
+
+    <div class="form-group">
+        <label for="user_username">{{ translate('user_username', lan) }}</label>
+        <input
+            type="text"
+            id="user_username"
+            name="user_username"
+            value="{{ user.user_username }}"
+        >
+    </div>
+
+    <div class="form-group">
+        <label for="user_email">Email</label>
+        <input
+            type="email"
+            id="user_email"
+            name="user_email"
+            value="{{ user.user_email }}"
+        >
+    </div>
+
+    <button type="submit" class="btn">
+        {{ translate('save_changes', lan) }}
+    </button>
+    </form>
+
+    <hr>
+
+    <!-- 2) FORM TIL AT SKIFTE PASSWORD -->
+    <h3>{{ translate('change_password', lan) }}</h3>
+    <form mix-post="/user/password" class="password-form">
+        <div class="form-group">
+        <label for="current_password">{{ translate('current_password', lan) }}</label>
+        <input
+            type="password"
+            id="current_password"
+            name="current_password"
+            required
+        >
+    </div>
+
+    <div class="form-group">
+        <label for="new_password">{{ translate('new_password', lan) }}</label>
+        <input
+            type="password"
+            id="new_password"
+            name="new_password"
+            required
+        >
+    </div>
+
+    <div class="form-group">
+        <label for="new_password_confirm">{{ translate('confirm_password', lan) }}</label>
+        <input
+            type="password"
+            id="new_password_confirm"
+            name="new_password_confirm"
+            required
+        >
+    </div>
+
+    <button type="submit" class="btn">
+        {{ translate('change_password', lan) }}
+    </button>
+    </form>
+
+    <hr>
+
+</section>

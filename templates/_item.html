@@ -1,8 +1,27 @@
 <div id="item">
+    {% if item.item_image %}
     <img src="{{ image_path(item.item_image) }}" alt="{{ item.item_name }}">
-    <h2>
-        {{ item.item_name }}
-    </h2>    
+    {% endif %}
+
+    <div id="item_more_img">
+    {% if item.item_image_2 %}
+    <img src="{{ image_path(item.item_image_2) }}" alt="{{ item.item_name }}">
+    {% endif %}
+
+    {% if item.item_image_3 %}
+    <img src="{{ image_path(item.item_image_3) }}" alt="{{ item.item_name }}">
+    {% endif %}
+</div>
+<h2>
+    {{ item.item_name }}
+</h2>    
+
+    <!-- {# Loop gennem alle billeder #} -->
+    <!-- {% for fname in item.images %}
+        <img src="{{ image_path(fname) }}" alt="{{ item.item_name }} {{ translate('image', lan) }} {{ loop.index }}">
+    {% endfor %} -->
+
+
     <!-- <div>
         {{ "{:,}".format(item.item_price)  }} USD
     </div>
