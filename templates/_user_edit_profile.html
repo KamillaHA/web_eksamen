@@ -1,17 +1,12 @@
-<button mix-delete="/user">
-{{ translate('delete_profile', lan) }}
-
-</button>
-
-
-
 <!-- <section id="profile_user" class="hidden"> -->
     <h2>{{ translate('edit_profile', lan) }}</h2>
 
     <!-- 1) FORM TIL PROFIL-OPDATERING -->
-    <form mix-post="/user" class="profile-form">
-<!-- Hvis du bruger method-override på serveren: -->
-<!-- <input type="hidden" name="_method" value="PATCH"> -->
+<form
+    action="{{ url_for('update_user', lan=lan) }}"
+    method="post"
+    class="profile-form"
+>
 
     <div class="form-group">
         <label for="user_name">{{ translate('user_name', lan) }}</label>
@@ -58,11 +53,16 @@
     </button>
     </form>
 
-    <hr>
+
 
     <!-- 2) FORM TIL AT SKIFTE PASSWORD -->
     <h3>{{ translate('change_password', lan) }}</h3>
-    <form mix-post="/user/password" class="password-form">
+<form
+    action="{{ url_for('change_password', lan=lan) }}"
+    method="post"
+    class="password-form" 
+>
+
         <div class="form-group">
         <label for="current_password">{{ translate('current_password', lan) }}</label>
         <input
@@ -98,6 +98,41 @@
     </button>
     </form>
 
-    <hr>
+
+
+
+    <!-- 3) FORM TIL AT SLETTE PROFIL -->
+
+<h3>{{ translate('delete_profile', lan) }}</h3>
+<form
+  action="{{ url_for('post_delete_user', lan=lan) }}"
+  method="post"
+  class="delete-form"
+>
+  <div class="form-group">
+    <label for="confirm_password">
+      {{ translate('current_password', lan) }}
+    </label>
+    <input
+      type="password"
+      id="confirm_password"
+      name="current_password"
+      required
+      class="{{ 'error' if delete_error else '' }}"
+      placeholder="{{ translate('enter_password_to_delete', lan) }}"
+    >
+  </div>
+  <button type="submit" class="btn btn-danger">
+    {{ translate('delete_profile', lan) }}
+  </button>
+</form>
+
+
+
+
+
+    <!-- <button mix-delete="/user">
+    {{ translate('delete_profile', lan) }}
+    </button> -->
 
 </section>

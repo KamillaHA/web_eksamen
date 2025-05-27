@@ -109,6 +109,44 @@ def send_reset_email(user_email, reset_token, lan="dk"):
         server.sendmail(sender_email, receiver_email, message.as_string())
 
 ##############################
+def send_deletion_email(user_name, user_last_name, user_email, lan="dk"):
+    """
+    Sender en bekræftelse til user_email om at kontoen er slettet.
+    """
+    try:
+        sender_email = "kamiweb1031@gmail.com"
+        password     = "bdqb aclo sysn hgrf"  # dit App Password
+
+        # Sæt modtageren til den bruger, vi sletter
+        receiver_email = "kamiweb1031@gmail.com"
+        
+        # Byg selve beskeden
+        message = MIMEMultipart()
+        message["From"]    = "Vejhylden <{}>".format(sender_email)
+        message["To"]      = receiver_email
+        message["Subject"] = translate("deletion_email_subject", lan)
+
+        body = f"""
+        <h1>{translate('deletion_email_greeting', lan)} {user_name} {user_last_name}</h1>
+        <p>{translate('deletion_email_body', lan)}</p>
+        """
+        message.attach(MIMEText(body, "html"))
+
+        # Send via Gmail SMTP
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+
+        ic("Deletion email sent successfully!")
+    except Exception as ex:
+        ic("Error sending deletion email:", ex)
+        # Du kan vælge at raise igen, eller bare logge
+        raise
+
+
+
+##############################
 # def validate_user_password():
 #     error = "web_ex password"
 #     user_password = request.form.get("user_password", "")

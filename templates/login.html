@@ -3,24 +3,48 @@
 {% include "_toast.html" %}
 
 <main>
+  <h1>{{ translate('login', lan) }}</h1>
 
-    <h1>{{ translate('login', lan) }}</h1>
+  <form action="{{ url_for('post_login', lan=lan) }}" method="post">
+    {% set old = old_values if old_values is defined else {} %}
 
-    <form action="{{ url_for('post_login', lan=lan) }}" method="post">
-        <input name="user_email" type="email" placeholder="Email" mix-check="{{ x.REGEX_EMAIL }}" required
-        >
-        <input name="user_password" type="password" placeholder="Password" mix-check="{{ x.REGEX_PASSWORD }}" required
-        >
-        <p>{{ translate('forgot_password', lan) }} <a href="{{ url_for('forgot_password', lan=lan) }}">{{ translate('click_here', lan) }}</a></p>
-        <button type="submit">{{ translate('login', lan) }}</button>
-    </form>
+    <div class="form-group">
+      <input
+        name="user_email"
+        type="email"
+        placeholder="Email"
+        required
+        mix-check="{{ x.REGEX_EMAIL }}"
+        value="{{ old.user_email or '' }}"
+        class="{{ 'error' if user_email_error else '' }}"
+      >
+    </div>
 
-<p>{{ translate('profile', lan) }}</p>
-<p>{{ translate('sign_up', lan) }} <a href="{{ url_for('signup', lan=lan) }}">{{ translate('here', lan) }}</a></p>
+    <div class="form-group">
+      <input
+        name="user_password"
+        type="password"
+        placeholder="Password"
+        required
+        mix-check="{{ x.REGEX_PASSWORD }}"
+        class="{{ 'error' if user_password_error else '' }}"
+      >
+    </div>
 
+    <p>
+      {{ translate('forgot_password', lan) }}
+      <a href="{{ url_for('forgot_password', lan=lan) }}">
+        {{ translate('click_here', lan) }}
+      </a>
+    </p>
+    <button type="submit">{{ translate('login', lan) }}</button>
+  </form>
 
-
+  <p>{{ translate('profile', lan) }}</p>
+  <p>
+    {{ translate('sign_up', lan) }}
+    <a href="{{ url_for('signup', lan=lan) }}">{{ translate('here', lan) }}</a>
+  </p>
 </main>
-
 
 {% include "_footer.html" %}

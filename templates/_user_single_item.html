@@ -1,12 +1,11 @@
 
-    <h2>lav om på item</h2>
-  
-    <form
-    mix-post="{{ url_for('update_item', item_pk=item.item_pk, lan=lan) }}"
-    mix-update="#single_item_user"
-    enctype="multipart/form-data"
-  >
-  
+<form
+  action="{{ url_for('update_item', item_pk=item.item_pk, lan=lan) }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+
+<h2>{{ translate('info_item', lan) }}</h2>
       <div class="form-group">
         <label for="item_name">{{ translate('name', lan) }}</label>
         <input
@@ -42,18 +41,16 @@
         <p><em>{{ translate('based_on', lan) }}</em></p>
       </div>
   
-      <hr>
   
       <div class="form-group">
         <label for="file1">{{ translate('image', lan) }}</label>
         <input
           type="file"
           id="file1"
-          name="files"
+          name="file1"
           accept="image/*"
         >
         {% if item.item_image %}
-          <small>{{ translate('current_image', lan) }}:</small>
           <img src="{{ image_path(item.item_image) }}" alt="" style="height:3rem;">
         {% endif %}
       </div>
@@ -63,12 +60,11 @@
         <input
           type="file"
           id="file2"
-          name="files"
+          name="file2"
           accept="image/*"
         >
         <p><em>{{ translate('optional', lan) }}</em></p>
         {% if item.item_image_2 %}
-          <small>{{ translate('current_image', lan) }}:</small>
           <img src="{{ image_path(item.item_image_2) }}" alt="" style="height:3rem;">
         {% endif %}
       </div>
@@ -78,18 +74,17 @@
         <input
           type="file"
           id="file3"
-          name="files"
+          name="file3"
           accept="image/*"
         >
         <p><em>{{ translate('optional', lan) }}</em></p>
         {% if item.item_image_3 %}
-          <small>{{ translate('current_image', lan) }}:</small>
           <img src="{{ image_path(item.item_image_3) }}" alt="" style="height:3rem;">
         {% endif %}
       </div>
   
       <button type="submit" class="btn">
-        gem
+        {{ translate('save_changes', lan) }}
       </button>
-    </form>
 
+    </form>

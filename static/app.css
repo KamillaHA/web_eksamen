@@ -327,6 +327,11 @@ input{
 .error{
     background: red;
 }
+input.error {
+  border: 1px solid red;
+  background-color: #ffe6e6;
+}
+
 .hidden{ 
     display: none !important; 
 }

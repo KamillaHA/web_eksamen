@@ -2,52 +2,94 @@
 {% include "_nav.html" %}
 
 <main>
+  <h1>{{ translate('sign_up', lan) }}</h1>
 
-    
-    <h1>{{ translate('sign_up', lan) }}</h1>
+  <form 
+    action="{{ url_for('post_signup', lan=lan) }}" 
+    method="POST" 
+  >
+    {% set old = old_values if old_values is defined else {} %}
 
-    <!-- <div id="toast_container"></div> -->
+    <div>
+      <label for="user_name">
+        <span>{{ translate('user_name', lan) }}</span>
+      </label>
+      <input
+        id="user_name"
+        name="user_name"
+        type="text"
+        value="{{ old.user_name or '' }}"
+        required
+        pattern="{{ x.USER_NAME_REGEX }}"
+        title="{{ translate('invalid_name', lan) }}"
+      >
+    </div> 
 
-    <form action="{{ url_for('post_signup', lan=lan) }}" method="POST">
-        <div>
-            <label for="">
-                <span>{{ translate('user_name', lan) }}</span>
-            </label>
-            <input name="user_name" type="text" mix-check="{{ x.USER_NAME_REGEX }}">
-        </div> 
+    <div>
+      <label for="user_last_name">
+        <span>{{ translate('user_lastname', lan) }}</span>
+      </label>
+      <input
+        id="user_last_name"
+        name="user_last_name"
+        type="text"
+        value="{{ old.user_last_name or '' }}"
+        required
+        pattern="{{ x.USER_LAST_NAME_REGEX }}"
+        title="{{ translate('invalid_lastname', lan) }}"
+      >
+    </div>
 
-        <div>
-            <label for="">
-                <span>{{ translate('user_lastname', lan) }}</span>
-            </label>
-            <input name="user_last_name" type="text" mix-check="{{ x.USER_LAST_NAME_REGEX }}">
-        </div>
+    <div>
+      <label for="user_email">
+        <span>Email</span>
+      </label>
+      <input
+        id="user_email"
+        name="user_email"
+        type="email"
+        value="{{ old.user_email or '' }}"
+        required
+        pattern="{{ x.REGEX_EMAIL }}"
+        title="{{ translate('invalid_email', lan) }}"
+      >
+    </div>
 
-        <div>
-            <label for="">
-                <span>Email</span>
-                <span></span>
-            </label>
-            <input name="user_email" type="text" mix-check="{{ x.USER_EMAIL_REGEX }}">
-        </div>
+    <div>
+      <label for="user_username">
+        <span>{{ translate('user_username', lan) }}</span>
+      </label>
+      <input
+        id="user_username"
+        name="user_username"
+        type="text"
+        value="{{ old.user_username or '' }}"
+        required
+        pattern="{{ x.USER_USERNAME_REGEX }}"
+        placeholder="{{ x.USER_USERNAME_MIN }}–{{ x.USER_USERNAME_MAX }} {{ translate('characters', lan) }}"
+        title="{{ translate('invalid_username', lan) }}"
+      >
+    </div>        
 
-        <div>
-            <label for="">
-                <span>{{ translate('user_username', lan) }}</span>
-            </label>
-            <input name="user_username" type="text" mix-check="{{ x.USER_USERNAME_REGEX }}" placeholder="{{ x.USER_USERNAME_MIN }} {{ translate('to', lan) }} {{ x.USER_USERNAME_MAX }} {{ translate('characters', lan) }}">
-        </div>        
+    <div>
+      <label for="user_password">
+        <span>{{ translate('password', lan) }}</span>
+      </label>
+      <input
+        id="user_password"
+        name="user_password"
+        type="password"
+        required
+        pattern="{{ x.USER_PASSWORD_REGEX }}"
+        placeholder="{{ x.USER_PASSWORD_MIN }}–{{ x.USER_PASSWORD_MAX }} {{ translate('characters', lan) }}"
+        title="{{ translate('invalid_password', lan) }}"
+      >
+    </div>        
 
-        <div>
-            <label for="">
-                <span>Password</span>
-            </label>
-            <input name="user_password" type="password" mix-check="{{ x.USER_PASSWORD_REGEX }}" placeholder="{{ x.USER_PASSWORD_MIN }} {{ translate('to', lan) }} {{ x.USER_PASSWORD_MAX }} {{ translate('characters', lan) }}">
-        </div>        
-        <button type="submit">{{ translate('sign_up', lan) }}</button>
-    </form>
-
+    <button type="submit">
+      {{ translate('sign_up', lan) }}
+    </button>
+  </form>
 </main>
-
 
 {% include "_footer.html" %}

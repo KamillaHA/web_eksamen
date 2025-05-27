@@ -1,9 +1,10 @@
+<a 
+  href="{{ url_for('get_item_fragment', item_pk=item.item_pk, lan=lan) }}" 
+  mix-get
+  mix-prevent-default
+  class="item"
 
-<a href="/items/{{ item.item_pk }}" mix-get class="item">
-    <img src="{{ image_path(item.item_image) }}" alt="{{ item.item_name }}">
-    <p>
-        {{ item.item_name }}
-    </p>
-
+>
+  <img src="{{ image_path(item.item_image) }}" alt="{{ item.item_name }}">
+  <p>{{ item.item_name }}</p>
 </a>
-

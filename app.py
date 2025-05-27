@@ -36,6 +36,9 @@ def inject_user():
 @app.context_processor
 def utility_processor():
     def image_path(filename):
+        # Hvis der ikke findes noget filnavn, brug et default-billede
+        if not filename:
+            return url_for("static", filename="images/placeholder.png")        
         """Returner den korrekte static-sti til billedet."""
         # Absolutte stier til de to mulige mapper
         upload_fp = os.path.join(app.static_folder, "uploads", filename)
@@ -271,7 +274,6 @@ def post_signup(lan="dk"):
             ic("Done sending email.")
         except Exception as mail_ex:
             ic(f"Email-fejl: {mail_ex} (brugeren er oprettet)")
-            raise mail_ex  # <-- smid fejlen op så du ser den i browseren
 
         # return redirect(url_for("login", message="Signup successful! Please verify your email", lan=lan))
         session["toast_message"] = languages.translate("toast_signup_ok", lan)
@@ -339,54 +341,79 @@ def login(lan="dk"):
 @app.post("/login")
 @app.post("/<lan>/login")
 def post_login(lan="dk"):
+    # Gem hvad brugeren tastede, så vi kan gen-populate inputfeltet
+    old = {}
     try:
-        # MUST VALIDATE
-        user_email = x.validate_user_email()
+        # 1) Validér input
+        user_email    = x.validate_user_email()
         user_password = x.validate_user_password()
+        old["user_email"] = user_email
 
+        # 2) Hent bruger fra DB
         db, cursor = x.db()
-        q = """
-        SELECT user_pk, user_name, user_last_name, user_username, user_email, user_password, user_is_admin, user_verified_at FROM users WHERE user_email = %s AND user_deleted_at IS NULL
-        """
-        cursor.execute(q, (user_email,))
+        cursor.execute("""
+            SELECT user_pk, user_name, user_last_name,
+                   user_username, user_email, user_password,
+                   user_is_admin, user_verified_at
+            FROM users
+            WHERE user_email = %s AND user_deleted_at IS NULL
+        """, (user_email,))
         user = cursor.fetchone()
+
+        # 3) Tjek om e-mail findes
         if not user:
             raise Exception("User not found")
 
+        # 4) Tjek password
         if not check_password_hash(user["user_password"], user_password):
-            raise Exception("Invalid credentials")
-        # todo: remove the user's password
+            raise Exception("Invalid password")
 
-
-
-
-
-        # if not user.get("user_verified_at"):
-        #     return render_template("login.html", message="Please verify your email before logging in.", x=x, translate=languages.translate, lan=lan)
-        if not user.get("user_verified_at"):
+        # 5) Tjek om verificeret (uændret fra før)
+        if not user.get("user_verified_at") and not user.get("user_is_admin"):
             session["toast_message"] = languages.translate("toast_login_error", lan)
-            session["toast_status"] = "error"
-            session["toast_ttl"] = "4000"
+            session["toast_status"]  = "error"
+            session["toast_ttl"]     = "4000"
             return redirect(url_for("login", lan=lan))
 
-
-
-
-
+        # 6) Alt OK → log ind
         user.pop("user_password")
-        ic(user)
         session["user"] = user
-
-        if user.get("user_is_admin"):
-            return redirect(url_for("admin", lan=lan))
-        else:
-            return redirect(url_for("profile", lan=lan))
+        return redirect(url_for("admin" if user["user_is_admin"] else "profile", lan=lan))
 
     except Exception as ex:
-        ic(ex)
-        return str(ex), 400
+        err = str(ex)
+        # Bestem hvilken type fejl
+        email_err    = (err == "User not found")
+        password_err = (err == "Invalid password")
+
+        # Oversæt fejlmeddelelse
+        if email_err:
+            msg = languages.translate("login_error_no_user", lan)
+        elif password_err:
+            msg = languages.translate("login_error_wrong_password", lan)
+        else:
+            msg = languages.translate("login_error_generic", lan)
+
+        # Sørg for at lukke DB
+        try:
+            cursor.close()
+            db.close()
+        except:
+            pass
+
+        # Gen-render login-siden med flags
+        return render_template(
+            "login.html",
+            x=x,
+            translate=languages.translate,
+            lan=lan,
+            old_values=old,
+            user_email_error=email_err,
+            user_password_error=password_err        
+            )
 
     finally:
+        # I tilfælde af tidlig exit
         if "cursor" in locals(): cursor.close()
         if "db"     in locals(): db.close()
 
@@ -421,16 +448,17 @@ def admin(lan="dk"):
             db.commit()
 
         # ── 2) Fetch single item (if needed) ──
-        cursor.execute("""
-            SELECT *
-            FROM items
-            LEFT JOIN images
-              ON items.item_pk = images.item_id
-              AND images.image_deleted_at IS NULL
-            WHERE items.item_pk = %s
-        """, (toggle_item,))
-        items = cursor.fetchone()
-
+        single_item = None
+        if toggle_item:
+            cursor.execute("""
+                SELECT *
+                FROM items
+                LEFT JOIN images
+                  ON items.item_pk = images.item_id
+                  AND images.image_deleted_at IS NULL
+                WHERE items.item_pk = %s
+            """, (toggle_item,))
+            single_item = cursor.fetchone()
         # ── 3) Fetch all items ──
         q_items = """
         SELECT *
@@ -462,6 +490,7 @@ def admin(lan="dk"):
             "admin.html",
             title="Admin",
             items=items,
+            single_item=single_item,
             rates=rates,
             user=user,
             users=users,
@@ -573,6 +602,42 @@ def get_item_by_pk(item_pk):
     finally:
         if "cursor" in locals(): cursor.close()
         if "db" in locals(): db.close()
+
+
+##############################
+@app.get("/items/fragment/<item_pk>")
+@app.get("/<lan>/items/fragment/<item_pk>")
+def get_item_fragment(item_pk, lan="dk"):
+    db, cursor = x.db()
+    cursor.execute("""
+        SELECT *
+        FROM items
+        LEFT JOIN images
+          ON items.item_pk = images.item_id
+          AND images.image_deleted_at IS NULL
+        WHERE items.item_pk = %s
+    """, (item_pk,))
+    item = cursor.fetchone()
+    cursor.close(); 
+    db.close()
+
+
+    # Render kun én <section> inkl. korrekt id og uden 'hidden'
+    fragment = render_template(
+        "_user_single_item.html",
+        item=item,
+        lan=lan,
+        translate=languages.translate,
+        x=x
+    )
+
+    return f"""
+<mixhtml mix-replace="#single_item_user">
+  <section id="single_item_user">
+    {fragment}
+  </section>
+</mixhtml>
+"""
 
 
 
@@ -705,14 +770,6 @@ def create_item(lan="dk"):
         """,
         (item_pk, img1, img2, img3)
     )
-    # db.commit()
-
-    # # 6) Gem de validerede billeder i images-tabellen
-    # for slot, fname in enumerate(image_filenames, start=1):
-    #     cursor.execute(
-    #         "INSERT INTO images (item_id,item_image,image_slot) VALUES (%s,%s,%s)",
-    #         (item_pk, fname, slot)
-    #     )
     db.commit()
 
     cursor.close()
@@ -734,28 +791,62 @@ def update_item(item_pk, lan="dk"):
     item_address = request.form["item_address"].strip()
     item_price   = request.form["item_price"].strip()
 
-    # 3) Valider og gem nye billeder (op til 3)
-    image_filenames = x.validate_item_images()
-    img1, img2, img3 = (image_filenames + [None, None, None])[:3]
-
-    # 4) Opdater items-rækken
+    # 3) Åbn DB + cursor FØR vi bruger cursor
     db, cursor = x.db()
+
+    # 4) Hent de eksisterende billeder
+    cursor.execute(
+        "SELECT item_image, item_image_2, item_image_3 FROM images WHERE item_id = %s",
+        (item_pk,)
+    )
+    old = cursor.fetchone() or {}
+    img1 = old.get("item_image")
+    img2 = old.get("item_image_2")
+    img3 = old.get("item_image_3")
+
+    # 5) Helper til at validere og gemme én fil
+    def save_one(f):
+        name, ext = os.path.splitext(f.filename)
+        ext = ext.lstrip(".").lower()
+        if ext not in x.ALLOWED_EXTENSIONS:
+            raise Exception("new_ex file extension not allowed")
+        data = f.read()
+        size = len(data)
+        f.seek(0)
+        if size > x.MAX_FILE_SIZE:
+            raise Exception("new_ex file too large")
+        new_name = f"{uuid.uuid4().hex}.{ext}"
+        f.save(os.path.join("static", "uploads", new_name))
+        return new_name
+
+    # 6) For hver fil-slot: overskriv kun hvis brugeren har uploadet
+    for slot_attr, var_name in [("file1", "img1"), ("file2", "img2"), ("file3", "img3")]:
+        f = request.files.get(slot_attr)
+        if f and f.filename:
+            new_fn = save_one(f)
+            if var_name == "img1":
+                img1 = new_fn
+            elif var_name == "img2":
+                img2 = new_fn
+            elif var_name == "img3":
+                img3 = new_fn
+
+    # 7) Opdater items-rækken
     cursor.execute(
         """
         UPDATE items
         SET
-          item_name      = %s,
-          item_address   = %s,
-          item_price     = %s,
-          item_updated_at= NOW()
+          item_name       = %s,
+          item_address    = %s,
+          item_price      = %s,
+          item_updated_at = NOW()
         WHERE item_pk = %s
           AND item_created_by = %s
         """,
-        (item_name, item_address, item_price,
-         item_pk, user["user_pk"])
+        (item_name, item_address, item_price, item_pk, user["user_pk"])
     )
 
-    # 5) Opdater images-rækken
+    # 8) Opdater images-rækken
     cursor.execute(
         """
         UPDATE images
@@ -768,14 +859,47 @@ def update_item(item_pk, lan="dk"):
         (img1, img2, img3, item_pk)
     )
 
+    # 9) Commit
     db.commit()
+
+    # 10) Hent det opdaterede item til MixHTML
+    cursor.execute("""
+        SELECT *
+        FROM items
+        LEFT JOIN images
+          ON items.item_pk = images.item_id
+          AND images.image_deleted_at IS NULL
+        WHERE items.item_pk = %s
+    """, (item_pk,))
+    updated = cursor.fetchone()
+
+    # 11) Luk DB
     cursor.close()
     db.close()
 
-    # 6) Redirect tilbage til profilen
-    return redirect(url_for("profile", lan=lan))
-    # return f'<div mix-redirect="{url_for("profile", lan=lan)}"></div>'
+    # 12) Returnér MixHTML-fragment hvis AJAX, ellers redirect til profile
+    snippet = render_template(
+        "_user_single_item.html",
+        item=updated,
+        lan=lan,
+        translate=languages.translate,
+        x=x
+    )
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return f"""
+<mixhtml mix-replace="#single_item_user">
+  <section id="single_item_user">
+    {snippet}
+  </section>
+</mixhtml>
+"""
+    else:
+        return redirect(url_for("profile", lan=lan))
 
+
+
+
+##############################
 
 
 ##############################
@@ -866,8 +990,12 @@ def update_user(lan="dk"):
       "user_email":     user_email
     })
 
-    # Lys evt. frontenden via mix-replace eller redirect
-    return redirect(url_for("profile", lan=lan))
+    # 5) Returnér mix-redirect ved AJAX, ellers almindelig redirect
+    profile = url_for("profile", lan=lan)
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        # MixHTML vil se dette og lave client-side redirect
+        return f'<div mix-redirect="{profile}"></div>'
+    return redirect(profile)
 
 ##############################
 # 2) SKIFT PASSWORD
@@ -923,6 +1051,97 @@ def delete_user(lan="dk"):
 
     # Instruér MixHTML til at redirecte klient-side til login
     return f'<div mix-redirect="{url_for("login", lan=lan)}"></div>'
+
+
+##############################
+@app.post("/user/delete")
+@app.post("/<lan>/user/delete")
+def post_delete_user(lan="dk"):
+    # 1) Tjek at brugeren er logget ind
+    user = x.validate_user_logged()
+    user_pk = user["user_pk"]
+
+    # 2) Hent det indtastede password
+    entered = request.form.get("current_password", "").strip()
+
+    # 3) Hent den rigtige hash fra DB
+    db, cursor = x.db()
+    cursor.execute(
+        "SELECT user_password, user_email, user_name, user_last_name "
+        "FROM users WHERE user_pk = %s",
+        (user_pk,)
+    )
+    row = cursor.fetchone()
+
+    # 4) Hvis password er forkert → gen-render profilen med fejl-flag
+    if not row or not check_password_hash(row["user_password"], entered):
+        cursor.close(); db.close()
+
+        # Gen-hent items og rates som i GET /profile …
+        with open("rates.txt", "r") as f:
+            rates = json.loads(f.read())
+        db2, cursor2 = x.db()
+        cursor2.execute("""
+            SELECT *
+            FROM items
+            LEFT JOIN images
+              ON items.item_pk = images.item_id
+             AND images.image_deleted_at IS NULL
+            WHERE items.item_created_by = %s
+              AND items.item_deleted_at IS NULL
+            ORDER BY items.item_created_at DESC
+        """, (user_pk,))
+        user_items = cursor2.fetchall()
+        cursor2.close(); db2.close()
+        for it in user_items:
+            if isinstance(it.get("item_price"), Decimal):
+                it["item_price"] = float(it["item_price"])
+
+        return render_template(
+            "profile.html",
+            title="Profile",
+            x=x,
+            user=session.get("user"),
+            items=user_items,
+            rates=rates,
+            translate=languages.translate,
+            lan=lan,
+            delete_error=True
+        ), 400
+
+    # 5) Soft-delete i DB
+    cursor.execute("""
+      UPDATE users
+      SET
+        user_deleted_at = NOW(),
+        user_is_blocked = 1
+      WHERE user_pk = %s
+    """, (user_pk,))
+    db.commit()
+
+    # 6) Send bekræftelses‐mail om account deletion
+    try:
+        x.send_deletion_email(
+          row["user_name"],
+          row["user_last_name"],
+          row["user_email"],
+          lan=lan
+        )
+    except Exception as mail_ex:
+        ic(f"Error sending deletion mail: {mail_ex}")
+
+    cursor.close(); db.close()
+
+    # 7) Log ud (ryd session)
+    session.clear()
+
+    # 8) Læg toast i session før redirect
+    session["toast_message"] = languages.translate("deletion_email_sent", lan)
+    session["toast_status"]  = "ok"
+    session["toast_ttl"]     = "4000"
+
+    # 9) Redirect til login, toast vil nu blive vist
+    return redirect(url_for("login", lan=lan))
 
 
 

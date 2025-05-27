@@ -14,11 +14,23 @@ translations = {
         'reset_password' : 'Nulstil din adgangskode',
         'send_reset_link' : 'Send nulstillingslink',
         'save_password' : 'Gem adgangskode',
+        'password' : 'Adgangskode',
 
         'reset_email_greeting' : 'Har du glemt din adgangskode til Vejhylden?',
         'reset_email_instruction' : 'Klik herunder for at vælge ny adgangskode.',
 
 
+        'enter_password_to_delete' : 'Indtast din adgangskode for at slette din profil',
+        'deletion_email_subject' : 'Din brugerprofil hos Vejhylden er blevet slettet',
+        'deletion_email_greeting' : 'På gensyn,',
+        'deletion_email_body' : 'Vi håber, at du har haft glæde af vores tjeneste, og at vi ser dig en anden gang.',
+
+
+        'invalid_name': 'Ugyldigt navn',
+        'invalid_lastname': 'Ugyldigt efternavn',
+        'invalid_username': 'Ugyldigt brugernavn',
+        'invalid_password': 'Ugyldig adgangskode',
+        'invalid_email': 'Ugyldig e-mail',
 
 
         'click_here': 'Klik her',
@@ -47,6 +59,7 @@ translations = {
         'new_password' : 'Ny adgangskode',
         'confirm_password' : 'Bekræft ny adgangskode',
         'delete_profile' : 'Slet profil',
+        'delete_item' : 'Slet bibliotek',
         'user_name' : 'Navn',
         'user_lastname' : 'Efternavn',
         'user_username' : 'Brugernavn',
@@ -54,7 +67,7 @@ translations = {
         'profile_page' : 'Profil indstillinger',
         'name' : 'Bibliotekets navn*',
         'address' : 'Adresse*',
-        'image' : 'Billede af biblioteket',
+        'image' : 'Billede af biblioteket*',
         'more_images' : 'Flere billeder af biblioteket',
         'optional' : 'Valgfrit',
         'price' : 'Indholdsværdi*',
@@ -68,6 +81,10 @@ translations = {
         'info_item' : 'Biblioteksinformation',
         'block_user' : 'Blokering af bruger',
         'block_item' : 'Blokering af bibliotek',
+
+        'no_items_notice' : 'Du har ingen biblioteker endnu',
+        'to_create' : 'for at oprette et nyt bibliotek.',
+
     },
     'en': {
         'nav' : 'the shelf of stories',
@@ -83,10 +100,22 @@ translations = {
         'reset_password' : 'Reset password',
         'send_reset_link' : 'Send reset link',
         'save_password' : 'Save password',
+        'password' : 'Password',
 
         'reset_email_greeting' : 'Forgot your password to Vejhylden?',
         'reset_email_instruction' : 'Click below to choose a new password.',
 
+        'enter_password_to_delete' : 'Enter your password to delete your profile',
+        'deletion_email_subject' : 'Your user profile at Vejhylden has been deleted',
+        'deletion_email_greeting' : 'Goodbye,',
+        'deletion_email_body' : 'We hope you enjoyed our service and that we will see you again.',
+
+
+        'invalid_name': 'Invalid name',
+        'invalid_lastname': 'Invalid lastname',
+        'invalid_username': 'Invalid username',
+        'invalid_password': 'Invalid password',
+        'invalid_email': 'Invalid e-mail',
 
 
 
@@ -116,6 +145,7 @@ translations = {
         'new_password' : 'New password',
         'confirm_password' : 'Confirm new password',
         'delete_profile' : 'Delete profile',
+        'delete_item' : 'Delete library',
         'user_name' : 'Name',
         'user_lastname' : 'Lastname',
         'user_username' : 'Username',
@@ -123,7 +153,7 @@ translations = {
         'profile_page' : 'Profile information',
         'name' : 'Name of the library*',
         'address' : 'Address*',
-        'image' : 'Picture of the library',
+        'image' : 'Picture of the library*',
         'more_images' : 'More pictures of the library',
         'optional' : 'Optional',
         'price' : 'Collection value*',
@@ -137,6 +167,9 @@ translations = {
         'info_item' : 'Library information',
         'block_user' : 'Blocking of user',
         'block_item' : 'Blocking of library',
+
+        'no_items_notice' : 'You don´t have any libraries yet',
+        'to_create' : 'to create a new library.',
     },
 }
 
