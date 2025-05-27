@@ -1,4 +1,8 @@
-<a href="/items/{{ item.item_pk }}" mix-get class="item">
+<a
+  href="{{ url_for('get_admin_item_fragment', item_pk=item.item_pk, lan=lan) }}"
+  mix-get
+  class="item"
+>
     <img src="{{ image_path(item.item_image) }}" alt="{{ item.item_name }}">
     <p>
         {{ item.item_name }}

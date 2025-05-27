@@ -147,6 +147,82 @@ def send_deletion_email(user_name, user_last_name, user_email, lan="dk"):
 
 
 ##############################
+def send_user_block_email(user_email: str, user_name: str, user_last_name: str, blocked: bool, lan="dk"):
+    """
+    Sender en mail til brugeren om at kontoen er (un)blokeret.
+    """
+    sender = "kamiweb1031@gmail.com"
+    pwd    = "bdqb aclo sysn hgrf"
+
+    # Byg besked
+    if blocked:
+        subject = translate("email_subject_blocked", lan)
+        body = f"""
+          <h1>{translate('email_blocked_greeting', lan)} {user_name} {user_last_name}</h1>
+          <p>{translate('email_blocked_body', lan)}</p>
+        """
+    else:
+        subject = translate("email_subject_unblocked", lan)
+        body = f"""
+          <h1>{translate('email_unblocked_greeting', lan)} {user_name} {user_last_name}</h1>
+          <p>{translate('email_unblocked_body', lan)}</p>
+        """
+
+    msg = MIMEMultipart()
+    msg["From"]    = f"Vejhylden <{sender}>"
+    msg["To"]      = "kamiweb1031@gmail.com"
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "html"))
+
+    try:
+        with smtplib.SMTP("smtp.gmail.com", 587) as s:
+            s.starttls()
+            s.login(sender, pwd)
+            s.send_message(msg)
+        ic("Block/unblock mail sent")
+    except Exception as e:
+        ic("Error sending block mail:", e)
+
+
+
+
+##############################
+def send_item_block_email(user_email: str, user_name: str, user_last_name: str, item_name: str, blocked: bool, lan="dk"):
+    """
+    Sender en mail til ejeren af et item om at netop dét item er (un)blokeret.
+    """
+    sender = "kamiweb1031@gmail.com"
+    pwd    = "bdqb aclo sysn hgrf"
+
+    if blocked:
+        subject = translate("email_subject_item_blocked", lan)
+        body = f"""
+          <h1>{translate('email_item_blocked_greeting', lan)} {user_name} {user_last_name}</h1>
+          <p>{translate('email_item_blocked_body', lan).format(item_name=item_name)}</p>
+        """
+    else:
+        subject = translate("email_subject_item_unblocked", lan)
+        body = f"""
+          <h1>{translate('email_item_unblocked_greeting', lan)} {user_name} {user_last_name}</h1>
+          <p>{translate('email_item_unblocked_body', lan).format(item_name=item_name)}</p>
+        """
+
+    msg = MIMEMultipart()
+    msg["From"]    = f"Vejhylden <{sender}>"
+    msg["To"]      = "kamiweb1031@gmail.com"
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "html"))
+
+    try:
+        with smtplib.SMTP("smtp.gmail.com", 587) as s:
+            s.starttls()
+            s.login(sender, pwd)
+            s.send_message(msg)
+        ic("Item block/unblock mail sent")
+    except Exception as e:
+        ic("Error sending item-block mail:", e)
+
+##############################
 # def validate_user_password():
 #     error = "web_ex password"
 #     user_password = request.form.get("user_password", "")

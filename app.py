@@ -198,11 +198,16 @@ def index(lan="dk"):
         # languages_allowed = ["dk", "en"]
         # if lan not in languages_allowed: lan = "dk"
         q = """
-        SELECT *
+        SELECT items.*, images.*
         FROM items
         LEFT JOIN images
-        ON items.item_pk = images.item_id
-        AND images.image_deleted_at IS NULL
+          ON items.item_pk = images.item_id
+          AND images.image_deleted_at IS NULL
+        JOIN users
+          ON items.item_created_by = users.user_pk
+        WHERE users.user_is_blocked = 0
+          AND items.item_deleted_at IS NULL
+          AND items.item_is_blocked = 0
         ORDER BY items.item_created_at DESC
         LIMIT 2
         """
@@ -354,7 +359,7 @@ def post_login(lan="dk"):
         cursor.execute("""
             SELECT user_pk, user_name, user_last_name,
                    user_username, user_email, user_password,
-                   user_is_admin, user_verified_at
+                   user_is_admin, user_verified_at, user_is_blocked
             FROM users
             WHERE user_email = %s AND user_deleted_at IS NULL
         """, (user_email,))
@@ -367,6 +372,14 @@ def post_login(lan="dk"):
         # 4) Tjek password
         if not check_password_hash(user["user_password"], user_password):
             raise Exception("Invalid password")
+        
+
+        # ── NYT TJEK: ER BRUGEREN BLOKERET? ──
+        if user.get("user_is_blocked"):
+            session["toast_message"] = languages.translate("login_error_blocked", lan)
+            session["toast_status"]  = "error"
+            session["toast_ttl"]     = "4000"
+            return redirect(url_for("login", lan=lan))
 
         # 5) Tjek om verificeret (uændret fra før)
         if not user.get("user_verified_at") and not user.get("user_is_admin"):
@@ -434,10 +447,63 @@ def admin(lan="dk"):
         toggle_item = request.args.get("toggle_item")
         if toggle_item:
             cursor.execute(
-                "UPDATE items SET item_is_blocked = NOT item_is_blocked WHERE item_pk = %s",
-                (toggle_item,)
-            )
+        "UPDATE items SET item_is_blocked = NOT item_is_blocked WHERE item_pk = %s",
+        (toggle_item,)
+    )
             db.commit()
+
+    # Hent det opdaterede item
+            cursor.execute("""
+        SELECT *
+        FROM items
+        LEFT JOIN images
+          ON items.item_pk = images.item_id
+          AND images.image_deleted_at IS NULL
+        WHERE items.item_pk = %s
+    """, (toggle_item,))
+            updated_item = cursor.fetchone()
+
+    # Load rates
+            with open("rates.txt", "r") as f:
+                rates = json.loads(f.read())
+
+    # Hent ejeren af det opdaterede item
+            cursor.execute("""
+        SELECT user_email, user_name, user_last_name
+        FROM users
+        WHERE user_pk = %s
+    """, (updated_item["item_created_by"],))
+            owner = cursor.fetchone()
+
+    # Send email til ejeren om blokering/unblokering af item
+            try:
+                x.send_item_block_email(
+            owner["user_email"],
+            owner["user_name"],
+            owner["user_last_name"],
+            updated_item["item_name"],
+            updated_item["item_is_blocked"],
+            lan=lan
+        )
+            except Exception as mail_ex:
+                x.ic(f"Fejl ved afsendelse af item-blok mail: {mail_ex}")
+
+            cursor.close()
+            db.close()
+
+            fragment = render_template(
+            "_admin_item.html",
+            item=updated_item,
+            rates=rates,
+            lan=lan,
+            translate=languages.translate,
+            x=x
+    )
+            return f"""
+<mixhtml mix-replace="#item">
+{fragment}
+</mixhtml>
+"""
 
         toggle_user = request.args.get("toggle_user")
         if toggle_user:
@@ -446,6 +512,53 @@ def admin(lan="dk"):
                 (toggle_user,)
             )
             db.commit()
+
+
+            cursor.execute("""
+                SELECT user_email, user_name, user_last_name, user_is_blocked
+                FROM users
+                WHERE user_pk = %s
+            """, (toggle_user,))
+            u = cursor.fetchone()
+
+                        # 3) Opdater alle brugerens items til samme blok-status  -------nyeste der skalvæk hvis det ikke virker
+            cursor.execute(
+              "UPDATE items SET item_is_blocked = %s WHERE item_created_by = %s",
+              (1 if u["user_is_blocked"] else 0, toggle_user)
+            )
+            db.commit()
+
+            # 1c) Send mail om blokering/unblokering
+            try:
+                x.send_user_block_email(
+                    u["user_email"],
+                    u["user_name"],
+                    u["user_last_name"],
+                    u["user_is_blocked"],
+                    lan=lan
+                )
+            except Exception as mail_ex:
+                x.ic(f"Fejl ved afsendelse af blok-mail: {mail_ex}")
+
+            # 1d) Hent den opdaterede bruger til fragment
+            cursor.execute("SELECT * FROM users WHERE user_pk = %s", (toggle_user,))
+            updated_user = cursor.fetchone()
+
+            cursor.close()
+            db.close()
+
+        # Returnér _kun_ fragmentet der indeholder <div id="user">…
+            fragment = render_template(
+            "_admin_user.html",
+            user=updated_user,
+            lan=lan,
+            translate=languages.translate
+        )
+            return f"""
+<mixhtml mix-replace="#user">
+  {fragment}
+</mixhtml>
+"""
 
         # ── 2) Fetch single item (if needed) ──
         single_item = None
@@ -459,20 +572,35 @@ def admin(lan="dk"):
                 WHERE items.item_pk = %s
             """, (toggle_item,))
             single_item = cursor.fetchone()
-        # ── 3) Fetch all items ──
-        q_items = """
-        SELECT *
-        FROM items
-        LEFT JOIN images
-          ON items.item_pk = images.item_id
-          AND images.image_deleted_at IS NULL
-        ORDER BY items.item_created_at DESC
-        """
-        cursor.execute(q_items)
+
+
+
+
+        # ── 3) Fetch all items ── også ny
+        cursor.execute("""
+            SELECT items.*, images.*
+            FROM items
+            LEFT JOIN images
+              ON items.item_pk = images.item_id
+              AND images.image_deleted_at IS NULL
+            LEFT JOIN users
+              ON items.item_created_by = users.user_pk
+            WHERE users.user_is_blocked = 0
+              AND items.item_deleted_at IS NULL
+            ORDER BY items.item_created_at DESC
+        """)
         items = cursor.fetchall()
 
+
+
+
         # ── 4) Fetch all users ──
-        q_users = "SELECT * FROM users ORDER BY user_created_at DESC"
+        q_users = """
+            SELECT *
+            FROM users
+            WHERE user_deleted_at IS NULL
+            ORDER BY user_created_at DESC
+            """     
         cursor.execute(q_users)
         users = cursor.fetchall()
 
@@ -484,6 +612,9 @@ def admin(lan="dk"):
         # ── 6) Load rates ──
         with open("rates.txt", "r") as file:
             rates = json.loads(file.read())
+
+        cursor.close()
+        db.close()
 
         # ── 7) Render template ──
         return render_template(
@@ -526,6 +657,7 @@ def profile(lan="dk"):
      AND images.image_deleted_at IS NULL
     WHERE items.item_created_by = %s
       AND items.item_deleted_at IS NULL
+    AND items.item_is_blocked = 0
     ORDER BY items.item_created_at DESC
 """, (user_pk,))
     user_items = cursor.fetchall()
@@ -639,6 +771,46 @@ def get_item_fragment(item_pk, lan="dk"):
 </mixhtml>
 """
 
+##############################
+@app.get("/admin/items/fragment/<int:item_pk>")
+@app.get("/<lan>/admin/items/fragment/<int:item_pk>")
+def get_admin_item_fragment(item_pk, lan="dk"):
+    # Kun admins
+    user = session.get("user")
+    if not user or not user.get("user_is_admin"):
+        return abort(403)
+
+    db, cursor = x.db()
+    cursor.execute("""
+        SELECT *
+        FROM items
+        LEFT JOIN images
+          ON items.item_pk = images.item_id
+          AND images.image_deleted_at IS NULL
+        WHERE items.item_pk = %s
+    """, (item_pk,))
+    item = cursor.fetchone()
+    cursor.close(); db.close()
+
+    # Rerender dit admin‐template
+    rates = json.loads(open("rates.txt").read())
+    html = render_template(
+        "_admin_item.html",
+        item=item,
+        rates=rates,
+        lan=lan,
+        translate=languages.translate,
+        x=x
+    )
+
+    # Pak det ind i din admin single‐view‐sektion
+    return f"""
+<mixhtml mix-replace="#single_item_admin">
+  <section id="single_item_admin">
+    {html}
+  </section>
+</mixhtml>
+"""
 
 
 ##############################

@@ -1,7 +1,7 @@
-<h2>
-    {{ translate('info_item', lan) }}
-</h2>
 <div id="item">
+    <h2>
+        {{ translate('info_item', lan) }}
+    </h2>
 
     <img src="{{ image_path(item.item_image) }}" alt="{{ item.item_name }}">
 
@@ -23,7 +23,6 @@
     </div>
 {% endif %}
 
-</div>
 <h2>
     {{ translate('block_item', lan) }}
 </h2>
@@ -48,3 +47,4 @@ class="btn btn-block-toggle"
 {{ translate('block', lan) }}
 {% endif %}  
 </button>
+</div>

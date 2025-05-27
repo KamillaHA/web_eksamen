@@ -33,6 +33,25 @@ translations = {
         'invalid_email': 'Ugyldig e-mail',
 
 
+        'email_subject_blocked': 'Blokering fra Vejhylden',
+        'email_blocked_greeting': 'Du er blevet blokeret hos Vejhylden,',
+        'email_blocked_body': 'Din bruger er blevet blokeret af en administrator. Du kan ikke længere logge ind på din profil.',
+
+        'email_subject_unblocked': 'Fjernet blokering fra Vejhylden',
+        'email_unblocked_greeting': 'Du er blevet aktiveret igen hos Vejhylden,',
+        'email_unblocked_body': 'Din bruger er blevet aktiveret igen af en administrator. Du kan nu logge ind på din profil.',
+        'login_error_blocked': 'Din bruger er blokeret, og du kan derfor ikke logge ind.',
+
+        'email_subject_item_blocked': 'Bibliotek blokeret fra Vejhylden',
+        'email_item_blocked_greeting': 'Dit bibliotek er blevet blokeret fra Vejhylden,',
+        'email_item_blocked_body': 'Dit bibliotek {item_name} er blevet blokeret af en administrator. Du kan ikke længere tilgå det.',
+
+        'email_subject_item_unblocked': 'Fjernet blokering af bibliotek fra Vejhylden',
+        'email_item_unblocked_greeting': 'Dit bibliotek er blevet aktiveret igen hos Vejhylden,',
+        'email_item_unblocked_body': 'Dit bibliotek {item_name} er blevet aktiveret igen af en administrator. Du kan nu tilgå det.',
+
+
+
         'click_here': 'Klik her',
         'signing_up': 'for at oprette dig.',
         'thanks': 'Tak',
@@ -117,6 +136,23 @@ translations = {
         'invalid_password': 'Invalid password',
         'invalid_email': 'Invalid e-mail',
 
+
+        'email_subject_blocked': 'Blocked from Vejhylden',
+        'email_blocked_greeting': 'You have been blocked from Vejhylden,',
+        'email_blocked_body': 'Your account has been blocked by an administrator. You can no longer log in to your profile.',
+
+        'email_subject_unblocked': 'Unblocked from Vejhylden',
+        'email_unblocked_greeting': 'You have been unblocked from Vejhylden,',
+        'email_unblocked_body': 'Your account has been activated by an administrator. You can now log in to your profile.',
+        'login_error_blocked': 'Your account is blocked, and you cannot log in.',
+
+        'email_subject_item_blocked': 'Library blocked from Vejhylden',
+        'email_item_blocked_greeting': 'Your library has been blocked from Vejhylden,',
+        'email_item_blocked_body': 'Your library {item_name} has been blocked by an administrator. You can no longer access it.',
+
+        'email_subject_item_unblocked': 'Library unblocked from Vejhylden',
+        'email_item_unblocked_greeting': 'Your library has been unblocked from Vejhylden,',
+        'email_item_unblocked_body': 'Your library {item_name} has been unblocked by an administrator. You can now access it.',
 
 
         'click_here': 'Click here',

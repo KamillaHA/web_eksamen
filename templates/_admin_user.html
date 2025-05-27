@@ -27,16 +27,16 @@
         {% endif %}    
     </p>
 
-<button
-mix-get
-href="{{ url_for('admin', lan=lan, toggle_user=user.user_pk) }}"
-class="btn btn-block-toggle"
->
-{% if user.user_is_blocked %}
-{{ translate('unblock', lan) }}
-{% else %}
-{{ translate('block', lan) }}
-{% endif %}  
-</button>
-
+    
+    <button
+    mix-get
+    href="{{ url_for('admin', lan=lan, toggle_user=user.user_pk) }}"
+    class="btn btn-block-toggle"
+    >
+    {% if user.user_is_blocked %}
+    {{ translate('unblock', lan) }}
+    {% else %}
+    {{ translate('block', lan) }}
+    {% endif %}  
+    </button>
 </div>
