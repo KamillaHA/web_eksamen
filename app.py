@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_session import Session
 from decimal import Decimal
 from datetime import datetime, date, timedelta
+from collections import defaultdict
 import x
 import re
 import time
@@ -137,7 +138,7 @@ def post_forgot_password(lan="dk"):
 
     x.send_reset_email(user_email, reset_token, lan)
 
-    session["toast_message"] = "reset link"
+    session["toast_message"] = "A reset link has been sent"
     session["toast_status"] = "ok"
     return redirect(url_for("login", lan=lan))
 
@@ -227,7 +228,7 @@ def index(lan="dk"):
         ic(rates)
         # Convert the text rates to json
         rates = json.loads(rates)
-        return render_template("index.html", title="Vejhylden", items=items, rates=rates, translate=languages.translate, lan=lan, user=user)
+        return render_template("index.html", title="Vejhylden", items=items, rates=rates, translate=languages.translate, lan=lan, x=x)
     except Exception as ex:
         ic(ex)
         return "ups"
@@ -500,7 +501,7 @@ def admin(lan="dk"):
             x=x
     )
             return f"""
-<mixhtml mix-replace="#item">
+<mixhtml mix-replace="#admin_item">
 {fragment}
 </mixhtml>
 """
@@ -592,6 +593,14 @@ def admin(lan="dk"):
         items = cursor.fetchall()
 
 
+            # Sorter items alfabetisk efter navn
+        items.sort(key=lambda i: i["item_name"].lower())
+
+                # Opdel i grupper baseret på første bogstav
+        grouped_items = defaultdict(list)
+        for item in items:
+            first_letter = item["item_name"][0].upper()
+            grouped_items[first_letter].append(item)
 
 
         # ── 4) Fetch all users ──
@@ -604,6 +613,9 @@ def admin(lan="dk"):
         cursor.execute(q_users)
         users = cursor.fetchall()
 
+        admin_pk = session["user"]["user_pk"]
+        users = [u for u in users if u["user_pk"] != admin_pk]
+
         # ── 5) Convert Decimal prices to float ──
         for it in items:
             if isinstance(it.get("item_price"), Decimal):
@@ -612,6 +624,16 @@ def admin(lan="dk"):
         # ── 6) Load rates ──
         with open("rates.txt", "r") as file:
             rates = json.loads(file.read())
+
+        # Sorter brugerne alfabetisk efter navn
+        users.sort(key=lambda u: u["user_name"].lower())
+
+# Assuming users is a list of dicts with 'user_name' key
+        grouped_users = defaultdict(list)
+        for user in users:
+            first_letter = user["user_name"][0].upper()
+        grouped_users[first_letter].append(user)
+
 
         cursor.close()
         db.close()
@@ -623,9 +645,9 @@ def admin(lan="dk"):
             items=items,
             single_item=single_item,
             rates=rates,
-            user=user,
             users=users,
             x=x,
+            grouped_users=grouped_users,
             translate=languages.translate,
             lan=lan
         )
@@ -644,6 +666,8 @@ def admin(lan="dk"):
 def profile(lan="dk"):
     user = session.get("user")
     user_pk = session["user"]["user_pk"]
+    if user and user.get("user_is_admin"):
+        return redirect(url_for("admin", lan=lan))
 
     with open("rates.txt", "r") as f:
         rates = json.loads(f.read())
@@ -663,7 +687,7 @@ def profile(lan="dk"):
     user_items = cursor.fetchall()
     cursor.close()
     db.close()
-    return render_template("profile.html", title="Profile", x=x, user=user, items=user_items, rates=rates, translate=languages.translate, lan=lan)
+    return render_template("profile.html", title="Profile", x=x, items=user_items, rates=rates, translate=languages.translate, lan=lan)
 
 
 

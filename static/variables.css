@@ -18,7 +18,15 @@
     --colorDarkBrown: #664930;
 
 
+    --fontSizeHeader: 1.6rem;
+    --fontSizeDesktop: 1rem;
+    --fontSizeMobile: 0.9rem;
+    --fontSizeSmall: 0.8rem;
 
     --fontMain: 'Poppins', sans-serif;
     --fontWritten: 'Oooh Baby', cursive;
+
+
+    --marginMobile: 2rem;
+    
 }

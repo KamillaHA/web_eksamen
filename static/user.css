@@ -1,4 +1,165 @@
+/* --- Mobile-First Styles --- */
 main#user_main {
+    display: block;
+    height: calc(100% - 4rem);
+    margin-bottom: 6rem;
+}
+
+
+#dashboard {
+    background-color: var(--colorDarkBrown);
+    width: 100vw;
+    padding: 1rem;
+    position: static;
+    height: auto;
+
+    h1 {
+        text-align: center;
+        color: var(--colorBg);
+        font-family: var(--fontWritten);
+        font-size: var(--fontSizeHeader);
+    }
+
+    #btn_items_form_user,
+    #btn_items_user,
+    #btn_profile_user {
+        display: block;
+        text-align: center;
+        margin-top: 1rem;
+        background-color: var(--colorDarkBrown);
+        color: var(--colorBg);
+        cursor: pointer;
+        text-decoration: none;
+        font-family: var(--fontMain);
+        font-size: var(--fontSizeMobile);
+    }
+}
+
+#items_user {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    align-content: start;
+    align-items: start;
+    margin-top: var(--marginMobile);
+}
+
+#single_item_user #item {
+    p {
+        font-size: 1.2rem;
+    }
+    div {
+        margin-top: 0.5rem;
+    }
+    img {
+        width: 100%;
+    }
+}
+
+h2, h3 {
+    text-align: center;
+    font-family: var(--fontMain);
+    margin-top: var(--marginMobile);
+    color: var(--colorDarkBrown);
+}
+h2 {
+    font-size: var(--fontSizeHeader);
+}
+
+h3 {
+    font-size: var(--fontSizeMobile);
+}
+
+
+/* --- Desktop Styles --- */
+@media (min-width: 768px) {
+    main#user_main {
+        display: grid;
+        grid-template-columns: 10fr 20fr 20fr;
+        padding-left: 20vw;
+    }
+
+    #dashboard {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 20vw;
+        padding: 0;
+
+        h1 {
+                margin-top: 8rem;
+            }
+
+        #btn_items_form_user,
+        #btn_items_user,
+        #btn_profile_user {
+            font-size: var(--fontSizeDesktop);
+
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    }
+
+    h2, h3 {
+    text-align: left;
+    margin-left: 0.5rem;
+}
+h3 {
+    font-size: var(--fontSizeDesktop);
+}
+
+    #items_form_user, #profile_user {
+        grid-column: 2 / 3; /* starter lige efter dashboard */
+    }
+
+    #single_item_user {
+        margin: 0 2rem;
+    }
+
+    /* Specifik styling kun til dual-view (items_user og single_item_user) */
+    .dual-view-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        grid-column: 1 / 4; /* Starter ved dashboardets afslutning */
+    }
+
+    #items_user {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-left: 2rem;
+
+
+        .item p {
+                font-size: 1.3rem;
+            }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* main#user_main {
     display: grid;
     grid-template-columns: 10fr 20fr 20fr;
     gap: 1rem;
@@ -76,7 +237,30 @@ main#user_main {
         }
     }
     
-}
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -12,10 +12,12 @@
     <img src="{{ image_path(item.item_image_3) }}" alt="{{ item.item_name }}">
     {% endif %}
 </div>
-<h2>
-    {{ item.item_name }}
-</h2>    
 
+
+<div class="item-info">
+      <h2>
+          {{ item.item_name }}
+      </h2>    
     <p>
         {{ item.item_address}}
     </p>
@@ -31,5 +33,6 @@
     {{ "{:,.0f}".format(item.item_price * rates.rates.DKK) }} DKK
     </div>
 {% endif %}
+  </div>
 
 </div>

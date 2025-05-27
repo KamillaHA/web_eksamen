@@ -18,11 +18,21 @@
     </div>
 </div>
 
-<script>
+
+<!-- <script>
     setTimeout(() => {
         const toast = document.getElementById("toast_message");
         if (toast) toast.classList.add("hidden");
-    }, {{ session.toast_ttl or 3000 }});
+    }, {{ session.toast_ttl|default(3000)|int }});
+</script> -->
+
+<script>
+    const toast = document.getElementById("toast_message");
+    if (toast) {
+        setTimeout(() => {
+            toast.classList.add("hidden");
+        }, Number("{{ session.toast_ttl|default(3000)|int }}"));
+    }
 </script>
 
 {% set _ = session.pop('toast_message', None) %}

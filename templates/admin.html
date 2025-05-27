@@ -5,13 +5,11 @@
 <main id="admin_main">
 
     <!-- TJEK OM ASIDE ER OK -->
-    <div id="aside_dash">
 
         <aside id="dashboard">
             <h1>{{ translate('admin', lan) }}</h1>
             {% include "_btn_admin.html" %}
         </aside>
-    </div>
 
 
         <section id="items_admin">
@@ -31,7 +29,7 @@
             {% endfor %}        
         </section>
 
-        <section id="single_user">
+        <section id="single_user" class="hidden">
             {% set user = users[0] %}
             {% include "_admin_user.html" %}
         </section>

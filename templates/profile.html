@@ -16,6 +16,7 @@
     {% include "_user_item_form.html" %}
   </section>
 
+  <div class="dual-view-container">
   <section id="items_user" class="hidden">
     {% if items %}
       {% for item in items %}
@@ -43,6 +44,7 @@
       {% include "_user_single_item.html" %}
     {% endif %}
   </section>
+  </div>
 
   <section id="profile_user" class="hidden">
     {% include "_user_edit_profile.html" %}

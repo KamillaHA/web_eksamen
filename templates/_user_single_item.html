@@ -5,7 +5,7 @@
   enctype="multipart/form-data"
 >
 
-<h2>{{ translate('info_item', lan) }}</h2>
+<h4>{{ translate('info_item', lan) }}</h4>
       <div class="form-group">
         <label for="item_name">{{ translate('name', lan) }}</label>
         <input
@@ -13,6 +13,7 @@
           id="item_name"
           name="item_name"
           value="{{ item.item_name }}"
+          class="{{ 'error' if item_name_error else '' }}" 
           required
         >
       </div>
@@ -24,6 +25,7 @@
           id="item_address"
           name="item_address"
           value="{{ item.item_address }}"
+          class="{{ 'error' if item_address_error else '' }}" 
           required
         >
       </div>
@@ -36,6 +38,7 @@
           name="item_price"
           step="1.00"
           value="{{ item.item_price }}"
+          class="{{ 'error' if item_price_error else '' }}" 
           required
         >
         <p><em>{{ translate('based_on', lan) }}</em></p>

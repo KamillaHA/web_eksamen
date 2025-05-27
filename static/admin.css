@@ -1,4 +1,439 @@
+/* --- Mobile-First Styles --- */
 main#admin_main {
+    display: block;
+    height: calc(100% - 4rem);
+    overflow: hidden;
+    margin-bottom: 3rem;
+}
+
+#dashboard {
+    background-color: var(--colorDarkBrown);
+    width: 100vw;
+    padding: 1rem;
+    position: static;
+    height: auto;
+
+    h1 {
+        text-align: center;
+        color: var(--colorBg);
+        font-family: var(--fontWritten);
+        font-size: var(--fontSizeHeader);
+    }
+
+    #btn_items,
+    #btn_users {
+        display: block;
+        text-align: center;
+        margin-top: 1rem;
+        background-color: var(--colorDarkBrown);
+        color: var(--colorBg);
+        cursor: pointer;
+        text-decoration: none;
+        font-family: var(--fontMain);
+        font-size: var(--fontSizeMobile);
+    }
+}
+
+#users, #items_admin {
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  max-height: calc(100vh - 4rem);
+}
+
+#single_item_admin, #single_user {
+  padding: 1rem;
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  width: 100%;
+  margin-bottom: 3rem;
+  background-color: var(--colorBg);
+}
+
+#single_item_admin #admin_item .admin_item_row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+#single_item_admin #admin_item .block_header {
+margin: 0.5rem 0 0 1rem;
+}
+#single_item_admin #admin_item h2, #single_user #user .header_item_admin {
+font-size: var(--fontSizeMobile);
+margin: 0.5rem 0 0 0;
+text-align: left;
+}
+
+#single_item_admin #admin_item .admin_item_row img {
+  width: 50%;
+  height: auto;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+#single_item_admin #admin_item .admin_item_row .info_item_admin {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.25rem;
+  font-family: var(--fontMain);
+}
+
+
+#single_item_admin #admin_item div {
+  font-size: var(--fontSizeMobile);
+}
+
+
+.value {
+    font-weight: bold;
+}
+.heading_p {
+    margin: 0;
+    text-align: left;
+
+}
+p {
+    font-family: var(--fontMain);
+    font-size: var(--fontSizeMobile);
+}
+
+.user_information, .user_status, .item_status {
+    margin: 0 0 1rem 1rem;
+}
+button {
+  background-color: var(--colorBrown);
+  color: var(--colorBg);
+  padding: 0.75rem;
+  border: none;
+  border-radius: 10px;
+  font-size: var(--fontSizeMobile);
+  font-weight: bold;
+  cursor: pointer;
+  font-family: var(--fontMain);
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--colorDarkBrown);
+}
+
+#item_more_img {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+
+/* --- Desktop Styles --- */
+@media (min-width: 768px) {
+    main#admin_main {
+        display: grid;
+        grid-template-columns:  20fr 12fr;
+        gap: 1rem;
+        padding-left: 20vw;
+    }
+
+    #dashboard {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 20vw;
+        padding: 0;
+
+        h1 {
+            margin-top: 8rem;
+        }
+    }
+
+    #btn_items,
+    #btn_users {
+        font-size: var(--fontSizeDesktop);
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    #items_admin,
+    #users {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    #single_item_admin, #single_user {
+      position: relative;
+      z-index: 0;
+      width: auto;
+      margin-bottom: 0;
+    }
+
+    #single_item_admin #admin_item {
+      display: block;
+      width: 100%;
+    }
+
+    #single_item_admin #admin_item .admin_item_row {
+  display: block;
+width: auto;
+img {
+    width: 100%;
+    border-radius: 10px;
+    gap: 2rem;
+}
+
+}
+#single_item_admin #admin_item h2, #single_user #user .header_item_admin  {
+font-size: var(--fontSizeDesktop);
+margin-left: 1rem;
+}
+
+    #single_item_admin #admin_item img {
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    #single_item_admin #admin_item, #single_user #user .header_item_admin{
+      display: inline-block;
+      font-size: var(--fontSizeHeader);
+      margin-bottom: 1rem;
+    }
+
+    #single_item_admin #admin_item .info_item_admin p,
+    #single_item_admin #admin_item .info_item_admin div {
+      font-size: var(--fontSizeDesktop);
+      margin-left: 1rem;
+    }
+
+    #item_more_img {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    #item_more_img img {
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    .user_information, .user_status, .item_status {
+    margin: 0 0 2rem 1rem;
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* main#admin_main {
+    display: block;
+    height: calc(100% - 4rem);
+    overflow: hidden;
+    margin-bottom: 3rem;
+}
+
+#dashboard {
+    background-color: var(--colorDarkBrown);
+    width: 100vw;
+    padding: 1rem;
+    position: static;
+    height: auto;
+
+    h1 {
+        text-align: center;
+        color: var(--colorBg);
+        font-family: var(--fontWritten);
+        font-size: var(--fontSizeHeader);
+    }
+
+    #btn_items,
+    #btn_users {
+        display: block;
+        text-align: center;
+        margin-top: 1rem;
+        background-color: var(--colorDarkBrown);
+        color: var(--colorBg);
+        cursor: pointer;
+        text-decoration: none;
+        font-family: var(--fontMain);
+        font-size: var(--fontSizeMobile);
+    }
+}
+
+#users, #items_admin {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+  max-height: calc(100vh - 8rem); 
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+#single_item_admin {
+  padding: 1rem;
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  width: 100%;
+  margin-bottom: 3rem;
+  background-color: var(--colorBg);
+
+}
+
+#single_item_admin #admin_item {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1rem;
+  font-family: var(--fontMain);
+  margin-top: 1rem;
+}
+
+#single_item_admin #admin_item img {
+  width: 50%;
+  height: auto;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+#single_item_admin #admin_item .info_item_admin {
+      width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+#single_item_admin #admin_item .header_item_admin {
+display: none;
+}
+
+#single_item_admin #admin_item .info_item_admin {
+  font-size: var(--fontSizeHeader);
+  margin: 0;
+}
+
+#single_item_admin #admin_item .item-info div {
+  font-size: var(--fontSizeMobile);
+  font-weight: bold;
+}
+
+#item_more_img {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+
+
+@media (min-width: 768px) {
+    main#admin_main {
+        display: grid;
+        grid-template-columns:  20fr 12fr;
+        gap: 1rem;
+        padding-left: 20vw;
+    }
+
+    #dashboard {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 20vw;
+        padding: 0;
+
+        h1 {
+                margin-top: 8rem;
+            }
+    }
+
+
+    #btn_items,
+    #btn_users {
+        font-size: var(--fontSizeDesktop);
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    #items_admin,
+    #users {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+
+  #single_item_admin {
+    position: relative;
+    z-index: 0;
+    width: auto;
+    margin-bottom: 0;
+  }
+
+  #single_item_admin #admin_item {
+    display: block;
+    margin: 0;
+  }
+
+  #single_item_admin #admin_item img {
+    width: 100%;
+    border-radius: 5px;
+  }
+
+  #single_item_admin #admin_item .header_item_admin {
+    display: inline-block;
+    font-size: var(--fontSizeHeader);
+    margin-bottom: 1rem;
+    margin-top: 0;
+  }
+
+  #single_item_admin #admin_item .info_item_admin p,
+  #single_item_admin #admin_item .info_item_admin div {
+    font-size: var(--fontSizeDesktop);
+    margin-top: 0.5rem;
+  }
+
+  #item_more_img {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  #item_more_img img {
+    width: 100%;
+    border-radius: 5px;
+  }
+}
+ */
+
+
+
+
+
+
+
+
+/* main#admin_main {
     display: grid;
     grid-template-columns: 10fr 20fr 20fr;
     gap: 1rem;
@@ -78,9 +513,7 @@ main#admin_main {
         }
     }
 
-
-
 }
 
 
-
+ */

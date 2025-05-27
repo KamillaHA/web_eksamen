@@ -1,33 +1,53 @@
-<div id="item">
-    <h2>
+<div id="admin_item">
+    <!-- <h2 class="header_item_admin">
         {{ translate('info_item', lan) }}
-    </h2>
+    </h2> -->
 
-    <img src="{{ image_path(item.item_image) }}" alt="{{ item.item_name }}">
+    <div class="admin_item_row">
 
-    <p>
-        {{ item.item_name }}
-    </p>    
 
-    <p>
-        {{ item.item_address}}
-    </p>
-
-    {% if lan == 'en' %}
-    <div>
-    {{ "{:,}".format(item.item_price) }} USD
+        {% if item.item_image %}
+        <img src="{{ image_path(item.item_image) }}" alt="{{ item.item_name }}">
+        {% endif %}
+    
+                    <div id="item_more_img">
+        {% if item.item_image_2 %}
+        <img src="{{ image_path(item.item_image_2) }}" alt="{{ item.item_name }}">
+        {% endif %}
+    
+        {% if item.item_image_3 %}
+        <img src="{{ image_path(item.item_image_3) }}" alt="{{ item.item_name }}">
+        {% endif %}
     </div>
-{% else %}
-    <div>
-    {{ "{:,.0f}".format(item.item_price * rates.rates.DKK) }} DKK
-    </div>
-{% endif %}
 
-<h2>
+    <div class="info_item_admin">
+
+        <h2 class="heading_p">
+            {{ item.item_name }}
+        </h2>    
+    
+        <p>
+            {{ item.item_address}}
+        </p>
+    
+        {% if lan == 'en' %}
+        <div class="value">
+        {{ "{:,}".format(item.item_price) }} USD
+        </div>
+    {% else %}
+        <div>
+        {{ "{:,.0f}".format(item.item_price * rates.rates.DKK) }} DKK
+        </div>
+    {% endif %}
+    </div>
+    </div>
+
+
+<h2 class="block_header">
     {{ translate('block_item', lan) }}
 </h2>
 
-<p>
+<p class="item_status">
     Status:
     {% if item.item_is_blocked %}
     {{ translate('blocked', lan) }}

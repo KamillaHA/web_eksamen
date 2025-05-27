@@ -1,24 +1,27 @@
 <div id="user">
 
-    <h2>
+    <h2 class="header_item_admin">
         {{ translate('info_user', lan) }}
     </h2>
 
-    <p>
-        {{ user.user_name }}
-    </p>    
-    <p>
-        {{ user.user_last_name }}
-    </p>
-    <p>
-        {{ user.user_email }}
-    </p>
+    <div class="user_information">
 
-    <h2>
+        <p>
+            {{ user.user_name }}
+        </p>    
+        <p>
+            {{ user.user_last_name }}
+        </p>
+        <p>
+            {{ user.user_email }}
+        </p>
+    </div>
+
+    <h2 class="header_item_admin">
         {{ translate('block_user', lan) }}
     </h2>
 
-    <p>
+    <p class="user_status">
         Status:
         {% if user.user_is_blocked %}
         {{ translate('blocked', lan) }}

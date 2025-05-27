@@ -1,9 +1,9 @@
 <nav>
 
     <div id="logo_container">
-        <a href="{{ url_for('index', lan=lan) }}">
+        <a href="{{ url_for('index', lan=lan) }}" class="logo-link">
             <!-- <img class="logo" src="../static/images/logotest.png" alt="Logotest"> -->
-            Vejhylden - {{ translate('nav', lan) }}
+            Vejhylden <span class="nav-subtitle"> - {{ translate('nav', lan) }}</span>
         </a>
         
     </div>
@@ -11,6 +11,18 @@
 
 
     <div id="nav_right">
+
+
+    <div>
+        <a href="javascript:void(0)"
+        onclick="switchLang('dk')"
+        title="Dansk">🇩🇰</a> 
+        <strong>/</strong>
+        <a href="javascript:void(0)"
+        onclick="switchLang('en')"
+        title="English">🇬🇧</a>
+    </div>
+
     {% if not user %}
         <a href="{{ url_for('login', lan=lan) }}">{{ translate('login', lan) }}</a>
 
@@ -29,14 +41,7 @@
             {{ translate('logout', lan) }}
         </a>
     {% endif %}
-    <div>
-        <a href="javascript:void(0)"
-        onclick="switchLang('dk')"
-        title="Dansk">🇩🇰</a>
-        <a href="javascript:void(0)"
-        onclick="switchLang('en')"
-        title="English">🇬🇧</a>
-    </div>
+
 </div>
 
 

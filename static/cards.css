@@ -1,0 +1,139 @@
+/* --- Card Styles (Mobile-First) --- */
+
+/* Fælles styling for kort i user, admin og index */
+#items_user .item,
+#items_admin .item,
+#users .user,
+#items .item,
+.admin_item_card {
+  display: block;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  /* margin: 0.5rem var(--marginMobile); */
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Fjern pointer-events og definer farve for alt inde i kort */
+#items_user .item *,
+#items_admin .item *,
+#users .user *,
+#items .item *,
+.admin_item_card * {
+  pointer-events: none;
+  color: black;
+}
+
+/* Hover-effekt */
+#items_user .item:hover,
+#items_admin .item:hover,
+#users .user:hover,
+#items .item:hover,
+.admin_item_card:hover {
+  transform: scale(1.01);
+}
+
+/* Billede */
+#items_user .item img,
+#items_admin .item img,
+#users .user img,
+#items .item img,
+.admin_item_card img {
+  width: 100%;
+  height: 8rem;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 5px 5px 0 0;
+}
+
+/* Navn / Titel */
+#items_user .item p,
+#items_admin .item p,
+#users .user p,
+#items .item p,
+.admin_item_card p {
+  font-size: var(--fontSizeMobile);
+  color: var(--colorTxt);
+  font-family: var(--fontMain);
+  margin: 0 1rem;
+}
+
+/* Ekstra info fx pris eller beskrivelse */
+#items_user .item div,
+#items_admin .item div,
+#users .user div,
+#items .item div,
+.admin_item_card div {
+  padding: 0 1rem;
+  font-size: var(--fontSizeMobile);
+  font-family: var(--fontMain);
+}
+
+
+#items_admin .admin_item_card {
+  height: 13rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  img {
+    height: 8rem
+  }
+  p {
+    font-size: 1.2rem;
+    padding: 0.5rem;
+  }
+}
+
+#users .user {
+  height: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* --- Desktop Styles --- */
+@media (min-width: 768px) {
+
+  #users .user {
+    margin: 0 0.5rem;
+    justify-content: center;
+    h3 {
+      margin-top: 0;
+    }
+  }
+
+  #items_user .item,
+  #items_admin .item,
+  #items .item,
+  .admin_item_card {
+    margin: 0.5rem;
+    height: 100%;
+  }
+
+
+  #items_user .item p,
+  #items_admin .item p,
+  #users .user p,
+  #items .item p,
+  .admin_item_card p {
+    font-size: 1.2rem;
+    padding: 0 1rem;
+    margin: 0;
+  }
+
+  #items_user .item div,
+  #items_admin .item div,
+  #users .user div,
+  #items .item div,
+  .admin_item_card div {
+    font-size: 1rem;
+  }
+
+  #items_admin .admin_item_card {
+  margin-bottom: 0;
+  }
+}

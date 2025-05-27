@@ -2,10 +2,10 @@
 {% include "_nav.html" %}
 {% include "_toast.html" %}
 
-<main>
-  <h1>{{ translate('login', lan) }}</h1>
-
+<main class="log_main">
+  
   <form action="{{ url_for('post_login', lan=lan) }}" method="post">
+    <h2 class="log_heading">{{ translate('login', lan) }}</h2>
     {% set old = old_values if old_values is defined else {} %}
 
     <div class="form-group">
@@ -38,13 +38,12 @@
       </a>
     </p>
     <button type="submit">{{ translate('login', lan) }}</button>
+    <p>{{ translate('profile', lan) }}
+      {{ translate('sign_up', lan) }}
+      <a href="{{ url_for('signup', lan=lan) }}">{{ translate('here', lan) }}</a>
+    </p>
   </form>
 
-  <p>{{ translate('profile', lan) }}</p>
-  <p>
-    {{ translate('sign_up', lan) }}
-    <a href="{{ url_for('signup', lan=lan) }}">{{ translate('here', lan) }}</a>
-  </p>
 </main>
 
 {% include "_footer.html" %}

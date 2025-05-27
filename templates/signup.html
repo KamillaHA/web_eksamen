@@ -1,13 +1,13 @@
 {% include "_header.html" %}
 {% include "_nav.html" %}
 
-<main>
-  <h1>{{ translate('sign_up', lan) }}</h1>
-
+<main class="log_main">
+  
   <form 
-    action="{{ url_for('post_signup', lan=lan) }}" 
-    method="POST" 
+  action="{{ url_for('post_signup', lan=lan) }}" 
+  method="POST" 
   >
+  <h2 class="log_heading">{{ translate('sign_up', lan) }}</h2>
     {% set old = old_values if old_values is defined else {} %}
 
     <div>
@@ -19,6 +19,7 @@
         name="user_name"
         type="text"
         value="{{ old.user_name or '' }}"
+        class="{{ 'error' if user_name_error else '' }}" 
         required
         pattern="{{ x.USER_NAME_REGEX }}"
         title="{{ translate('invalid_name', lan) }}"
@@ -34,6 +35,7 @@
         name="user_last_name"
         type="text"
         value="{{ old.user_last_name or '' }}"
+        class="{{ 'error' if user_last_name_error else '' }}" 
         required
         pattern="{{ x.USER_LAST_NAME_REGEX }}"
         title="{{ translate('invalid_lastname', lan) }}"
@@ -49,6 +51,7 @@
         name="user_email"
         type="email"
         value="{{ old.user_email or '' }}"
+        class="{{ 'error' if user_email_error else '' }}" 
         required
         pattern="{{ x.REGEX_EMAIL }}"
         title="{{ translate('invalid_email', lan) }}"
@@ -64,6 +67,7 @@
         name="user_username"
         type="text"
         value="{{ old.user_username or '' }}"
+        class="{{ 'error' if user_username_error else '' }}" 
         required
         pattern="{{ x.USER_USERNAME_REGEX }}"
         placeholder="{{ x.USER_USERNAME_MIN }}–{{ x.USER_USERNAME_MAX }} {{ translate('characters', lan) }}"
@@ -79,6 +83,7 @@
         id="user_password"
         name="user_password"
         type="password"
+        class="{{ 'error' if user_password_error else '' }}" 
         required
         pattern="{{ x.USER_PASSWORD_REGEX }}"
         placeholder="{{ x.USER_PASSWORD_MIN }}–{{ x.USER_PASSWORD_MAX }} {{ translate('characters', lan) }}"
