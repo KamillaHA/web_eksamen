@@ -25,6 +25,12 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 
+
+app.config['SECRET_KEY'] = os.environ.get(
+    'SECRET_KEY',
+    'h7G9kL!2pQzX4vNwR8s6HGa'  # din fallback
+)
+
 # Til login/log ud men virker umiddelbart uden?
 ##############################
 @app.context_processor
