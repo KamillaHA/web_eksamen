@@ -1,6 +1,12 @@
-/* --- Card Styles (Mobile-First) --- */
+/* --- Card styles  --- */
 
-/* Fælles styling for kort i user, admin og index */
+/* --- 
+admin.html
+profile.html
+index.html 
+--- */
+
+/* --- overall card styling  --- */
 #items_user .item,
 #items_admin .item,
 #users .user,
@@ -10,13 +16,12 @@
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  /* margin: 0.5rem var(--marginMobile); */
   overflow: hidden;
   text-decoration: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Fjern pointer-events og definer farve for alt inde i kort */
+/* --- remove pointer-events and define color --- */
 #items_user .item *,
 #items_admin .item *,
 #users .user *,
@@ -26,7 +31,7 @@
   color: black;
 }
 
-/* Hover-effekt */
+/* --- hover effect --- */
 #items_user .item:hover,
 #items_admin .item:hover,
 #users .user:hover,
@@ -35,7 +40,7 @@
   transform: scale(1.01);
 }
 
-/* Billede */
+/* --- images --- */
 #items_user .item img,
 #items_admin .item img,
 #users .user img,
@@ -48,7 +53,7 @@
   border-radius: 5px 5px 0 0;
 }
 
-/* Navn / Titel */
+/* --- name / title / text --- */
 #items_user .item p,
 #items_admin .item p,
 #users .user p,
@@ -60,7 +65,7 @@
   margin: 0 1rem;
 }
 
-/* Ekstra info fx pris eller beskrivelse */
+/* --- extra info - price / description --- */
 #items_user .item div,
 #items_admin .item div,
 #users .user div,
@@ -71,7 +76,7 @@
   font-family: var(--fontMain);
 }
 
-
+/* --- admin item card --- */
 #items_admin .admin_item_card {
   height: 13rem;
   display: flex;
@@ -88,6 +93,7 @@
   }
 }
 
+/* --- admin user card --- */
 #users .user {
   height: 4rem;
   display: flex;
@@ -98,6 +104,7 @@
 /* --- Desktop Styles --- */
 @media (min-width: 768px) {
 
+/* --- admin user card --- */
   #users .user {
     margin: 0 0.5rem;
     justify-content: center;
@@ -106,6 +113,7 @@
     }
   }
 
+/* --- overall card styling --- */
   #items_user .item,
   #items_admin .item,
   #items .item,
@@ -114,7 +122,7 @@
     height: 100%;
   }
 
-
+/* --- name / title / text --- */
   #items_user .item p,
   #items_admin .item p,
   #users .user p,
@@ -125,6 +133,7 @@
     margin: 0;
   }
 
+/* --- extra info - price / description --- */
   #items_user .item div,
   #items_admin .item div,
   #users .user div,
@@ -133,6 +142,7 @@
     font-size: 1rem;
   }
 
+/* --- admin item card --- */
   #items_admin .admin_item_card {
   margin-bottom: 0;
   }

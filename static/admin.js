@@ -1,4 +1,4 @@
-// Admin dashboard
+// Admin dashboard - show/hide sections based on button clicks
 document.getElementById('btn_items').onclick = () => {
     document.getElementById('items_admin').classList.remove('hidden');
     document.getElementById('single_item_admin').classList.remove('hidden');

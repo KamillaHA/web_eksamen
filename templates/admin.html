@@ -1,34 +1,38 @@
+<!-- Admin Dashboard -->
+
 {% include "_header.html" %}
 {% include "_nav.html" %}
 
 
 <main id="admin_main">
 
-    <!-- TJEK OM ASIDE ER OK -->
-
+    <!-- Admin Dashboard -->
         <aside id="dashboard">
             <h1>{{ translate('admin', lan) }}</h1>
             {% include "_btn_admin.html" %}
         </aside>
 
-
+        <!-- Items Section -->
         <section id="items_admin">
             {% for item in items: %}
                 {% include "_admin_card_item.html" %}
             {% endfor %}
         </section>
 
+        <!-- Single Item Section -->
         <section id="single_item_admin">
             {% set item = items[0] %}
             {% include "_admin_item.html" %}
         </section>
 
+        <!-- Users Section -->
         <section id="users" class="hidden">
             {% for user in users: %}
                 {% include "_admin_card_user.html" %}
             {% endfor %}        
         </section>
 
+        <!-- Single User Section -->
         <section id="single_user" class="hidden">
             {% set user = users[0] %}
             {% include "_admin_user.html" %}
@@ -38,5 +42,5 @@
 
 {% include "_footer.html" %}
 
-
+<script src="{{ url_for('static', filename='admin.js') }}"></script>
 

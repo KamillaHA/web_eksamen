@@ -3,30 +3,25 @@
 
 
 :root {
-    /* --colorBg: #F5F7F2;
-    --colorTxt: #17261C;
-    --colorGreen: #B7C396;
-    --colorDarkGreen: #365940;
-    --colorDarkBrown: #664930;
-    --colorBrown: #997E67; */
 
-
+/* --- colors --- */
     --colorBg: #F5F7F2;
     --colorTxt: #1C140D;
     --colorLightBrown: #CEC1B6;
     --colorBrown: #997E67;
     --colorDarkBrown: #664930;
 
-
+/* --- font sizes --- */
     --fontSizeHeader: 1.6rem;
     --fontSizeDesktop: 1rem;
     --fontSizeMobile: 0.9rem;
     --fontSizeSmall: 0.8rem;
 
+/* --- fonts --- */
     --fontMain: 'Poppins', sans-serif;
     --fontWritten: 'Oooh Baby', cursive;
 
-
+/* --- spacing --- */
     --marginMobile: 2rem;
     
 }

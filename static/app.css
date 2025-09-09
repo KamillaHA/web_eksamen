@@ -1,3 +1,5 @@
+/* --- Overall css all pages --- */
+
 @import 'variables.css';
 @import 'search.css';
 @import 'guest.css';
@@ -6,7 +8,6 @@
 @import 'form.css';
 @import 'cards.css';
 
-/* --- Global Styles --- */
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +22,7 @@ body {
     background-color: var(--colorBg);
 }
 
-/* --- Navigation --- */
+/* --- navigation --- */
 nav {
     display: flex;
     justify-content: space-between;
@@ -34,16 +35,22 @@ nav {
     left: 0;
     z-index: 10;
     background-color: var(--colorLightBrown);
+
+/* --- navigation right - login / signup --- */
     #nav_right {
         display: flex;
         gap: 1rem;
     }
+
+/* --- links --- */
     a {
         color: var(--colorTxt);
         text-decoration: none;
         font-family: var(--fontMain);
         font-size: var(--fontSizeMobile);
     }
+
+/* --- logo --- */
     #logo_container {
         display: flex;
         align-items: center;
@@ -55,17 +62,17 @@ nav {
     }
 }
 
+/* --- logo text --- */
 .nav-subtitle {
     display: none;
 }
-
 .logo-link {
     font-size: 1.5rem; /* kan justeres */
     font-weight: bold;
     font-family: var(--fontWritten);
 }
 
-/* --- Main login / signup --- */
+/* --- main login / signup --- */
 .log_main {
     margin-top: 6rem;
     overflow: hidden;
@@ -75,9 +82,7 @@ nav {
 
 }
 
-
-
-/* --- Toast Container --- */
+/* --- toast container --- */
 #toast_container {
     position: fixed;
     top: 1rem;
@@ -101,7 +106,7 @@ nav {
     }
 }
 
-/* --- Status Classes --- */
+/* --- status classes --- */
 .ok {
     background: green;
 }
@@ -110,16 +115,11 @@ nav {
     background: red;
 }
 
-/* input.error {
-    border: 1px solid red;
-    background-color: #ffe6e6;
-} */
-
 .hidden {
     display: none !important;
 }
 
-/* --- Footer --- */
+/* --- footer --- */
 footer {
     display: flex;
     justify-content: center;
@@ -136,47 +136,53 @@ footer {
     background-color: var(--colorLightBrown);
 }
 
+
+
 /* --- Desktop Styles --- */
 @media (min-width: 768px) {
 
+/* --- navigation --- */
     nav {
         padding: 0 2rem;
 
+/* --- navigation right - login / signup --- */
         #nav_right {
                 gap: 2rem;
             }
 
+/* --- logo --- */
         #logo_container img {
                 width: 10%;
             }
         
         a {
             font-size: var(--fontSizeDesktop);
-
         }
     }
-
     .logo-link {
-    font-size: 2rem; /* kan justeres */
+    font-size: 2rem; 
 }
 
+/* --- logo text --- */
     .nav-subtitle {
     display: inline-block;
     font-size: var(--fontSizeHeader);
     font-weight: normal;
 }
 
+/* --- toast container --- */
     #toast_container {
         max-width: 25rem;
     }
 
+/* --- footer --- */
     footer {
         height: 3rem;
     }
 }
 
 
-/* --- Mix Elements --- */
+/* --- mix elements --- */
 #mix-cover {
     position: fixed;
     top: 0;
@@ -207,132 +213,3 @@ footer {
         opacity: 0;
     }
 }
-
-/* *{
-    margin: 0; padding: 0; box-sizing: border-box;
-}
-
-body{
-    width: 100%;
-    height: 100vh;
-    overflow-x: hidden;
-    margin-top: 4rem;
-    background-color: var(--colorBg);
-}
-
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    height: 4rem;
-    align-items: center;
-    padding: 0 1rem;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    background-color: var(--colorLightBrown);
-    #nav_right {
-        gap: 2rem;
-        display: flex;
-    }
-    a {
-        color: var(--colorTxt);
-        text-decoration: none;
-        font-weight: bold;
-        &:last-child {
-            margin-left: auto;
-        }
-    }
-
-    #logo_container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        img {
-            width: 10%;
-            height: auto;
-        }
-    }
-}
-
-#toast_container {
-    position: fixed;
-    top: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20rem;         
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;                   
-    pointer-events: none;           
-    z-index: 99;
-    .toast {
-        display: inline-block;            
-        padding: 0.75rem 1rem;
-        background: rgba(0,0,0,0.8);
-        color: var(--colorBg);
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        pointer-events: auto;        
-    }
-}
-
-
-.ok{
-    background: green;
-}
-.error{
-    background: red;
-}
-input.error {
-    border: 1px solid red;
-    background-color: #ffe6e6;
-}
-
-.hidden{ 
-    display: none !important; 
-}
-
-
-footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 2rem;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 10;
-    background-color: var(--colorGreen);
-}
-
-
-#mix-cover{    
-    position: fixed; top:0rem; left:0;
-    width: 100vw;
-    height: 0.3rem;
-    background-color: rgb(6, 182, 212);
-    z-index: 20;
-}
-.mix-hidden{
-    display: none !important;
-}
-.mix-fade-out {
-    animation: fadeOut 2s cubic-bezier(0.1, 0, 0.5, 1);
-}
-.mix-error{
-    background-color: rgba(230,130,130, 0.5);
-}
-@keyframes mix-fade-out {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
- */

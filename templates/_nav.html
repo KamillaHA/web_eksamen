@@ -1,28 +1,30 @@
+<!-- Navigation Bar -->
+
 <nav>
 
+<!-- Logo -->
     <div id="logo_container">
         <a href="{{ url_for('index', lan=lan) }}" class="logo-link">
-            <!-- <img class="logo" src="../static/images/logotest.png" alt="Logotest"> -->
             Vejhylden <span class="nav-subtitle"> - {{ translate('nav', lan) }}</span>
         </a>
         
     </div>
 
 
-
     <div id="nav_right">
+        
+    <!-- Language Switcher -->
+        <div>
+            <a href="javascript:void(0)"
+            onclick="switchLang('dk')"
+            title="Dansk">🇩🇰</a> 
+            <strong>/</strong>
+            <a href="javascript:void(0)"
+            onclick="switchLang('en')"
+            title="English">🇬🇧</a>
+        </div>
 
-
-    <div>
-        <a href="javascript:void(0)"
-        onclick="switchLang('dk')"
-        title="Dansk">🇩🇰</a> 
-        <strong>/</strong>
-        <a href="javascript:void(0)"
-        onclick="switchLang('en')"
-        title="English">🇬🇧</a>
-    </div>
-
+        <!-- Login / Logout -->
     {% if not user %}
         <a href="{{ url_for('login', lan=lan) }}">{{ translate('login', lan) }}</a>
 
@@ -42,7 +44,5 @@
         </a>
     {% endif %}
 
-</div>
-
-
+    </div>
 </nav>

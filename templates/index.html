@@ -1,19 +1,14 @@
+<!-- Index page -->
+
 {% include "_header.html" %}
 {% include "_nav.html" %}
 
-<!-- <header>
-    <div id="search_container">
-        <input id="input_search" oninput="search()" class="" type="text" placeholder="Search">
-        <div id="search_results" class="hidden">
-        </div>
-    </div>
-</header> -->
 <main id="index_main">
 
-    <section id="map">
+    <!-- Map Section -->
+    <section id="map"></section>
 
-    </section>
-
+    <!-- Cards / Center Section -->
     <section id="items_more">
         <div id="search_container">
             <input id="input_search" oninput="search()" class="" type="text" placeholder="{{ translate('search', lan) }}">
@@ -28,12 +23,12 @@
         {% include "_btn_more_items.html" %}
     </section>
 
+    <!-- Single item / Right Section -->
     <section id="right">
         {% set item = items[0] %}
         {% include "_item.html" %}
     </section>
 </div>
-
 </main>
 
 

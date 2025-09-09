@@ -1,43 +1,50 @@
+<!-- User Profile Page -->
+
 {% include "_header.html" %}
 {% include "_nav.html" %}
 
 
 <main id="user_main">
 
+  <!-- User Dashboard -->
     <div id="aside_dash">
-
         <aside id="dashboard">
             <h1>{{ translate('welcome', lan) }} {{ user.user_username }}</h1>
             {% include "_btn_user.html" %}
         </aside>
     </div>
 
+    <!-- Add new library -->
   <section id="items_form_user">
     {% include "_user_item_form.html" %}
   </section>
 
+  <!-- Show Items or None -->
   <div class="dual-view-container">
+
+    <!-- User Items Cards -->
   <section id="items_user" class="hidden">
     {% if items %}
       {% for item in items %}
         {% include "_user_your_items.html" %}
       {% endfor %}
     {% else %}
-    <div>
 
-        <h2 class="no-items-notice">
-          {{ translate('no_items_notice', lan) }}</h2>
-              <p>
-                  <a href="#" onclick="btn_items_form_user.click()">
-                    {{ translate('click_here', lan) }}
-                  </a> 
-                  {{ translate('to_create', lan) }}
-              </p>
-    </div>
-
+    <!-- No Items -->
+    <section id="no-items">
+      <h2 class="no-items-notice">
+        {{ translate('no_items_notice', lan) }}</h2>
+            <p>
+                <a href="#" onclick="btn_items_form_user.click()">
+                  {{ translate('click_here', lan) }}
+                </a> 
+                {{ translate('to_create', lan) }}
+            </p>
+    </section>
     {% endif %}
   </section>
 
+  <!-- Change Single Item -->
   <section id="single_item_user" class="hidden">
     {% if items %}
       {% set item = items[0] %}
@@ -46,6 +53,7 @@
   </section>
   </div>
 
+  <!-- Change Profile Section -->
   <section id="profile_user" class="hidden">
     {% include "_user_edit_profile.html" %}
   </section>
@@ -53,3 +61,5 @@
 
 
 {% include "_footer.html" %}
+
+<script src="{{ url_for('static', filename='user.js') }}"></script>

@@ -26,31 +26,34 @@ def db():
     return db, cursor
 
 
+# Validate user login status
 ##############################
 def validate_user_logged():
     if not session.get("user"): raise Exception("new_ex user not logged")
     return session.get("user")
 
 
+# Send verification email after user registration
 ##############################
 def send_email(user_name, user_last_name, user_email, user_verification_token, lan="dk"):
     try:
-        # Create a gmail
-        # Enable (turn on) 2 step verification/factor in the google account manager
-        # Visit: https://myaccount.google.com/apppasswords
-
         # Email and password of the sender's Gmail account
         sender_email = "kamiweb1031@gmail.com"
         password = "bdqb aclo sysn hgrf"  # If 2FA is on, use an App Password instead
 
         # Receiver email address
         receiver_email = "kamiweb1031@gmail.com"
+        # With correct mail:
+        # receiver_email = user_email
+
         
         # Create the email message
         message = MIMEMultipart()
         message["From"] = "Vejhylden"
         message["To"] = "kamiweb1031@gmail.com"
         message["Subject"] = translate("email_subject", lan)
+        # With correct mail:
+        # message["To"] = receiver_email
 
         # Verification link
         verification_link = f"http://127.0.0.1/{lan}/verify/{user_verification_token}"
@@ -79,17 +82,19 @@ def send_email(user_name, user_last_name, user_email, user_verification_token, l
         pass
 
 
-
+# Send password reset email
 ##############################
 def send_reset_email(user_email, reset_token, lan="dk"):
     from languages import translate
 
+    # Email and password of the sender's Gmail account
     sender_email = "kamiweb1031@gmail.com"
     password = "bdqb aclo sysn hgrf"
     receiver_email = "kamiweb1031@gmail.com"
 
     link = f"http://127.0.0.1/{lan}/reset-password/{reset_token}"
 
+    # Create the email message
     subject = translate("reset_password", lan)
     body = f"""
         <h1>{translate("reset_email_greeting", lan)}</h1>
@@ -97,17 +102,21 @@ def send_reset_email(user_email, reset_token, lan="dk"):
         <p><a href="{link}">{translate("click_here", lan)}</a></p>
     """
 
+    # Create a multipart message
     message = MIMEMultipart()
     message["From"] = "Vejhylden"
     message["To"] = "kamiweb1031@gmail.com"
     message["Subject"] = subject
     message.attach(MIMEText(body, "html"))
 
+    # Connect to Gmail's SMTP server and send the email
     with smtplib.SMTP("smtp.gmail.com", 587) as server:
         server.starttls()
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, message.as_string())
 
+
+# Send deletion confirmation email after user account deletion
 ##############################
 def send_deletion_email(user_name, user_last_name, user_email, lan="dk"):
     """
@@ -117,15 +126,16 @@ def send_deletion_email(user_name, user_last_name, user_email, lan="dk"):
         sender_email = "kamiweb1031@gmail.com"
         password     = "bdqb aclo sysn hgrf"  # dit App Password
 
-        # Sæt modtageren til den bruger, vi sletter
+        # Set the receiver email to the user's email
         receiver_email = "kamiweb1031@gmail.com"
         
-        # Byg selve beskeden
+        # Build message
         message = MIMEMultipart()
         message["From"]    = "Vejhylden <{}>".format(sender_email)
         message["To"]      = receiver_email
         message["Subject"] = translate("deletion_email_subject", lan)
 
+        # Body of the email
         body = f"""
         <h1>{translate('deletion_email_greeting', lan)} {user_name} {user_last_name}</h1>
         <p>{translate('deletion_email_body', lan)}</p>
@@ -141,11 +151,11 @@ def send_deletion_email(user_name, user_last_name, user_email, lan="dk"):
         ic("Deletion email sent successfully!")
     except Exception as ex:
         ic("Error sending deletion email:", ex)
-        # Du kan vælge at raise igen, eller bare logge
+        # You can choose to raise again or just log
         raise
 
 
-
+# Send block/unblock emails
 ##############################
 def send_user_block_email(user_email: str, user_name: str, user_last_name: str, blocked: bool, lan="dk"):
     """
@@ -154,26 +164,28 @@ def send_user_block_email(user_email: str, user_name: str, user_last_name: str, 
     sender = "kamiweb1031@gmail.com"
     pwd    = "bdqb aclo sysn hgrf"
 
-    # Byg besked
+    # If blocked, send block email; if unblocked, send unblock email
     if blocked:
         subject = translate("email_subject_blocked", lan)
         body = f"""
-          <h1>{translate('email_blocked_greeting', lan)} {user_name} {user_last_name}</h1>
-          <p>{translate('email_blocked_body', lan)}</p>
+            <h1>{translate('email_blocked_greeting', lan)} {user_name} {user_last_name}</h1>
+            <p>{translate('email_blocked_body', lan)}</p>
         """
     else:
         subject = translate("email_subject_unblocked", lan)
         body = f"""
-          <h1>{translate('email_unblocked_greeting', lan)} {user_name} {user_last_name}</h1>
-          <p>{translate('email_unblocked_body', lan)}</p>
+            <h1>{translate('email_unblocked_greeting', lan)} {user_name} {user_last_name}</h1>
+            <p>{translate('email_unblocked_body', lan)}</p>
         """
 
+    # Create the email message
     msg = MIMEMultipart()
     msg["From"]    = f"Vejhylden <{sender}>"
     msg["To"]      = "kamiweb1031@gmail.com"
     msg["Subject"] = subject
     msg.attach(MIMEText(body, "html"))
 
+    # Send the email
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as s:
             s.starttls()
@@ -184,8 +196,7 @@ def send_user_block_email(user_email: str, user_name: str, user_last_name: str, 
         ic("Error sending block mail:", e)
 
 
-
-
+# Send item block/unblock emails
 ##############################
 def send_item_block_email(user_email: str, user_name: str, user_last_name: str, item_name: str, blocked: bool, lan="dk"):
     """
@@ -194,25 +205,28 @@ def send_item_block_email(user_email: str, user_name: str, user_last_name: str, 
     sender = "kamiweb1031@gmail.com"
     pwd    = "bdqb aclo sysn hgrf"
 
+    # If blocked, send block email; if unblocked, send unblock email
     if blocked:
         subject = translate("email_subject_item_blocked", lan)
         body = f"""
-          <h1>{translate('email_item_blocked_greeting', lan)} {user_name} {user_last_name}</h1>
-          <p>{translate('email_item_blocked_body', lan).format(item_name=item_name)}</p>
+            <h1>{translate('email_item_blocked_greeting', lan)} {user_name} {user_last_name}</h1>
+            <p>{translate('email_item_blocked_body', lan).format(item_name=item_name)}</p>
         """
     else:
         subject = translate("email_subject_item_unblocked", lan)
         body = f"""
-          <h1>{translate('email_item_unblocked_greeting', lan)} {user_name} {user_last_name}</h1>
-          <p>{translate('email_item_unblocked_body', lan).format(item_name=item_name)}</p>
+            <h1>{translate('email_item_unblocked_greeting', lan)} {user_name} {user_last_name}</h1>
+            <p>{translate('email_item_unblocked_body', lan).format(item_name=item_name)}</p>
         """
 
+    # Create the email message
     msg = MIMEMultipart()
     msg["From"]    = f"Vejhylden <{sender}>"
     msg["To"]      = "kamiweb1031@gmail.com"
     msg["Subject"] = subject
     msg.attach(MIMEText(body, "html"))
 
+    # Send the email
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as s:
             s.starttls()
@@ -222,16 +236,8 @@ def send_item_block_email(user_email: str, user_name: str, user_last_name: str, 
     except Exception as e:
         ic("Error sending item-block mail:", e)
 
-##############################
-# def validate_user_password():
-#     error = "web_ex password"
-#     user_password = request.form.get("user_password", "")
-#     if len(user_password) < 8:
-#         raise Exception(error)
-#     return user_password
 
-
-
+# Validate user input for name
 ##############################
 USER_NAME_MIN = 2
 USER_NAME_MAX = 20
@@ -244,20 +250,20 @@ def validate_user_name():
     return user_name
 
 
-
+# Validate user input for last name
 ##############################
 USER_LAST_NAME_MIN   = 2
 USER_LAST_NAME_MAX   = 20
 USER_LAST_NAME_REGEX = f"^.{{{USER_LAST_NAME_MIN},{USER_LAST_NAME_MAX}}}$"
 def validate_user_last_name():
-    error = "new_ex last name"
+    error = "new_ex last_name"
     user_last_name = request.form.get("user_last_name", "").strip()
     if not re.match(USER_LAST_NAME_REGEX, user_last_name):
         raise Exception(error)
     return user_last_name
 
 
-
+# Validate user input for username
 ##############################
 USER_USERNAME_MIN   = 2
 USER_USERNAME_MAX   = 20
@@ -270,7 +276,7 @@ def validate_user_username():
     return user_username
 
 
-
+# Validate user input for password
 ##############################
 USER_PASSWORD_MIN   = 2
 USER_PASSWORD_MAX   = 20
@@ -283,7 +289,7 @@ def validate_user_password():
     return user_password
 
 
-
+# Validate user input for page number
 ##############################
 REGEX_PAGE_NUMBER = "^[1-9][0-9]*$"
 def validate_page_number(page_number):
@@ -293,7 +299,7 @@ def validate_page_number(page_number):
     return int(page_number)
 
 
-
+# Validate user input for email
 ##############################
 REGEX_EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 def validate_user_email():
@@ -303,33 +309,34 @@ def validate_user_email():
     return user_email
 
 
-
+# Validate user input for images
 ##############################
 ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "gif"]
-MAX_FILE_SIZE = 1 * 1024 * 1024  # 1MB - size in bytes
+MAX_FILE_SIZE = 5 * 1024 * 1024  # 1MB - size in bytes
 MAX_FILES = 3
 
+# Function to validate and save item images
 def validate_item_images():
     images_names = []
     if "files" not in request.files:
         raise Exception("new_ex at least one file")
     
+    # Get the list of files from the request
     files = [f for f in request.files.getlist('files') if f.filename]
     
-    # TODO: Fix the validation for 0 files
-    # if not files == [None]:
-    #     raise Exception("web_ex at least one file")  
-
+# Check if there are no files or too many files
     if len(files) == 0:
         raise Exception("new_ex at least one file")
     if len(files) > MAX_FILES:
         raise Exception(f"new_ex max {MAX_FILES} files")
 
+# Validate and save images
     for f in files:
         data = f.read()
         size = len(data)
         f.seek(0)
 
+# Check file size and extension
         name, ext = os.path.splitext(f.filename)
         ext = ext.lstrip(".").lower()
         if ext not in ALLOWED_EXTENSIONS:
@@ -337,31 +344,9 @@ def validate_item_images():
         if size > MAX_FILE_SIZE:
             raise Exception("new_ex file too large")
 
+# Generate a unique filename and save the file
         new_name = f"{uuid.uuid4().hex}.{ext}"
         f.save(os.path.join("static/uploads", new_name))
         images_names.append(new_name)
 
     return images_names
-
-
-
-    # for the_file in files:
-    #     file_size = len(the_file.read())
-    #     file_name, file_extension = os.path.splitext(the_file.filename)
-    #     the_file.seek(0)
-    #     file_extension = file_extension.lstrip(".")
-    #     if file_extension not in ALLOWED_EXTENSIONS:
-    #         raise Exception("new_ex file extension not allowed")  
-    #     if file_size > MAX_FILE_SIZE:
-    #         raise Exception("new_ex file too large")  
-    #     new_file_name = f"{uuid.uuid4().hex}.{file_extension}"
-    #     images_names.append(new_file_name)
-    #     file_path = os.path.join("static/uploads", new_file_name)
-    #     the_file.save(file_path)
-        
-    # return images_names
-
-
-# OBS: HVAD BETYDER OVENSTÅENDE IFT STATIC/UPLOADS? DUMMY BILLEDER???
-
-

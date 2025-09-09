@@ -1,7 +1,8 @@
 
 translations = {
     'dk': {
-        'nav' : 'hylden med historier',
+
+        # Toast messages and email subjects
         'toast_signup_ok' : 'Tak for din tilmelding hos Vejhylden - tjek din e-mail for at bekræfte dit login.',
         'toast_login_error' : 'Bekræft venligst din e-mail for at logge ind.',
         'already_verified' : 'Brugeren er allerede blevet verificeret',
@@ -10,29 +11,27 @@ translations = {
         'email_subject' : 'Verificér din bruger hos Vejhylden.',
         'verify_link' : 'Klik venligst på nedenstående link for at verificere din bruger.',
         'forgot_password' : 'Glemt adgangskode?',
-
         'reset_password' : 'Nulstil din adgangskode',
         'send_reset_link' : 'Send nulstillingslink',
         'save_password' : 'Gem adgangskode',
         'password' : 'Adgangskode',
 
+        # Email templates for password reset and deletion
         'reset_email_greeting' : 'Har du glemt din adgangskode til Vejhylden?',
         'reset_email_instruction' : 'Klik herunder for at vælge ny adgangskode.',
-
-
         'enter_password_to_delete' : 'Indtast din adgangskode for at slette din profil',
         'deletion_email_subject' : 'Din brugerprofil hos Vejhylden er blevet slettet',
         'deletion_email_greeting' : 'På gensyn,',
         'deletion_email_body' : 'Vi håber, at du har haft glæde af vores tjeneste, og at vi ser dig en anden gang.',
 
-
+        # Validation messages
         'invalid_name': 'Ugyldigt navn',
         'invalid_lastname': 'Ugyldigt efternavn',
         'invalid_username': 'Ugyldigt brugernavn',
         'invalid_password': 'Ugyldig adgangskode',
         'invalid_email': 'Ugyldig e-mail',
 
-
+        # Email templates
         'email_subject_blocked': 'Blokering fra Vejhylden',
         'email_blocked_greeting': 'Du er blevet blokeret hos Vejhylden,',
         'email_blocked_body': 'Din bruger er blevet blokeret af en administrator. Du kan ikke længere logge ind på din profil.',
@@ -51,7 +50,8 @@ translations = {
         'email_item_unblocked_body': 'Dit bibliotek {item_name} er blevet aktiveret igen af en administrator. Du kan nu tilgå det.',
 
 
-
+        # General UI 
+        'nav' : 'hylden med historier',
         'click_here': 'Klik her',
         'signing_up': 'for at oprette dig.',
         'thanks': 'Tak',
@@ -63,10 +63,30 @@ translations = {
         'logout' : 'Log ud',
         'search' : 'Søg',
         'here' : 'her',
-        'admin' : 'Dit admin dashboard',
         'library' : "Biblioteker",
         'user' : 'Profiler',
         'profile' : 'Har du ikke en profil?',
+        'name' : 'Bibliotekets navn*',
+        'address' : 'Adresse*',
+        'image' : 'Billede af biblioteket*',
+        'more_images' : 'Flere billeder af biblioteket',
+        'optional' : 'Valgfrit',
+        'price' : 'Indholdsværdi*',
+
+        # Library management 
+        'admin' : 'Dit admin dashboard',
+        'create' : 'Opret bibliotek',
+        'blocked' : 'Blokeret',
+        'block' : 'Bloker',
+        'unblock' : 'Fjern blokering',
+        'active' : 'Aktiv',
+        'based_on' : 'Baseret på mængde og stand af bøger',
+        'info_user' : 'Brugerinformation',
+        'info_item' : 'Biblioteksinformation',
+        'block_user' : 'Blokering af bruger',
+        'block_item' : 'Blokering af bibliotek',
+        'no_items_notice' : 'Du har ingen biblioteker endnu',
+        'to_create' : 'for at oprette et nyt bibliotek.',
         'profile_btn' : 'Profil',
         'panel_btn' : 'Panel',
         'welcome' : 'Velkommen',
@@ -84,29 +104,12 @@ translations = {
         'user_username' : 'Brugernavn',
         'your_items' : 'Dine biblioteker',
         'profile_page' : 'Profil indstillinger',
-        'name' : 'Bibliotekets navn*',
-        'address' : 'Adresse*',
-        'image' : 'Billede af biblioteket',
-        'more_images' : 'Flere billeder af biblioteket',
-        'optional' : 'Valgfrit',
-        'price' : 'Indholdsværdi*',
-        'create' : 'Opret bibliotek',
-        'blocked' : 'Blokeret',
-        'block' : 'Bloker',
-        'unblock' : 'Fjern blokering',
-        'active' : 'Aktiv',
-        'based_on' : 'Baseret på mængde of stand af bøger',
-        'info_user' : 'Brugerinformation',
-        'info_item' : 'Biblioteksinformation',
-        'block_user' : 'Blokering af bruger',
-        'block_item' : 'Blokering af bibliotek',
-
-        'no_items_notice' : 'Du har ingen biblioteker endnu',
-        'to_create' : 'for at oprette et nyt bibliotek.',
 
     },
+
     'en': {
-        'nav' : 'the shelf of stories',
+
+        # Toast messages and email subjects
         'toast_signup_ok' : 'Thank you for signing up to Vejhylden - check your email to confirm your login.',
         'toast_login_error' : 'Please verify your email to log in.',
         'already_verified' : 'The user has already been verified',
@@ -115,28 +118,27 @@ translations = {
         'email_subject' : 'Verify your account at Vejhylden.',
         'verify_link' : 'Please click the link below to verify your account.',
         'forgot_password' : 'Forgot password?',
-
         'reset_password' : 'Reset password',
         'send_reset_link' : 'Send reset link',
         'save_password' : 'Save password',
         'password' : 'Password',
 
+        # Email templates for password reset and deletion
         'reset_email_greeting' : 'Forgot your password to Vejhylden?',
         'reset_email_instruction' : 'Click below to choose a new password.',
-
         'enter_password_to_delete' : 'Enter your password to delete your profile',
         'deletion_email_subject' : 'Your user profile at Vejhylden has been deleted',
         'deletion_email_greeting' : 'Goodbye,',
         'deletion_email_body' : 'We hope you enjoyed our service and that we will see you again.',
 
-
+        # Validation messages
         'invalid_name': 'Invalid name',
         'invalid_lastname': 'Invalid lastname',
         'invalid_username': 'Invalid username',
         'invalid_password': 'Invalid password',
         'invalid_email': 'Invalid e-mail',
 
-
+        # Email templates
         'email_subject_blocked': 'Blocked from Vejhylden',
         'email_blocked_greeting': 'You have been blocked from Vejhylden,',
         'email_blocked_body': 'Your account has been blocked by an administrator. You can no longer log in to your profile.',
@@ -154,7 +156,8 @@ translations = {
         'email_item_unblocked_greeting': 'Your library has been unblocked from Vejhylden,',
         'email_item_unblocked_body': 'Your library {item_name} has been unblocked by an administrator. You can now access it.',
 
-
+        # General UI
+        'nav' : 'the shelf of stories',
         'click_here': 'Click here',
         'signing_up': 'for signing up.',
         'thanks': 'Thank you',
@@ -166,10 +169,30 @@ translations = {
         'logout' : 'Logout',
         'search' : 'Search',
         'here' : 'here',
-        'admin' : 'Your admin dashboard',
         'library' : "Libraries",
         'user' : 'Users',
         'profile' : 'Don´t have a profile?',
+        'name' : 'Name of the library*',
+        'address' : 'Address*',
+        'image' : 'Picture of the library*',
+        'more_images' : 'More pictures of the library',
+        'optional' : 'Optional',
+        'price' : 'Collection value*',
+
+        # Library management
+        'admin' : 'Your admin dashboard',
+        'create' : 'Create library',
+        'blocked' : 'Blocked',
+        'block' : 'Block',
+        'unblock' : 'Unblock',
+        'active' : 'Active',
+        'based_on' : 'Based on the number and value of the books',
+        'info_user' : 'User information',
+        'info_item' : 'Library information',
+        'block_user' : 'Blocking of user',
+        'block_item' : 'Blocking of library',
+        'no_items_notice' : 'You don´t have any libraries yet',
+        'to_create' : 'to create a new library.',
         'profile_btn' : 'Profile',
         'panel_btn' : 'Dashboard',
         'welcome' : 'Welcome',
@@ -187,30 +210,10 @@ translations = {
         'user_username' : 'Username',
         'your_items' : 'Your libraries',
         'profile_page' : 'Profile information',
-        'name' : 'Name of the library*',
-        'address' : 'Address*',
-        'image' : 'Picture of the library',
-        'more_images' : 'More pictures of the library',
-        'optional' : 'Optional',
-        'price' : 'Collection value*',
-        'create' : 'Create library',
-        'blocked' : 'Blocked',
-        'block' : 'Block',
-        'unblock' : 'Unblock',
-        'active' : 'Active',
-        'based_on' : 'Based on the number and value of the books',
-        'info_user' : 'User information',
-        'info_item' : 'Library information',
-        'block_user' : 'Blocking of user',
-        'block_item' : 'Blocking of library',
-
-        'no_items_notice' : 'You don´t have any libraries yet',
-        'to_create' : 'to create a new library.',
     },
 }
 
-
-# defining a function to translate the keys
+# Defining a function to translate the keys
 def translate(key: str, lan: str = 'dk') -> str:
     """
     Look up `key` in the given `lan`, falling back to key itself.

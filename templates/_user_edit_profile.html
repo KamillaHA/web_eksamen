@@ -1,7 +1,8 @@
-<!-- <section id="profile_user" class="hidden"> -->
+<!-- User Edit Profile Forms -->
+
     <h2>{{ translate('edit_profile', lan) }}</h2>
 
-    <!-- 1) FORM TIL PROFIL-OPDATERING -->
+<!-- Update Profile Form -->
 <form
     action="{{ url_for('update_user', lan=lan) }}"
     method="post"
@@ -54,8 +55,7 @@
     </form>
 
 
-
-    <!-- 2) FORM TIL AT SKIFTE PASSWORD -->
+<!-- Change Password Form -->
     <h3>{{ translate('change_password', lan) }}</h3>
 <form
     action="{{ url_for('change_password', lan=lan) }}"
@@ -69,7 +69,6 @@
             type="password"
             id="current_password"
             name="current_password"
-            required
         >
     </div>
 
@@ -79,7 +78,6 @@
             type="password"
             id="new_password"
             name="new_password"
-            required
         >
     </div>
 
@@ -89,7 +87,6 @@
             type="password"
             id="new_password_confirm"
             name="new_password_confirm"
-            required
         >
     </div>
 
@@ -100,39 +97,28 @@
 
 
 
-
-    <!-- 3) FORM TIL AT SLETTE PROFIL -->
-
+<!-- Delete Profile Form -->
 <h3>{{ translate('delete_profile', lan) }}</h3>
 <form
-  action="{{ url_for('post_delete_user', lan=lan) }}"
-  method="post"
-  class="delete-form"
+    action="{{ url_for('post_delete_user', lan=lan) }}"
+    method="post"
+    class="delete-form"
 >
-  <div class="form-group">
+    <div class="form-group">
     <label for="confirm_password">
-      {{ translate('current_password', lan) }}
+        {{ translate('current_password', lan) }}
     </label>
-    <input
-      type="password"
-      id="confirm_password"
-      name="current_password"
-      required
-      class="{{ 'error' if delete_error else '' }}"
-      placeholder="{{ translate('enter_password_to_delete', lan) }}"
-    >
-  </div>
-  <button type="submit" class="btn btn-danger">
+        <input
+            type="password"
+            id="confirm_password"
+            name="current_password"
+            class="{{ 'error' if delete_error else '' }}"
+            placeholder="{{ translate('enter_password_to_delete', lan) }}"
+        >
+    </div>
+    <button type="submit" class="btn btn-danger">
     {{ translate('delete_profile', lan) }}
-  </button>
+    </button>
 </form>
-
-
-
-
-
-    <!-- <button mix-delete="/user">
-    {{ translate('delete_profile', lan) }}
-    </button> -->
 
 </section>

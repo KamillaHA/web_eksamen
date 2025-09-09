@@ -1,3 +1,4 @@
+<!-- User Change Item Form -->
 
 <form
   action="{{ url_for('update_item', item_pk=item.item_pk, lan=lan) }}"
@@ -14,7 +15,6 @@
           name="item_name"
           value="{{ item.item_name }}"
           class="{{ 'error' if item_name_error else '' }}" 
-          required
         >
       </div>
   
@@ -26,7 +26,6 @@
           name="item_address"
           value="{{ item.item_address }}"
           class="{{ 'error' if item_address_error else '' }}" 
-          required
         >
       </div>
   
@@ -39,7 +38,6 @@
           step="1.00"
           value="{{ item.item_price }}"
           class="{{ 'error' if item_price_error else '' }}" 
-          required
         >
         <p><em>{{ translate('based_on', lan) }}</em></p>
       </div>

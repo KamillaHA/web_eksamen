@@ -1,3 +1,5 @@
+<!-- User Add New Item Form -->
+
 <h2>{{ translate('add_item', lan) }}</h2>
 
 
@@ -8,21 +10,21 @@ enctype="multipart/form-data"
 >
 <div>
     <label for="item_name">{{ translate('name', lan) }}</label>
-    <input id="item_name" name="item_name" type="text" placeholder="Roskildes Boghylde" class="{{ 'error' if item_name_error else '' }}" required>
+    <input id="item_name" name="item_name" type="text" placeholder="Roskildes Boghylde" class="{{ 'error' if item_name_error else '' }}">
 </div>
 <div>
     <label for="item_address">{{ translate('address', lan) }}</label>
-    <input id="item_address" name="item_address" type="text" placeholder="Jernbanegade 2, 4000 Roskilde" class="{{ 'error' if item_address_error else '' }}"  required>
+    <input id="item_address" name="item_address" type="text" placeholder="Jernbanegade 2, 4000 Roskilde" class="{{ 'error' if item_address_error else '' }}" >
 </div>
 <div>
     <label for="item_price">{{ translate('price', lan) }}</label>
-    <input id="item_price" name="item_price" type="number" step="1.00" placeholder="25.00" class="{{ 'error' if item_price_error else '' }}"  required>
+    <input id="item_price" name="item_price" type="number" step="1.00" placeholder="25.00" class="{{ 'error' if item_price_error else '' }}" >
     <p><em>{{ translate('based_on', lan) }}</em></p>
 </div>
 
 <div>
-    <label for="file1">{{ translate('image', lan) }}* </label>
-    <input id="file1" name="files" type="file" accept="image/*" required>
+    <label for="file1">{{ translate('image', lan) }} </label>
+    <input id="file1" name="files" type="file" accept="image/*">
 </div>
 <div>
     <label for="file2">{{ translate('more_images', lan) }}</label>

@@ -1,4 +1,4 @@
-// User dashboard
+// User dashboard - show/hide sections based on button clicks
 document.getElementById('btn_items_form_user').onclick = () => {
     document.getElementById('items_form_user').classList.remove('hidden');
     document.getElementById('items_user').classList.add('hidden');

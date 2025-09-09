@@ -1,16 +1,16 @@
+<!-- Admin Single Item -->
+
 <div id="admin_item">
-    <!-- <h2 class="header_item_admin">
-        {{ translate('info_item', lan) }}
-    </h2> -->
+
 
     <div class="admin_item_row">
-
-
+        
+        <!-- Images -->
         {% if item.item_image %}
         <img src="{{ image_path(item.item_image) }}" alt="{{ item.item_name }}">
         {% endif %}
     
-                    <div id="item_more_img">
+    <div id="item_more_img">
         {% if item.item_image_2 %}
         <img src="{{ image_path(item.item_image_2) }}" alt="{{ item.item_name }}">
         {% endif %}
@@ -20,6 +20,7 @@
         {% endif %}
     </div>
 
+    <!-- Item Information -->
     <div class="info_item_admin">
 
         <h2 class="heading_p">
@@ -42,7 +43,7 @@
     </div>
     </div>
 
-
+<!-- Item Block Status -->
 <h2 class="block_header">
     {{ translate('block_item', lan) }}
 </h2>

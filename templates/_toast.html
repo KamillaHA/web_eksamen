@@ -1,15 +1,5 @@
 
-<!-- Til at rette i css -->
-<!-- <div id="toast_container">
-    <div class="toast" id="toast_message">
-        {{ translate('toast_ok', lan) }}
-    </div>
-</div> -->
-
-
-
-
-
+<!-- Toast Notifications -->
 
 {% if session.toast_message %}
 <div id="toast_container">
@@ -17,14 +7,6 @@
         {{ session.toast_message }}
     </div>
 </div>
-
-
-<!-- <script>
-    setTimeout(() => {
-        const toast = document.getElementById("toast_message");
-        if (toast) toast.classList.add("hidden");
-    }, {{ session.toast_ttl|default(3000)|int }});
-</script> -->
 
 <script>
     const toast = document.getElementById("toast_message");

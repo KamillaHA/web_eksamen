@@ -1,3 +1,5 @@
+<!-- Login page -->
+
 {% include "_header.html" %}
 {% include "_nav.html" %}
 {% include "_toast.html" %}
@@ -13,7 +15,6 @@
         name="user_email"
         type="email"
         placeholder="Email"
-        required
         mix-check="{{ x.REGEX_EMAIL }}"
         value="{{ old.user_email or '' }}"
         class="{{ 'error' if user_email_error else '' }}"
@@ -25,7 +26,6 @@
         name="user_password"
         type="password"
         placeholder="Password"
-        required
         mix-check="{{ x.REGEX_PASSWORD }}"
         class="{{ 'error' if user_password_error else '' }}"
       >

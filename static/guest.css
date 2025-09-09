@@ -1,4 +1,10 @@
-/* --- Mobile-First Styles --- */
+/* --- Index page --- */
+
+/* ---
+index.html
+ --- */
+
+/* --- main --- */
 main#index_main {
     display: flex;
     flex-direction: column;
@@ -6,6 +12,7 @@ main#index_main {
     height: calc(100% - 4rem);
 }
 
+/* --- center section - search / more items --- */
 #items_more {
     display: flex;
     flex-direction: column;
@@ -16,6 +23,7 @@ main#index_main {
     margin-bottom: 6rem;
 }
 
+/* --- items and users grid --- */
 #items, #users {
     display: grid;
     grid-template-columns: 1fr;
@@ -23,6 +31,7 @@ main#index_main {
 
 }
 
+/* --- button more items --- */
 #btn_more_items {
     width: 50%;
     margin: 2rem auto;
@@ -30,9 +39,11 @@ main#index_main {
     color: var(--colorBg);
     border-radius: 10px;
     cursor: pointer;
-    padding: 1rem 0.5rem;
+    display: grid;
+    align-items: center;
 }
 
+/* --- right section - single view --- */
 #right {
     padding: 1rem;
     position: fixed;
@@ -43,10 +54,12 @@ main#index_main {
     background-color: var(--colorBg);
 }
 
+/* --- more images --- */
 main#index_main #item_more_img {
   display: none ;
 }
 
+/* --- single item container --- */
 #right #item {
   display: flex;
   align-items: flex-start;
@@ -55,6 +68,7 @@ main#index_main #item_more_img {
   margin-top: 1rem;
 }
 
+/* --- single item image --- */
 #right #item img {
   width: 8rem;
   height: auto;
@@ -62,6 +76,7 @@ main#index_main #item_more_img {
   flex-shrink: 0;
 }
 
+/* --- single item info --- */
 #right #item .item-info {
   display: flex;
   flex-direction: column;
@@ -70,6 +85,7 @@ main#index_main #item_more_img {
   flex: 1;
 }
 
+/* --- single item header --- */
 #right #item .item-info h2 {
   font-size: var(--fontSizeDesktop);
   color: var(--colorDarkBrown);
@@ -77,23 +93,29 @@ main#index_main #item_more_img {
   text-align: left;
 }
 
+/* --- single item description --- */
 #right #item .item-info p {
   font-size: var(--fontSizeMobile);
   margin: 0;
 }
-
+#right #item .item-info p em{
+  font-size: var(--fontSizeSmall);
+  margin: 0;
+}
 #right #item .item-info div {
   font-size: var(--fontSizeMobile);
   font-weight: bold;
 }
 
+/* --- map --- */
 #map {
-    height: 50vh;
+    min-height: 20vh;
     z-index: 1;
     position: sticky;
     top: 0;
 }
 
+/* --- custom markers --- */
 .custom-marker {
     width: 40px;
     height: 40px;
@@ -108,76 +130,88 @@ main#index_main #item_more_img {
 
 /* --- Desktop Styles --- */
 @media (min-width: 768px) {
+
+/* --- main --- */
     main#index_main {
         display: grid;
         grid-template-columns: 10fr 12fr 8fr;
         gap: 1rem;
     }
 
+/* --- items and users grid --- */
     #items, #users {
         grid-template-columns: repeat(2, 1fr);
     }
 
+/* --- button more items --- */
     #btn_more_items {
         width: 30%;
     }
 
-main#index_main #item_more_img {
+/* --- more images --- */
+  main#index_main #item_more_img {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
     margin-top: 1rem;
   }
-
   #item_more_img img {
     width: 100%;
     border-radius: 5px;
   }
 
+/* --- right section - single view --- */
   #right {
     position:relative;
     z-index: 0;
     width: auto;
     margin-bottom: 0;
-}
-#right #item .item-info h2 {
-  font-size: var(--fontSizeHeader);
-
-}
-#right #item .item-info div, #right #item .item-info p {
-  font-size: var(--fontSizeDesktop);
-}
-
-    #right #item_img img {
-        width: 60%;
-    }
-
-#right #item {
-  display: block;
-
-  img {
-    width: 100%;
   }
 
-  p {
+/* --- single item header --- */
+  #right #item .item-info h2 {
+    font-size: var(--fontSizeHeader);
+  }
+
+/* --- single item description --- */
+  #right #item .item-info div, #right #item .item-info p {
     font-size: var(--fontSizeDesktop);
   }
 
-  div {
-    margin-top: 0.5rem;
-    font-size: 1rem;
+/* --- single item image --- */
+  #right #item_img img {
+    width: 60%;
   }
-}
 
+/* --- single item container --- */
+  #right #item {
+    display: block;
+
+    img {
+      width: 100%;
+    }
+
+    p {
+      font-size: var(--fontSizeDesktop);
+    }
+
+    div {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+  }
+/* --- single item info size --- */
     #right h2 {
         margin-left: 0;
         margin-bottom: 1rem;
     }
 
+/* --- map --- */
     #map {
         height: 100vh;
     }
 
+/* --- custom markers --- */
     .custom-marker {
         width: 50px;
         height: 50px;
@@ -186,97 +220,3 @@ main#index_main #item_more_img {
     }
 }
 
-
-
-
-
-/* main#index_main {
-    display: grid;
-    grid-template-columns: 10fr 12fr 8fr;
-    gap: 1rem;
-    height: calc(100% - 4rem);
-    #items_more {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 100%;
-        overflow-y: auto;
-        #items,
-        #users {
-            display: grid;
-            grid-template-columns: 10fr 10fr;
-            gap: 0.5rem;
-            width: 100%;
-            .item,
-            .user {
-                padding: 0.2rem;
-                border: 1px solid rgba(0,0,0,0.1);
-                box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
-                width: 100%;
-                text-decoration: none;
-                * {
-                    pointer-events: none;
-                    color: black;
-                }
-                p {
-                    font-size: 1.3rem;
-                }
-                div {
-                    margin-top: 0.5rem;
-                }
-                img {
-                    width: 100%;
-                    height: 6rem;
-                    object-fit: cover;
-                    border-radius: 5px;
-                }
-            }
-        }
-        #btn_more_items {
-            width: 30%;
-            margin: auto;
-            background-color: var(--colorDarkBrown);
-            color: var(--colorBg);
-            margin-top: 1rem;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-    }
-    
-    #right {
-        #item_more_img {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        }
-        #item {
-            p {
-                font-size: 1.3rem;
-            }
-            div {
-                margin-top: 0.5rem;
-            }
-        }
-        #item_img img {
-            width: 60%;
-        }
-    }
-}
-
-#map{
-    height: 100%;
-    z-index: 1;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-}
-.custom-marker {
-    width: 50px;
-    height: 50px;
-    background-color: var(--colorDarkBrown);
-    border-radius: 50%;
-    text-align: center;
-    line-height: 50px;
-    color: var(--colorBg);
-    font-size: 1rem;
-    font-family: var(--fontWritten);
-} */

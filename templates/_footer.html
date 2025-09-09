@@ -6,11 +6,12 @@
 </footer>
 
 
+<!-- Scripts -->
     <script src="{{ url_for('static', filename='app.js') }}"></script>
-    <script src="{{ url_for('static', filename='user.js') }}"></script>
-    <script src="{{ url_for('static', filename='admin.js') }}"></script>
 
 
+
+<!-- Language Switcher -->
     <script>
         function switchLang(lang) {
             let path = window.location.pathname;
@@ -31,8 +32,9 @@
 
 
 
-
+<!-- Map -->
     <script>
+        
         // Create the map centered on Copenhagen (latitude, longitude)
         var map = L.map('map').setView([55.6761, 10.3605], 7); // Denmark's coordinates
 

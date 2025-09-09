@@ -1,4 +1,8 @@
+<!-- Single Item Index page -->
+
 <div id="item">
+
+<!-- Images -->
     {% if item.item_image %}
     <img src="{{ image_path(item.item_image) }}" alt="{{ item.item_name }}">
     {% endif %}
@@ -13,15 +17,14 @@
     {% endif %}
 </div>
 
-
+<!-- Item Information -->
 <div class="item-info">
-      <h2>
-          {{ item.item_name }}
-      </h2>    
+    <h2>
+        {{ item.item_name }}
+    </h2>    
     <p>
         {{ item.item_address}}
     </p>
-
 
 
     {% if lan == 'en' %}
@@ -33,6 +36,6 @@
     {{ "{:,.0f}".format(item.item_price * rates.rates.DKK) }} DKK
     </div>
 {% endif %}
-  </div>
-
+<p><em>{{ translate('based_on', lan) }}</em></p>
+</div>
 </div>

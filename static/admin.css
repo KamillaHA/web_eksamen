@@ -1,4 +1,13 @@
-/* --- Mobile-First Styles --- */
+/* --- Admin page --- */
+
+/* --- 
+admin.html
+_admin_item.html
+_admin_user.html 
+--- */
+
+
+/* --- main--- */
 main#admin_main {
     display: block;
     height: calc(100% - 4rem);
@@ -6,6 +15,7 @@ main#admin_main {
     margin-bottom: 3rem;
 }
 
+/* --- left sidebar --- */
 #dashboard {
     background-color: var(--colorDarkBrown);
     width: 100vw;
@@ -13,6 +23,7 @@ main#admin_main {
     position: static;
     height: auto;
 
+/* --- header --- */
     h1 {
         text-align: center;
         color: var(--colorBg);
@@ -20,6 +31,7 @@ main#admin_main {
         font-size: var(--fontSizeHeader);
     }
 
+/* --- buttons --- */
     #btn_items,
     #btn_users {
         display: block;
@@ -34,6 +46,7 @@ main#admin_main {
     }
 }
 
+/* --- SPA content --- */
 #users, #items_admin {
   gap: 1rem;
   padding: 1rem;
@@ -43,6 +56,7 @@ main#admin_main {
   max-height: calc(100vh - 4rem);
 }
 
+/* --- single view item & user --- */
 #single_item_admin, #single_user {
   padding: 1rem;
   position: fixed;
@@ -53,6 +67,7 @@ main#admin_main {
   background-color: var(--colorBg);
 }
 
+/* --- single item images--- */
 #single_item_admin #admin_item .admin_item_row {
   display: flex;
   flex-direction: row;
@@ -60,15 +75,6 @@ main#admin_main {
   gap: 1rem;
   margin-top: 1rem;
 }
-#single_item_admin #admin_item .block_header {
-margin: 0.5rem 0 0 1rem;
-}
-#single_item_admin #admin_item h2, #single_user #user .header_item_admin {
-font-size: var(--fontSizeMobile);
-margin: 0.5rem 0 0 0;
-text-align: left;
-}
-
 #single_item_admin #admin_item .admin_item_row img {
   width: 50%;
   height: auto;
@@ -76,6 +82,26 @@ text-align: left;
   flex-shrink: 0;
 }
 
+/* --- more images --- */
+#item_more_img {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+
+/* --- single item block user --- */
+#single_item_admin #admin_item .block_header {
+margin: 0.5rem 0 0 1rem;
+}
+
+/* --- single item/user h2 --- */
+#single_item_admin #admin_item h2, #single_user #user .header_item_admin {
+font-size: var(--fontSizeMobile);
+margin: 0.5rem 0 0 0;
+text-align: left;
+}
+
+/* --- single item info text --- */
 #single_item_admin #admin_item .admin_item_row .info_item_admin {
   width: 50%;
   display: flex;
@@ -85,28 +111,34 @@ text-align: left;
   font-family: var(--fontMain);
 }
 
-
+/* --- single item div size --- */
 #single_item_admin #admin_item div {
   font-size: var(--fontSizeMobile);
 }
 
-
+/* --- prize --- */
 .value {
     font-weight: bold;
 }
+
+/* --- item name --- */
 .heading_p {
     margin: 0;
     text-align: left;
-
 }
+
+/* --- item/user text --- */
 p {
     font-family: var(--fontMain);
     font-size: var(--fontSizeMobile);
 }
 
+/* --- item/user status --- */
 .user_information, .user_status, .item_status {
     margin: 0 0 1rem 1rem;
 }
+
+/* --- buttons --- */
 button {
   background-color: var(--colorBrown);
   color: var(--colorBg);
@@ -120,15 +152,12 @@ button {
   transition: background-color 0.3s ease;
 }
 
+/* --- buttons hover --- */
 button:hover {
   background-color: var(--colorDarkBrown);
 }
 
-#item_more_img {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-}
+
 
 /* --- Desktop Styles --- */
 @media (min-width: 768px) {
@@ -139,6 +168,7 @@ button:hover {
         padding-left: 20vw;
     }
 
+/* --- left sidebar --- */
     #dashboard {
         position: fixed;
         left: 0;
@@ -147,11 +177,13 @@ button:hover {
         width: 20vw;
         padding: 0;
 
+/* --- header --- */
         h1 {
             margin-top: 8rem;
         }
     }
 
+/* --- buttons --- */
     #btn_items,
     #btn_users {
         font-size: var(--fontSizeDesktop);
@@ -161,6 +193,7 @@ button:hover {
         }
     }
 
+/* --- SPA content --- */
     #items_admin,
     #users {
         display: grid;
@@ -168,6 +201,7 @@ button:hover {
         gap: 0.5rem;
     }
 
+/* --- single view item & user --- */
     #single_item_admin, #single_user {
       position: relative;
       z-index: 0;
@@ -175,345 +209,60 @@ button:hover {
       margin-bottom: 0;
     }
 
+/* --- single item images--- */
     #single_item_admin #admin_item {
       display: block;
       width: 100%;
     }
 
     #single_item_admin #admin_item .admin_item_row {
-  display: block;
-width: auto;
-img {
-    width: 100%;
-    border-radius: 10px;
-    gap: 2rem;
-}
+      display: block;
+      width: auto;
 
-}
-#single_item_admin #admin_item h2, #single_user #user .header_item_admin  {
-font-size: var(--fontSizeDesktop);
-margin-left: 1rem;
-}
-
+      img {
+        width: 100%;
+        border-radius: 10px;
+        gap: 2rem;
+      }
+    }
     #single_item_admin #admin_item img {
       width: 100%;
       border-radius: 5px;
     }
 
-    #single_item_admin #admin_item, #single_user #user .header_item_admin{
+/* --- single item/user h2 --- */
+    #single_item_admin #admin_item h2, #single_user #user .header_item_admin  {
+      font-size: var(--fontSizeDesktop);
+      margin-left: 1rem;
+    }
+    #single_item_admin #admin_item, #single_user #user .header_item_admin {
       display: inline-block;
       font-size: var(--fontSizeHeader);
       margin-bottom: 1rem;
     }
 
+/* --- single item info size --- */
     #single_item_admin #admin_item .info_item_admin p,
     #single_item_admin #admin_item .info_item_admin div {
       font-size: var(--fontSizeDesktop);
       margin-left: 1rem;
     }
 
+/* --- more images --- */
     #item_more_img {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.5rem;
       margin-top: 1rem;
     }
-
     #item_more_img img {
       width: 100%;
       border-radius: 5px;
     }
 
+/* --- item/user status --- */
     .user_information, .user_status, .item_status {
     margin: 0 0 2rem 1rem;
-}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* main#admin_main {
-    display: block;
-    height: calc(100% - 4rem);
-    overflow: hidden;
-    margin-bottom: 3rem;
-}
-
-#dashboard {
-    background-color: var(--colorDarkBrown);
-    width: 100vw;
-    padding: 1rem;
-    position: static;
-    height: auto;
-
-    h1 {
-        text-align: center;
-        color: var(--colorBg);
-        font-family: var(--fontWritten);
-        font-size: var(--fontSizeHeader);
-    }
-
-    #btn_items,
-    #btn_users {
-        display: block;
-        text-align: center;
-        margin-top: 1rem;
-        background-color: var(--colorDarkBrown);
-        color: var(--colorBg);
-        cursor: pointer;
-        text-decoration: none;
-        font-family: var(--fontMain);
-        font-size: var(--fontSizeMobile);
     }
 }
 
-#users, #items_admin {
-  display: grid;
-  gap: 1rem;
-  padding: 1rem;
-  width: 100%;
-  max-height: calc(100vh - 8rem); 
-  overflow-y: auto;
-  scroll-behavior: smooth;
-}
-
-#single_item_admin {
-  padding: 1rem;
-  position: fixed;
-  z-index: 10;
-  bottom: 0;
-  width: 100%;
-  margin-bottom: 3rem;
-  background-color: var(--colorBg);
-
-}
-
-#single_item_admin #admin_item {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 1rem;
-  font-family: var(--fontMain);
-  margin-top: 1rem;
-}
-
-#single_item_admin #admin_item img {
-  width: 50%;
-  height: auto;
-  border-radius: 5px;
-  flex-shrink: 0;
-}
-
-#single_item_admin #admin_item .info_item_admin {
-      width: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.25rem;
-  flex: 1;
-}
-
-#single_item_admin #admin_item .header_item_admin {
-display: none;
-}
-
-#single_item_admin #admin_item .info_item_admin {
-  font-size: var(--fontSizeHeader);
-  margin: 0;
-}
-
-#single_item_admin #admin_item .item-info div {
-  font-size: var(--fontSizeMobile);
-  font-weight: bold;
-}
-
-#item_more_img {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-}
-
-
-@media (min-width: 768px) {
-    main#admin_main {
-        display: grid;
-        grid-template-columns:  20fr 12fr;
-        gap: 1rem;
-        padding-left: 20vw;
-    }
-
-    #dashboard {
-        position: fixed;
-        left: 0;
-        top: 0;
-        height: 100vh;
-        width: 20vw;
-        padding: 0;
-
-        h1 {
-                margin-top: 8rem;
-            }
-    }
-
-
-    #btn_items,
-    #btn_users {
-        font-size: var(--fontSizeDesktop);
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-
-    #items_admin,
-    #users {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
-    }
-
-
-  #single_item_admin {
-    position: relative;
-    z-index: 0;
-    width: auto;
-    margin-bottom: 0;
-  }
-
-  #single_item_admin #admin_item {
-    display: block;
-    margin: 0;
-  }
-
-  #single_item_admin #admin_item img {
-    width: 100%;
-    border-radius: 5px;
-  }
-
-  #single_item_admin #admin_item .header_item_admin {
-    display: inline-block;
-    font-size: var(--fontSizeHeader);
-    margin-bottom: 1rem;
-    margin-top: 0;
-  }
-
-  #single_item_admin #admin_item .info_item_admin p,
-  #single_item_admin #admin_item .info_item_admin div {
-    font-size: var(--fontSizeDesktop);
-    margin-top: 0.5rem;
-  }
-
-  #item_more_img {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
-
-  #item_more_img img {
-    width: 100%;
-    border-radius: 5px;
-  }
-}
- */
-
-
-
-
-
-
-
-
-/* main#admin_main {
-    display: grid;
-    grid-template-columns: 10fr 20fr 20fr;
-    gap: 1rem;
-    #dashboard {
-        background-color: var(--colorDarkBrown);
-        position: fixed;
-        left: 0;
-        top: 0;
-        height: 100vh;
-        overflow-y: auto;
-        width: 20vw;
-        h1 {
-            margin-top: 8rem;
-            text-align: center;
-            color: var(--colorBg);
-            font-family: var(--fontWritten);
-        }
-        #btn_items,
-        #btn_users {
-            display: block;
-            text-align: center;
-            margin-top: 2rem;
-            background-color: var(--colorDarkBrown);
-            color: var(--colorBg);
-            cursor: pointer;
-            text-decoration: none;
-            #btn_items:hover,
-            #btn_users:hover {
-                text-decoration: underline;
-            }
-        }
-    }
-    #users {
-        display: block;
-    }
-    #items_admin,
-    #users {
-        display: grid;
-        grid-template-columns: 10fr 10fr;
-        gap: 0.5rem;
-        width: 100%;
-        .item,
-        .user {
-            padding: 0.2rem;
-            border: 1px solid rgba(0,0,0,0.1);
-            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            text-decoration: none;
-            * {
-                pointer-events: none;
-                color: black;
-            }
-            p {
-                font-size: 1.3rem;
-            }
-            div {
-                margin-top: 0.5rem;
-            }
-            img {
-                width: 100%;
-                height: 6rem;
-                object-fit: cover;
-                border-radius: 5px;
-            }
-        }
-    }
-    #single_item_admin {
-        display: block;
-        #item p {
-            font-size: 1.3rem;
-        }
-        #item div {
-            margin-top: 0.5rem;
-        }
-        #item img {
-            width: 100%;
-        }
-    }
-
-}
-
-
- */

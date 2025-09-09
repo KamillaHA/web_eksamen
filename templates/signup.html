@@ -1,3 +1,5 @@
+<!-- Sign Up Page -->
+
 {% include "_header.html" %}
 {% include "_nav.html" %}
 
@@ -20,7 +22,6 @@
         type="text"
         value="{{ old.user_name or '' }}"
         class="{{ 'error' if user_name_error else '' }}" 
-        required
         pattern="{{ x.USER_NAME_REGEX }}"
         title="{{ translate('invalid_name', lan) }}"
       >
@@ -36,7 +37,6 @@
         type="text"
         value="{{ old.user_last_name or '' }}"
         class="{{ 'error' if user_last_name_error else '' }}" 
-        required
         pattern="{{ x.USER_LAST_NAME_REGEX }}"
         title="{{ translate('invalid_lastname', lan) }}"
       >
@@ -52,7 +52,6 @@
         type="email"
         value="{{ old.user_email or '' }}"
         class="{{ 'error' if user_email_error else '' }}" 
-        required
         pattern="{{ x.REGEX_EMAIL }}"
         title="{{ translate('invalid_email', lan) }}"
       >
@@ -68,7 +67,6 @@
         type="text"
         value="{{ old.user_username or '' }}"
         class="{{ 'error' if user_username_error else '' }}" 
-        required
         pattern="{{ x.USER_USERNAME_REGEX }}"
         placeholder="{{ x.USER_USERNAME_MIN }}–{{ x.USER_USERNAME_MAX }} {{ translate('characters', lan) }}"
         title="{{ translate('invalid_username', lan) }}"
@@ -84,7 +82,6 @@
         name="user_password"
         type="password"
         class="{{ 'error' if user_password_error else '' }}" 
-        required
         pattern="{{ x.USER_PASSWORD_REGEX }}"
         placeholder="{{ x.USER_PASSWORD_MIN }}–{{ x.USER_PASSWORD_MAX }} {{ translate('characters', lan) }}"
         title="{{ translate('invalid_password', lan) }}"

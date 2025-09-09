@@ -1,6 +1,16 @@
-/* --- Mobile-First Form Styles --- */
+/* --- Form styles --- */
 
-/* Form container */
+/* --- 
+login.html
+signup.html
+_forgot_password.html 
+_reset_password.html
+_user_edit_profile.html
+_user_item_form.html
+_user_single_item.html
+--- */
+
+/* --- overall form container --- */
 form {
   display: flex;
   flex-direction: column;
@@ -11,7 +21,7 @@ form {
   margin: var(--marginMobile);
 }
 
-/* Headline */
+/* --- headers --- */
 form h2, h4 {
   font-size: 1.5rem;
   color: var(--colorDarkBrown);
@@ -19,6 +29,7 @@ form h2, h4 {
   font-family: var(--fontWritten);
 }
 
+/* --- login form --- */
 .log_heading {
     margin-top: 0;
 }
@@ -28,7 +39,7 @@ form h2, h4 {
     }
 }
 
-/* Labels */
+/* --- labels --- */
 form label {
   font-weight: bold;
   font-size: var(--fontSizeMobile);
@@ -37,7 +48,7 @@ form label {
   font-family: var(--fontMain);
 }
 
-/* Input fields */
+/* --- input fields --- */
 form input[type="text"],
 form input[type="number"],
 form input[type="file"],
@@ -52,20 +63,20 @@ form input[type="password"] {
   background-color: white;
 }
 
-/* File input specific styling */
+/* --- img input specific styling --- */
 form input[type="file"] {
   padding: 0.5rem;
   background-color: var(--colorBg);
   border: 1px dashed var(--colorDarkBrown);
 }
 
-/* Error styling */
+/* --- error styling --- */
 form input.error {
   border: 1px solid red;
-  background-color: #ffe6e6;
+  background-color: #ffb4b4;
 }
 
-/* Optional field explanation */
+/* --- inputfield explanation --- */
 form p em {
   font-size: var(--fontSizeSmall);
   color: #000000;
@@ -73,7 +84,7 @@ form p em {
 
 }
 
-/* Submit button */
+/* --- submit button --- */
 form button[type="submit"] {
   background-color: var(--colorBrown);
   color: var(--colorBg);
@@ -87,11 +98,15 @@ form button[type="submit"] {
   transition: background-color 0.3s ease;
 }
 
+/* --- submit button hover --- */
 form button[type="submit"]:hover {
   background-color: var(--colorDarkBrown);
 }
 
+/* --- Desktop Styles --- */
 @media (min-width: 768px) {
+
+/* --- overall form container --- */
   form {
     max-width: 40rem;
     margin: 2rem auto 4rem auto;
@@ -99,14 +114,17 @@ form button[type="submit"]:hover {
     gap: 1.5rem;
   }
 
+/* --- headers --- */
   form h2, .log_heading {
     font-size: 2rem;
   }
 
+/* --- labels --- */
   form label {
   font-size: var(--fontSizeDesktop);
   }
 
+/* --- input fields --- */
   form input[type="text"],
   form input[type="number"],
   form input[type="file"],
@@ -116,5 +134,4 @@ form button[type="submit"]:hover {
     font-size: var(--fontSizeDesktop);
     padding: 1rem;
   }
-
 }
